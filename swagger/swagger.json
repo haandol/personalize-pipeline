@@ -1,0 +1,1630 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "2020-08-26T03:53:39Z",
+    "title": "PersonalizeAlphaRestApi"
+  },
+  "host": "gb6uwptgyi.execute-api.ap-northeast-2.amazonaws.com",
+  "basePath": "/dev",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/": {
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "204 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "x-amazon-apigateway-any-method": {
+        "responses": {}
+      }
+    },
+    "/personalize": {
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "204 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/personalize/batch-inference": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "StatesBatchInferenceModel",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StatesBatchInferenceModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "204 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/personalize/campaigns": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "204 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/personalize/cleanup": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "StatesCleanupModel",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StatesCleanupModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "204 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/personalize/events": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "PutEventsModel",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PutEventsModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "204 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/personalize/interactions-dataset": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "StatesInteractionsDatasetModel",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StatesInteractionsDatasetModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "204 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/personalize/metadata-dataset": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "StatesMetadataDatasetModel",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StatesMetadataDatasetModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "204 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/personalize/metrics": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "204 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/personalize/ranking": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "StatesSimsHrnnModel",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StatesSimsHrnnModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "204 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/personalize/recommend": {
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "204 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/personalize/recommend/hrnn": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "num_results",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "campaign_arn",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "204 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/personalize/recommend/ranking": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "item_list",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "campaign_arn",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "204 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/personalize/recommend/sims": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "item_id",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "num_results",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "campaign_arn",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "204 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/personalize/schema": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "schema_arn",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "ApiCreateSchema",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ApiCreateSchema"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "204 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/personalize/sims": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "StatesSimsHrnnModel",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StatesSimsHrnnModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "204 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/personalize/tracking": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "204 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/personalize/train-recipe": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "StatesTrainRecipe",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StatesTrainRecipe"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "204 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/personalize/user-personalization": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "StatesUserPersonalizationModel",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StatesUserPersonalizationModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "204 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "PutEventsModel": {
+      "type": "object",
+      "required": [
+        "event_type",
+        "item_id",
+        "sent_at",
+        "session_id",
+        "tracking_id",
+        "user_id"
+      ],
+      "properties": {
+        "sent_at": {
+          "type": "integer",
+          "description": "unix timestamp"
+        },
+        "event_type": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        },
+        "item_id": {
+          "type": "string"
+        },
+        "session_id": {
+          "type": "string"
+        },
+        "recommendation_id": {
+          "type": "string"
+        },
+        "impression": {
+          "type": "array",
+          "description": "list of item IDs"
+        },
+        "event_value": {
+          "type": "number"
+        },
+        "tracking_id": {
+          "type": "string"
+        },
+        "properties": {
+          "type": "object",
+          "description": "A string map of event-specific data that you might choose to record",
+          "properties": {}
+        }
+      },
+      "description": "put event to personalize asynchronously"
+    },
+    "Empty": {
+      "type": "object",
+      "title": "Empty Schema"
+    },
+    "StatesBatchInferenceModel": {
+      "type": "object",
+      "required": [
+        "input_path",
+        "name",
+        "output_path",
+        "solution_version_arn"
+      ],
+      "properties": {
+        "batch_inference_job_config": {
+          "type": "object",
+          "properties": {
+            "itemExplorationConfig": {
+              "type": "object",
+              "properties": {
+                "explorationItemAgeCutOff": {
+                  "type": "string"
+                },
+                "explorationWeight": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "solution_version_arn": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "output_path": {
+          "type": "string"
+        },
+        "num_results": {
+          "type": "integer"
+        },
+        "input_path": {
+          "type": "string"
+        }
+      },
+      "description": "start batch inference pipeline"
+    },
+    "StatesInteractionsDatasetModel": {
+      "type": "object",
+      "required": [
+        "bucket",
+        "name",
+        "recipe_arn",
+        "schema_arn"
+      ],
+      "properties": {
+        "bucket": {
+          "type": "string"
+        },
+        "event_type": {
+          "type": "string"
+        },
+        "schema_arn": {
+          "type": "string"
+        },
+        "solution_config": {
+          "type": "object",
+          "properties": {
+            "featureTransformationParameters": {
+              "type": "object",
+              "properties": {}
+            },
+            "hpoConfig": {
+              "type": "object",
+              "properties": {}
+            },
+            "algorithmHyperParameters": {
+              "type": "object",
+              "properties": {}
+            },
+            "eventValueThreshold": {
+              "type": "string"
+            }
+          }
+        },
+        "campaign_config": {
+          "type": "object",
+          "properties": {
+            "itemExplorationConfig": {
+              "type": "object",
+              "properties": {
+                "explorationItemAgeCutOff": {
+                  "type": "string"
+                },
+                "explorationWeight": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "name": {
+          "type": "string"
+        },
+        "perform_hpo": {
+          "type": "boolean"
+        },
+        "recipe_arn": {
+          "type": "string"
+        },
+        "deploy": {
+          "type": "boolean"
+        }
+      },
+      "description": "import new interaction dataset and create campaign"
+    },
+    "StatesCleanupModel": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "description": "clean up dataset-group and its related resources"
+    },
+    "ApiCreateSchema": {
+      "type": "object",
+      "required": [
+        "name",
+        "schema"
+      ],
+      "properties": {
+        "schema": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "description": "create schema"
+    },
+    "StatesTrainRecipe": {
+      "type": "object",
+      "required": [
+        "name",
+        "recipe_arn"
+      ],
+      "properties": {
+        "event_type": {
+          "type": "string"
+        },
+        "solution_config": {
+          "type": "object",
+          "properties": {
+            "featureTransformationParameters": {
+              "type": "object",
+              "properties": {}
+            },
+            "hpoConfig": {
+              "type": "object",
+              "properties": {}
+            },
+            "algorithmHyperParameters": {
+              "type": "object",
+              "properties": {}
+            },
+            "eventValueThreshold": {
+              "type": "string"
+            }
+          }
+        },
+        "campaign_config": {
+          "type": "object",
+          "properties": {
+            "itemExplorationConfig": {
+              "type": "object",
+              "properties": {
+                "explorationItemAgeCutOff": {
+                  "type": "string"
+                },
+                "explorationWeight": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "name": {
+          "type": "string"
+        },
+        "perform_hpo": {
+          "type": "boolean"
+        },
+        "recipe_arn": {
+          "type": "string"
+        },
+        "deploy": {
+          "type": "boolean"
+        }
+      },
+      "description": "create campaign with given recipe for existing dataset"
+    },
+    "StatesUserPersonalizationModel": {
+      "type": "object",
+      "required": [
+        "bucket",
+        "name",
+        "schema_arn"
+      ],
+      "properties": {
+        "bucket": {
+          "type": "string"
+        },
+        "item_schema_arn": {
+          "type": "string"
+        },
+        "event_type": {
+          "type": "string"
+        },
+        "schema_arn": {
+          "type": "string"
+        },
+        "solution_config": {
+          "type": "object",
+          "properties": {
+            "featureTransformationParameters": {
+              "type": "object",
+              "properties": {}
+            },
+            "hpoConfig": {
+              "type": "object",
+              "properties": {}
+            },
+            "algorithmHyperParameters": {
+              "type": "object",
+              "properties": {}
+            },
+            "eventValueThreshold": {
+              "type": "string"
+            }
+          }
+        },
+        "campaign_config": {
+          "type": "object",
+          "properties": {
+            "itemExplorationConfig": {
+              "type": "object",
+              "properties": {
+                "explorationItemAgeCutOff": {
+                  "type": "string"
+                },
+                "explorationWeight": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "name": {
+          "type": "string"
+        },
+        "item_bucket": {
+          "type": "string"
+        },
+        "perform_hpo": {
+          "type": "boolean"
+        },
+        "user_bucket": {
+          "type": "string"
+        },
+        "user_schema_arn": {
+          "type": "string"
+        },
+        "deploy": {
+          "type": "boolean"
+        }
+      },
+      "description": "start user-personalization pipeline"
+    },
+    "StatesMetadataDatasetModel": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "item_schema_arn": {
+          "type": "string"
+        },
+        "event_type": {
+          "type": "string"
+        },
+        "solution_config": {
+          "type": "object",
+          "properties": {
+            "featureTransformationParameters": {
+              "type": "object",
+              "properties": {}
+            },
+            "hpoConfig": {
+              "type": "object",
+              "properties": {}
+            },
+            "algorithmHyperParameters": {
+              "type": "object",
+              "properties": {}
+            },
+            "eventValueThreshold": {
+              "type": "string"
+            }
+          }
+        },
+        "campaign_config": {
+          "type": "object",
+          "properties": {
+            "itemExplorationConfig": {
+              "type": "object",
+              "properties": {
+                "explorationItemAgeCutOff": {
+                  "type": "string"
+                },
+                "explorationWeight": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "name": {
+          "type": "string"
+        },
+        "item_bucket": {
+          "type": "string"
+        },
+        "perform_hpo": {
+          "type": "boolean"
+        },
+        "user_bucket": {
+          "type": "string"
+        },
+        "user_schema_arn": {
+          "type": "string"
+        },
+        "deploy": {
+          "type": "boolean"
+        }
+      },
+      "description": "import new metadata and create campaign"
+    },
+    "StatesSimsHrnnModel": {
+      "type": "object",
+      "required": [
+        "bucket",
+        "name",
+        "schema_arn"
+      ],
+      "properties": {
+        "bucket": {
+          "type": "string"
+        },
+        "event_type": {
+          "type": "string"
+        },
+        "schema_arn": {
+          "type": "string"
+        },
+        "solution_config": {
+          "type": "object",
+          "properties": {
+            "featureTransformationParameters": {
+              "type": "object",
+              "properties": {}
+            },
+            "hpoConfig": {
+              "type": "object",
+              "properties": {}
+            },
+            "algorithmHyperParameters": {
+              "type": "object",
+              "properties": {}
+            },
+            "eventValueThreshold": {
+              "type": "string"
+            }
+          }
+        },
+        "campaign_config": {
+          "type": "object",
+          "properties": {
+            "itemExplorationConfig": {
+              "type": "object",
+              "properties": {
+                "explorationItemAgeCutOff": {
+                  "type": "string"
+                },
+                "explorationWeight": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "name": {
+          "type": "string"
+        },
+        "perform_hpo": {
+          "type": "boolean"
+        },
+        "deploy": {
+          "type": "boolean"
+        }
+      },
+      "description": "start sims / hrnn / ranking pipeline"
+    }
+  },
+  "x-amazon-apigateway-policy": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Principal": "*",
+        "Action": "execute-api:Invoke",
+        "Resource": "*"
+      }
+    ]
+  },
+  "x-amazon-apigateway-endpoint-configuration": {
+    "vpcEndpointIds": [
+      "vpce-07c47784c237c8b04"
+    ]
+  }
+}
