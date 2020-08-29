@@ -32,6 +32,7 @@ export class ApiLambdaStack extends cdk.Stack {
   public readonly listCampaignArnsFunction: lambda.IFunction;
   public readonly createSchemaFunction: lambda.IFunction;
   public readonly listSchemaArnsFunction: lambda.IFunction;
+  public readonly listSolutionVersionArnsFunction: lambda.IFunction;
 
   constructor(scope: cdk.Construct, id: string, props?: Props) {
     super(scope, id, props);
@@ -107,6 +108,13 @@ export class ApiLambdaStack extends cdk.Stack {
       runtime: lambda.Runtime.PYTHON_3_7,
       code: lambda.Code.fromAsset(path.resolve(__dirname, '../../functions/apis')),
       handler: 'list_schema_arns.handler',
+      role: this.lambdaExecutionRole,
+    });
+
+    this.listSolutionVersionArnsFunction = new lambda.Function(this, 'ListSolutionVersionArnsFunction', {
+      runtime: lambda.Runtime.PYTHON_3_7,
+      code: lambda.Code.fromAsset(path.resolve(__dirname, '../../functions/apis')),
+      handler: 'list_solution_version_arns.handler',
       role: this.lambdaExecutionRole,
     });
   }

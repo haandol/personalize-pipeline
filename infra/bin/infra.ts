@@ -263,6 +263,7 @@ const apiIntegrationStack = new ApiIntegrationStack(app, `${ns}ApiIntegrationSta
   listCampaignArnsFunction: apiLambdaStack.listCampaignArnsFunction,
   createSchemaFunction: apiLambdaStack.createSchemaFunction,
   listSchemaArnsFunction: apiLambdaStack.listSchemaArnsFunction,
+  listSolutionVersionArnsFunction: apiLambdaStack.listSolutionVersionArnsFunction,
 });
 apiIntegrationStack.addDependency(apiGwStack);
 apiIntegrationStack.addDependency(apiLambdaStack);

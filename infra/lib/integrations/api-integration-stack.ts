@@ -33,6 +33,7 @@ interface Props extends cdk.StackProps {
   listCampaignArnsFunction: lambda.IFunction;
   createSchemaFunction: lambda.IFunction;
   listSchemaArnsFunction: lambda.IFunction;
+  listSolutionVersionArnsFunction: lambda.IFunction;
 }
 
 interface IntegrationProps {
@@ -241,6 +242,18 @@ export class ApiIntegrationStack extends cdk.Stack {
         },
         requestValidator: props.requestValidators.parameterValidator,
       },
+      integrationResponses,
+    });
+
+    this.registerLambdaIntegration({
+      credentialsRole: props.credentialsRole,
+      httpMethod: 'GET',
+      function: props.listSolutionVersionArnsFunction,
+      resource: schemaResource,
+      requestTemplates: {
+        'application/json': JSON.stringify({}),
+      },
+      methodOptions,
       integrationResponses,
     });
   }
