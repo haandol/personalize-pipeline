@@ -249,7 +249,7 @@ export class ApiIntegrationStack extends cdk.Stack {
       credentialsRole: props.credentialsRole,
       httpMethod: 'GET',
       function: props.listSolutionVersionArnsFunction,
-      resource: schemaResource,
+      resource: resource.addResource('solution-versions'),
       requestTemplates: {
         'application/json': JSON.stringify({}),
       },
