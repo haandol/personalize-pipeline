@@ -95,7 +95,7 @@ def update_payloads(payloads, event_id, binary):
     }
     if properties:
         body['properties'] = json.dumps(properties)
-    if recommendatoin_id:
+    if recommendation_id:
         body['recommendationId'] = recommendation_id
     if impression:
         body['impression'] = list(map(str, impression))
