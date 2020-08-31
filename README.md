@@ -2,8 +2,8 @@
 
 Manage resources of Amazon Personalize using API Gateway
 
-<img src="img/overview.png" />
-<img src="img/pipeline.png" />
+<img src="docs/img/overview.png" />
+<img src="docs/img/pipeline.png" />
 
 **Running this repository may cost you to provision AWS resources**
 
@@ -42,7 +42,7 @@ APIs provided this repository are self-documented using API Gateway Models.
 
 1. Export **Swagger** your API specification on [**API Gateway Console**](https://ap-northeast-2.console.aws.amazon.com/apigateway/main/apis?region=ap-northeast-2)
 
-<img src="img/swagger1.png">
+<img src="docs/img/swagger1.png">
 
 2. place it at **swagger/swagger.json**
 
@@ -56,7 +56,7 @@ $ docker-compose up
 
 > You should set SSH Tunneling via BastionHost to invoke API on localhost
 
-<img src="img/swagger2.png">
+<img src="docs/img/swagger2.png">
 
 # Usage
 

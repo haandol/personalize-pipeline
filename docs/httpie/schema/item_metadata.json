@@ -1,0 +1,4 @@
+{
+  "name": "item-metadata-baseline",
+  "schema": "{\"type\": \"record\", \"name\": \"Items\", \"namespace\": \"com.amazonaws.personalize.schema\", \"fields\": [{\"name\": \"ITEM_ID\", \"type\": \"string\"}, {\"name\": \"GENRE\", \"type\": \"string\", \"categorical\": true}], \"version\": \"1.0\"}"
+}
