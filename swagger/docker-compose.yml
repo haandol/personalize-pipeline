@@ -5,7 +5,7 @@ services:
     ports:
     - "80:8080"
     volumes:
-    - ./swagger:/foo
+    - ./:/swagger
     environment:
-    - SWAGGER_JSON=/foo/swagger.json
+    - SWAGGER_JSON=/swagger/swagger.json
     - SUPPORTED_SUBMIT_METHODS="[\"get\", \"post\"]"
