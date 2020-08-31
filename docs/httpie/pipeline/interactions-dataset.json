@@ -1,0 +1,11 @@
+{
+  "name": "sims-baseline",
+  "bucket": "s3://dongkyl-personalize-partner-demo/interactions.csv",
+  "deploy": true,
+  "solution_config": {
+    "algorithmHyperParameters": {
+      "min_cointeraction_count": "0",
+      "popularity_discount_factor": "0.4331786078906956"
+    }
+  }
+}

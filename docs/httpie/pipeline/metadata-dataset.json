@@ -1,0 +1,6 @@
+{
+  "name": "sims-baseline",
+  "item_schema_arn": "arn:aws:personalize:ap-northeast-2:776556808198:schema/item-metadata-baseline",
+  "item_bucket": "s3://dongkyl-personalize-partner-demo/item_metadata.csv",
+  "deploy": true
+}

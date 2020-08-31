@@ -1,6 +1,6 @@
 {
   "name": "sims-baseline-batch",
   "solution_version_arn": "",
-  "input_path": "s3://dongkyl-personalize-partner-demo-batch/input.csv",
+  "input_path": "s3://dongkyl-personalize-partner-demo-batch/input.json",
   "output_path": "s3://dongkyl-personalize-partner-demo-batch/output/"
 }
