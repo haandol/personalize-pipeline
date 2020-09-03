@@ -130,16 +130,16 @@ export class ApiGatewayStack extends cdk.Stack {
               type: { 
                 type: apigw.JsonSchemaType.STRING,
               },
-              name: { 
+              name: {
                 type: apigw.JsonSchemaType.STRING,
               },
-              namespace: { 
+              namespace: {
                 type: apigw.JsonSchemaType.STRING,
               },
-              fields: { 
+              fields: {
                 type: apigw.JsonSchemaType.ARRAY,
               },
-              version: { 
+              version: {
                 type: apigw.JsonSchemaType.STRING,
               },
             }
