@@ -125,7 +125,7 @@ export class ApiGatewayStack extends cdk.Stack {
             type: apigw.JsonSchemaType.STRING
           },
           schema: {
-            type: apigw.JsonSchemaType.STRING
+            type: apigw.JsonSchemaType.OBJECT
           },
         },
         required: ['name', 'schema'],

@@ -27,7 +27,7 @@ def handler(event, context):
     logger.info(event)
 
     name = event['name']
-    schema = json.dumps(json.loads(event['schema']))
+    schema = json.dumps(event['schema'])
 
     create_schema_response = personalize.create_schema(
         name=name,
