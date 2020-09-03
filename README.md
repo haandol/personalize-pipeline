@@ -98,14 +98,12 @@ sh-4.2$ pip3 install --user httpie
 1. Create Schema
 
 ```bash
-$ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/schema name=my-demo-schema schema="{\"type\": \"record\", \"name\": \"Interactions\", \"namespace\": \"com.amazonaws.personalize.schema\", \"fields\": [{\"name\": \"USER_ID\", \"type\": \"string\"}, {\"name\": \"ITEM_ID\", \"type\": \"string\"}, {\"name\": \"TIMESTAMP\", \"type\": \"long\"}], \"version\": \"1.0\"}" content-type:"application/json"
+$ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/schema name=my-demo-schema schema={"type": "record", "name": "Interactions", "namespace": "com.amazonaws.personalize.schema", "fields": [{"name": "USER_ID", "type": "string"}, {"name": "ITEM_ID", "type": "string"}, {"name": "TIMESTAMP", "type": "long"}], "version": "1.0"}
 ```
-
-> tips for creating schema string - use `print(json.dumps(json.dumps(SCHEMA_DICT)))` on Python
 
 2. Invoke api to create Personalize SIMS campaign
 ```bash
-$ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/sims name=my-sims-model schema="arn:aws:personalize:ap-northeast-2:776556808198:schema/my-demo-schema" bucket="s3://demo-sims-67914/DEMO-sims.csv" content-type:"application/json"
+$ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/sims name=my-sims-model schema="arn:aws:personalize:ap-northeast-2:776556808198:schema/my-demo-schema" bucket="s3://demo-sims-67914/DEMO-sims.csv"
 ```
 
 ## Invoke API to get recommendations
@@ -113,13 +111,13 @@ $ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/pers
 1. Invoke api to get list of campaign_arn and copy your campaign arn
 
 ```bash
-$ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/campaigns content-type:"application/json"
+$ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/campaigns
 ```
 
 2. Invoke api to get recommendations realtime
 ```bash
 $ http post https://jts3jq4ygi.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/recommend/sims  campaign_arn=arn:aws:personalize:ap-northeast-2:929831892372:campaign/my-sims-model
- item_id=323 content-type:"application/json"
+ item_id=323
 ```
 
 3. Invoke api to get recommendations in batch
@@ -143,7 +141,7 @@ http post https://jts3jq4ygi.execute-api.ap-northeast-2.amazonaws.com/dev/person
 
 1. Invoke api to remove dataset-group
 ```bash
-$ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/cleanup name=my-sims-model content-type:"application/json"
+$ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/cleanup name=my-sims-model
 ```
 
 # Cleanup
