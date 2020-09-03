@@ -27,23 +27,6 @@ logger.setLevel(logging.INFO)
 personalize_events = boto3.client(service_name='personalize-events')
 
 
-def send_user_events(tracking_id, session_id, user_id, event_list):
-    '''PutEvents 최대 이벤트가 10개라 10개씩 끊어서 보내야한다
-    TODO: IO 작업이므로 ThreadPool 로 속도를 올릴 수 있다.
-    '''
-    n_events = len(event_list)
-    logger.info(f'events: {n_events}')
-    start = 0
-    for end in range(10, n_events+11, 10):
-        personalize_events.put_events(
-            trackingId=tracking_id,
-            sessionId=session_id,
-            userId=user_id,
-            eventList=event_list[start:end],
-        )
-        start = end
-
-
 def handler(event, context):
     logger.info(event)
 
@@ -63,7 +46,6 @@ def handler(event, context):
             logger.debug(user_payloads)
             for user_id in user_payloads:
                 user_events = user_payloads[user_id]
-                logger.debug(user_events)
                 send_user_events(tracking_id, session_id, user_id, user_events)
                 n_success += len(user_events)
 
@@ -87,20 +69,39 @@ def update_payloads(payloads, event_id, binary):
         convert_to_camel(k): str(v)
         for k, v in data.pop('properties', {}).items()
     }
+    properties.update({
+        'eventValue': event_value,
+        'itemId': item_id,
+    })
     body = {
         'eventId': str(event_id),
-        'eventType': str(event_type),
-        'itemId': str(item_id),
+        'eventType': event_type,
+        'properties': json.dumps(properties),
         'sentAt': datetime.fromtimestamp(sent_at),
     }
-    if properties:
-        body['properties'] = json.dumps(properties)
     if recommendation_id:
         body['recommendationId'] = recommendation_id
     if impression:
         body['impression'] = list(map(str, impression))
 
     payloads[tracking_id][session_id][user_id].append(body)
+
+
+def send_user_events(tracking_id, session_id, user_id, event_list):
+    '''PutEvents 최대 이벤트가 10개라 10개씩 끊어서 보내야한다
+    TODO: IO 작업이므로 ThreadPool 로 속도를 올릴 수 있다.
+    '''
+    n_events = len(event_list)
+    logger.info(f'events: {n_events}')
+    start = 0
+    for end in range(10, n_events+11, 10):
+        personalize_events.put_events(
+            trackingId=tracking_id,
+            userId=user_id,
+            sessionId=session_id,
+            eventList=event_list[start:end],
+        )
+        start = end
 
 
 def convert_to_camel(key):
