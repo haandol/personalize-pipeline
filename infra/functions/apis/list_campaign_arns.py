@@ -42,7 +42,7 @@ def handler(event, context):
         for solution in solution_response['solutions']:
             solution_arn_list.append(solution['solutionArn'])
 
-    arn_list = []
+    campaign_list = []
     for solution_arn in solution_arn_list:
         response = client.list_campaigns(
             solutionArn=solution_arn,
@@ -50,6 +50,10 @@ def handler(event, context):
         )   
             
         for campaign in response['campaigns']:
-            arn_list.append(campaign['campaignArn'])
+            campaign_list.append({
+                'name': campaign['name'],
+                'status': campaign['status'],
+                'campaign_arn': campaign['campaignArn']
+            })
     
-    return { 'arn_list': arn_list }
+    return campaign_list

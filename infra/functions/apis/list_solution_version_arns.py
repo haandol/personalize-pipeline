@@ -42,7 +42,7 @@ def handler(event, context):
         for solution in solution_response['solutions']:
             solution_arn_list.append(solution['solutionArn'])
 
-    arn_list = []
+    solution_version_list = []
     for solution_arn in solution_arn_list:
         response = client.list_solution_versions(
             solutionArn=solution_arn,
@@ -50,6 +50,9 @@ def handler(event, context):
         )   
             
         for solution_version in response['solutionVersions']:
-            arn_list.append(solution_version['solutionVersionArn'])
+            solution_version_list.append({
+                'status': solution_version['status'],
+                'solution_version_arn': solution_version['solutionVersionArn'],
+            })
     
-    return { 'arn_list': arn_list }
+    return solution_version_list
