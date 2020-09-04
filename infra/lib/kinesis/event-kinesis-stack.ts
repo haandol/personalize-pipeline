@@ -41,7 +41,7 @@ export class EventKinesisStack extends cdk.Stack {
       code: lambda.Code.fromAsset(path.resolve(__dirname, '..', '..', 'functions', 'kinesis')),
       runtime: lambda.Runtime.PYTHON_3_7,
       handler: 'put_events.handler',
-      memorySize: 512,
+      memorySize: 256,
       role,
       currentVersionOptions: {
         removalPolicy: cdk.RemovalPolicy.RETAIN,

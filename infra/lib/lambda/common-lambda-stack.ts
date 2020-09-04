@@ -55,6 +55,7 @@ export class CommonLambdaStack extends cdk.Stack {
       code: lambda.Code.fromAsset(path.resolve(__dirname, '..', '..', 'functions', 'common')),
       handler: 'notify.handler',
       role: this.lambdaExecutionRole,
+      timeout: cdk.Duration.seconds(5),
       environment: {
         'STATUS': 'DONE',
         'SENDER': notifySender,
@@ -69,6 +70,7 @@ export class CommonLambdaStack extends cdk.Stack {
       code: lambda.Code.fromAsset(path.resolve(__dirname, '..', '..', 'functions', 'common')),
       handler: 'notify.handler',
       role: this.lambdaExecutionRole,
+      timeout: cdk.Duration.seconds(5),
       environment: {
         'STATUS': 'FAILED',
         'SENDER': notifySender,

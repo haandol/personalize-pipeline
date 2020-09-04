@@ -58,6 +58,7 @@ export class ApiLambdaStack extends cdk.Stack {
       code: lambda.Code.fromAsset(path.resolve(__dirname, '../../functions/apis')),
       handler: 'get_metrics.handler',
       role: this.lambdaExecutionRole,
+      timeout: cdk.Duration.seconds(15),
     });
 
     this.recommendSimsFunction = new lambda.Function(this, 'RecommendSimsFunction', {
@@ -95,6 +96,7 @@ export class ApiLambdaStack extends cdk.Stack {
       code: lambda.Code.fromAsset(path.resolve(__dirname, '../../functions/apis')),
       handler: 'list_campaign_arns.handler',
       role: this.lambdaExecutionRole,
+      timeout: cdk.Duration.seconds(15),
     });
 
     this.createSchemaFunction = new lambda.Function(this, 'CreateSchemaFunction', {
@@ -109,6 +111,7 @@ export class ApiLambdaStack extends cdk.Stack {
       code: lambda.Code.fromAsset(path.resolve(__dirname, '../../functions/apis')),
       handler: 'list_schema_arns.handler',
       role: this.lambdaExecutionRole,
+      timeout: cdk.Duration.seconds(15),
     });
 
     this.listSolutionVersionArnsFunction = new lambda.Function(this, 'ListSolutionVersionArnsFunction', {
@@ -116,6 +119,7 @@ export class ApiLambdaStack extends cdk.Stack {
       code: lambda.Code.fromAsset(path.resolve(__dirname, '../../functions/apis')),
       handler: 'list_solution_version_arns.handler',
       role: this.lambdaExecutionRole,
+      timeout: cdk.Duration.seconds(15),
     });
   }
 
