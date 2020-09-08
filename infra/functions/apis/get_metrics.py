@@ -23,18 +23,42 @@ client = boto3.client('personalize')
 
 
 def handler(event, context):
-    name = event.get('name', '')
-    if not name:
-        raise RuntimeError('campaign name should be provided')
+    logger.info(event)
 
-    campaigns = client.list_campaigns(maxResults=100)['campaigns']
-    campaign_arns = [campaign['campaignArn'] for campaign in campaigns if campaign['name'] == name]
-    if not campaign_arns:
-        raise RuntimeError(f'There is no campaign for name: {name}')
+    name = event['name']
+    dataset_groups_response = client.list_dataset_groups(maxResults=100)
 
-    campaign = client.describe_campaign(campaignArn=campaign_arns[0])['campaign']
+    dataset_group_arn = ''
+    for dataset_group in dataset_groups_response['datasetGroups']:
+        if name == dataset_group['name']:
+            dataset_group_arn = dataset_group['datasetGroupArn']
+    if not dataset_group_arn:
+        raise RuntimeError(f'There is no dataset group for name: {name}')
 
-    response = client.get_solution_metrics(
-        solutionVersionArn=campaign['solutionVersionArn'],
+    solution_arn_list = []
+    solution_response = client.list_solutions(
+        datasetGroupArn=dataset_group_arn,
+        maxResults=100
     )
-    return response['metrics']
+    for solution in solution_response['solutions']:
+        solution_arn_list.append(solution['solutionArn'])
+
+    solution_version_arn_list = []
+    for solution_arn in solution_arn_list:
+        solution_version_response = client.list_solution_versions(
+            solutionArn=solution_arn,
+            maxResults=100
+        )
+        for solution_version in solution_version_response['solutionVersions']:
+            if 'ACTIVE' == solution_version['status']:
+                solution_version_arn_list.append(solution_version['solutionVersionArn'])
+
+    metrics = []
+    for solution_version_arn in solution_version_arn_list:
+        metric = client.get_solution_metrics(
+            solutionVersionArn=solution_version_arn,
+        )['metrics']
+        metric['solution_version_arn'] = solution_version_arn
+        metrics.append(metric)
+    metrics.sort(key=lambda x: x['coverage'])
+    return metrics
