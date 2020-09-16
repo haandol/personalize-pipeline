@@ -169,12 +169,14 @@ export class ApiGatewayStack extends cdk.Stack {
             type: apigw.JsonSchemaType.STRING
           },
           perform_hpo: {
+            description: 'set true to perform HPO',
             type: apigw.JsonSchemaType.BOOLEAN
           },
           event_type: {
             type: apigw.JsonSchemaType.STRING
           },
           deploy: {
+            description: 'set true to create campaign',
             type: apigw.JsonSchemaType.BOOLEAN
           },
           solution_config: {
@@ -246,12 +248,14 @@ export class ApiGatewayStack extends cdk.Stack {
             type: apigw.JsonSchemaType.STRING
           },
           perform_hpo: {
+            description: 'set true to perform HPO',
             type: apigw.JsonSchemaType.BOOLEAN
           },
           event_type: {
             type: apigw.JsonSchemaType.STRING
           },
           deploy: {
+            description: 'set true to create campaign',
             type: apigw.JsonSchemaType.BOOLEAN
           },
           solution_config: {
@@ -317,15 +321,22 @@ export class ApiGatewayStack extends cdk.Stack {
             type: apigw.JsonSchemaType.STRING
           },
           perform_hpo: {
+            description: 'set true to perform HPO',
             type: apigw.JsonSchemaType.BOOLEAN
           },
           event_type: {
             type: apigw.JsonSchemaType.STRING
           },
           deploy: {
+            description: 'set true to create campaign',
             type: apigw.JsonSchemaType.BOOLEAN
           },
+          solution_arn: {
+            description: 'training_mode required solution_arn',
+            type: apigw.JsonSchemaType.STRING
+          },
           training_mode: {
+            description: 'training_mode required solution_arn',
             type: apigw.JsonSchemaType.STRING
           },
           solution_config: {
@@ -388,15 +399,22 @@ export class ApiGatewayStack extends cdk.Stack {
             type: apigw.JsonSchemaType.STRING
           },
           perform_hpo: {
+            description: 'set true to perform HPO',
             type: apigw.JsonSchemaType.BOOLEAN
           },
           event_type: {
             type: apigw.JsonSchemaType.STRING
           },
           deploy: {
+            description: 'set true to create campaign',
             type: apigw.JsonSchemaType.BOOLEAN
           },
+          solution_arn: {
+            description: 'training_mode requires solution_arn',
+            type: apigw.JsonSchemaType.STRING
+          },
           training_mode: {
+            description: 'training_mode requires solution_arn',
             type: apigw.JsonSchemaType.STRING
           },
           solution_config: {
@@ -447,6 +465,7 @@ export class ApiGatewayStack extends cdk.Stack {
         type: apigw.JsonSchemaType.OBJECT,
         properties: {
           name: {
+            description: 'name for batch inference job',
             type: apigw.JsonSchemaType.STRING,
           },
           solution_version_arn: {
@@ -498,15 +517,22 @@ export class ApiGatewayStack extends cdk.Stack {
             type: apigw.JsonSchemaType.STRING
           },
           perform_hpo: {
+            description: 'set true to perform HPO',
             type: apigw.JsonSchemaType.BOOLEAN
           },
           event_type: {
             type: apigw.JsonSchemaType.STRING
           },
           deploy: {
+            description: 'set true to create campaign',
             type: apigw.JsonSchemaType.BOOLEAN
           },
+          solution_arn: {
+            description: 'training_mode requires solution_arn',
+            type: apigw.JsonSchemaType.STRING
+          },
           training_mode: {
+            description: 'training_mode requires solution_arn',
             type: apigw.JsonSchemaType.STRING
           },
           solution_config: {
@@ -557,6 +583,7 @@ export class ApiGatewayStack extends cdk.Stack {
         type: apigw.JsonSchemaType.OBJECT,
         properties: {
           name: {
+            description: 'name of dataset-group',
             type: apigw.JsonSchemaType.STRING
           },
         },
