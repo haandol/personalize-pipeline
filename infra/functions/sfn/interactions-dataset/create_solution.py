@@ -30,6 +30,7 @@ def handler(event, context):
     suffix = event['suffix']
     dataset_group_arn = event['dataset_group_arn']
     recipe_arn = event['recipe_arn']
+    training_mode = event.get('training_mode', 'FULL')
 
     solution_params = dict(
         name=f'{name}-{suffix}',
@@ -47,7 +48,8 @@ def handler(event, context):
     logger.info(json.dumps(create_solution_response, indent=2))
 
     create_solution_version_response = personalize.create_solution_version(
-        solutionArn=solution_arn
+        solutionArn=solution_arn,
+        trainingMode=training_mode,
     )
     solution_version_arn = create_solution_version_response['solutionVersionArn']
     logger.info(json.dumps(create_solution_version_response, indent=2))

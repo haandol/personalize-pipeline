@@ -29,6 +29,7 @@ def handler(event, context):
     name = event['name']
     suffix = event['suffix']
     dataset_group_arn = event['dataset_group_arn']
+    training_mode = event.get('training_mode', 'FULL')
     recipe_arn = 'arn:aws:personalize:::recipe/aws-user-personalization'
 
     solution_params = dict(
@@ -47,7 +48,8 @@ def handler(event, context):
     logger.info(json.dumps(create_solution_response, indent=2))
 
     create_solution_version_response = personalize.create_solution_version(
-        solutionArn=solution_arn
+        solutionArn=solution_arn,
+        trainingMode=training_mode,
     )
     solution_version_arn = create_solution_version_response['solutionVersionArn']
     logger.info(json.dumps(create_solution_version_response, indent=2))

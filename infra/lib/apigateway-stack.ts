@@ -325,6 +325,9 @@ export class ApiGatewayStack extends cdk.Stack {
           deploy: {
             type: apigw.JsonSchemaType.BOOLEAN
           },
+          training_mode: {
+            type: apigw.JsonSchemaType.STRING
+          },
           solution_config: {
             type: apigw.JsonSchemaType.OBJECT,
             properties: {
@@ -392,6 +395,9 @@ export class ApiGatewayStack extends cdk.Stack {
           },
           deploy: {
             type: apigw.JsonSchemaType.BOOLEAN
+          },
+          training_mode: {
+            type: apigw.JsonSchemaType.STRING
           },
           solution_config: {
             type: apigw.JsonSchemaType.OBJECT,
@@ -499,6 +505,9 @@ export class ApiGatewayStack extends cdk.Stack {
           },
           deploy: {
             type: apigw.JsonSchemaType.BOOLEAN
+          },
+          training_mode: {
+            type: apigw.JsonSchemaType.STRING
           },
           solution_config: {
             type: apigw.JsonSchemaType.OBJECT,
