@@ -527,14 +527,6 @@ export class ApiGatewayStack extends cdk.Stack {
             description: 'set true to create campaign',
             type: apigw.JsonSchemaType.BOOLEAN
           },
-          solution_arn: {
-            description: 'training_mode requires solution_arn',
-            type: apigw.JsonSchemaType.STRING
-          },
-          training_mode: {
-            description: 'training_mode requires solution_arn',
-            type: apigw.JsonSchemaType.STRING
-          },
           solution_config: {
             type: apigw.JsonSchemaType.OBJECT,
             properties: {
