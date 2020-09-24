@@ -56,6 +56,19 @@ export class VpcStack extends cdk.Stack {
     } else {
       throw Error('Insufficient information to setup VPC Endpoint');
     }
+
+    const securityGroup = new ec2.SecurityGroup(this, `BastionHostSecGrp`, {
+      vpc: this.vpc,
+    });
+    const bastionHost = new ec2.BastionHostLinux(this, `BastionHost`, {
+      vpc: this.vpc,
+      securityGroup,
+      instanceName: `${ns}BastionHost`,
+    });
+    bastionHost.allowSshAccessFrom(ec2.Peer.anyIpv4());
+    bastionHost.connections.allowFrom(bastionHost.connections, ec2.Port.tcp(443))
+
+    this.apigwVpcEndpoint.connections.allowFrom(securityGroup, ec2.Port.tcp(443));
   }
 
 }

@@ -18,6 +18,7 @@ import * as apigw from '@aws-cdk/aws-apigateway';
 
 export interface ApiRequestModels {
   CreateSchemaModel: apigw.IModel;
+  PutEventsModel: apigw.IModel;
 }
 
 export interface StatesRequestModels {
@@ -29,10 +30,6 @@ export interface StatesRequestModels {
   BatchInferenceModel: apigw.IModel;
   TrainRecipeModel: apigw.IModel;
   CleanupModel: apigw.IModel;
-}
-
-export interface EventRequestModels {
-  PutEventsModel: apigw.IModel;
 }
 
 export interface RequestValidators {

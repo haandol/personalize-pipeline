@@ -22,7 +22,6 @@ import { VpcStack } from '../lib/vpc-stack';
 import { ApiGatewayStack } from '../lib/apigateway-stack';
 import { CommonLambdaStack } from '../lib/lambda/common-lambda-stack';
 import { ApiLambdaStack } from '../lib/lambda/api-lambda-stack';
-import { EventKinesisStack } from '../lib/kinesis/event-kinesis-stack';
 import { SimsLambdaStack } from '../lib/lambda/sims-lambda-stack';
 import { UserPersonalizationLambdaStack } from '../lib/lambda/user-personalization-lambda-stack';
 import { MetadataDatasetLambdaStack } from '../lib/lambda/metadata-dataset-lambda-stack';
@@ -42,7 +41,6 @@ import { TrainRecipeSfnStack } from '../lib/sfn/train-recipe-sfn-stack';
 import { CleanupSfnStack } from '../lib/sfn/cleanup-sfn-stack';
 import { SfnIntegrationStack } from '../lib/integrations/sfn-integration-stack';
 import { ApiIntegrationStack } from '../lib/integrations/api-integration-stack';
-import { KinesisIntegrationStack } from '../lib/integrations/kinesis-integration-stack';
 import { ns, StackProps, AppContext, VpcProps } from '../lib/interfaces/constant';
 
 const app = new cdk.App({
@@ -62,7 +60,6 @@ apiGwStack.addDependency(vpcStack)
 
 const commonLambdaStack = new CommonLambdaStack(app, `${ns}CommonLambdaStack`, StackProps);
 const apiLambdaStack = new ApiLambdaStack(app, `${ns}ApiLambdaStack`, StackProps);
-const eventKinesisStack = new EventKinesisStack(app, `${ns}EventKinesisStack`, StackProps);
 
 const commonSfnStack = new CommonSfnStack(app, `${ns}CommonSfnStack`, StackProps);
 
@@ -264,18 +261,7 @@ const apiIntegrationStack = new ApiIntegrationStack(app, `${ns}ApiIntegrationSta
   createSchemaFunction: apiLambdaStack.createSchemaFunction,
   listSchemaArnsFunction: apiLambdaStack.listSchemaArnsFunction,
   listSolutionVersionArnsFunction: apiLambdaStack.listSolutionVersionArnsFunction,
+  putEventsFunction: apiLambdaStack.putEventsFunction,
 });
 apiIntegrationStack.addDependency(apiGwStack);
 apiIntegrationStack.addDependency(apiLambdaStack);
-
-// ApiGateway KinesisIntegration
-const kinesisIntegrationStack = new KinesisIntegrationStack(app, `${ns}KinesisIntegrationStack`, {
-  ...StackProps,
-  api: apiGwStack.api,
-  requestModels: apiGwStack.eventRequestModels,
-  requestValidators: apiGwStack.requestValidators,
-  credentialsRole: apiGwStack.credentialsRole,
-  eventStream: eventKinesisStack.stream,
-});
-kinesisIntegrationStack.addDependency(apiGwStack);
-kinesisIntegrationStack.addDependency(eventKinesisStack);

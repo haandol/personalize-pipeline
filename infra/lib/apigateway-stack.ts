@@ -19,7 +19,7 @@ import * as ec2 from '@aws-cdk/aws-ec2';
 import * as iam from '@aws-cdk/aws-iam';
 import * as apigw from '@aws-cdk/aws-apigateway';
 import {
-  ApiRequestModels, StatesRequestModels, EventRequestModels, RequestValidators
+  ApiRequestModels, StatesRequestModels, RequestValidators
 } from './interfaces/interface';
 
 interface Props extends cdk.StackProps {
@@ -31,7 +31,6 @@ export class ApiGatewayStack extends cdk.Stack {
   public readonly credentialsRole: iam.IRole;
   public readonly apiRequestModels: ApiRequestModels;
   public readonly statesRequestModels: StatesRequestModels;
-  public readonly eventRequestModels: EventRequestModels;
   public readonly requestValidators: RequestValidators;
 
   constructor(scope: cdk.Construct, id: string, props: Props) {
@@ -82,6 +81,7 @@ export class ApiGatewayStack extends cdk.Stack {
 
     this.apiRequestModels = {
       CreateSchemaModel: this.registerCreateSchemaModel(),
+      PutEventsModel: this.registerPutEventsModel(),
     };
 
     const simsHrnnModel = this.registerSimsHrnnModel();
@@ -94,10 +94,6 @@ export class ApiGatewayStack extends cdk.Stack {
       BatchInferenceModel: this.registerBatchInferenceModel(),
       TrainRecipeModel: this.registerTrainRecipeModel(),
       CleanupModel: this.registerCleanupModel(),
-    };
-
-    this.eventRequestModels = {
-      PutEventsModel: this.registerPutEventsModel(),
     };
 
     this.requestValidators = {

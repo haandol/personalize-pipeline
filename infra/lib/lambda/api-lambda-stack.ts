@@ -33,6 +33,7 @@ export class ApiLambdaStack extends cdk.Stack {
   public readonly createSchemaFunction: lambda.IFunction;
   public readonly listSchemaArnsFunction: lambda.IFunction;
   public readonly listSolutionVersionArnsFunction: lambda.IFunction;
+  public readonly putEventsFunction: lambda.IFunction;
 
   constructor(scope: cdk.Construct, id: string, props?: Props) {
     super(scope, id, props);
@@ -46,80 +47,89 @@ export class ApiLambdaStack extends cdk.Stack {
       ],
     });
 
+    const runtime = lambda.Runtime.PYTHON_3_7;
+    const code = lambda.Code.fromAsset(path.resolve(__dirname, '..', '..', 'functions', 'apis'));
+    const role = this.lambdaExecutionRole;
+
     this.getTrackingIdFunction = new lambda.Function(this, 'GetTrackingIdFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
-      code: lambda.Code.fromAsset(path.resolve(__dirname, '../../functions/apis')),
+      code,
+      runtime,
+      role,
       handler: 'get_tracking_id.handler',
-      role: this.lambdaExecutionRole,
     });
 
     this.getMetricsFunction = new lambda.Function(this, 'GetMetricsFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
-      code: lambda.Code.fromAsset(path.resolve(__dirname, '../../functions/apis')),
+      code,
+      runtime,
+      role,
       handler: 'get_metrics.handler',
-      role: this.lambdaExecutionRole,
       timeout: cdk.Duration.seconds(15),
     });
 
     this.recommendSimsFunction = new lambda.Function(this, 'RecommendSimsFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
-      code: lambda.Code.fromAsset(path.resolve(__dirname, '../../functions/apis')),
+      code,
+      runtime,
+      role,
       handler: 'recommend_sims.handler',
-      role: this.lambdaExecutionRole,
       currentVersionOptions: {
         removalPolicy: cdk.RemovalPolicy.RETAIN,
       },
     });
 
     this.recommendHrnnFunction = new lambda.Function(this, 'RecommendHrnnFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
-      code: lambda.Code.fromAsset(path.resolve(__dirname, '../../functions/apis')),
+      code,
+      runtime,
+      role,
       handler: 'recommend_hrnn.handler',
-      role: this.lambdaExecutionRole,
       currentVersionOptions: {
         removalPolicy: cdk.RemovalPolicy.RETAIN,
       },
     });
 
     this.recommendRankingFunction = new lambda.Function(this, 'RecommendRankingFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
-      code: lambda.Code.fromAsset(path.resolve(__dirname, '../../functions/apis')),
+      code,
+      runtime,
+      role,
       handler: 'recommend_ranking.handler',
-      role: this.lambdaExecutionRole,
-      currentVersionOptions: {
-        removalPolicy: cdk.RemovalPolicy.RETAIN,
-      },
     });
 
     this.listCampaignArnsFunction = new lambda.Function(this, 'ListCampaignArnsFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
-      code: lambda.Code.fromAsset(path.resolve(__dirname, '../../functions/apis')),
+      code,
+      runtime,
+      role,
       handler: 'list_campaign_arns.handler',
-      role: this.lambdaExecutionRole,
       timeout: cdk.Duration.seconds(15),
     });
 
     this.createSchemaFunction = new lambda.Function(this, 'CreateSchemaFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
-      code: lambda.Code.fromAsset(path.resolve(__dirname, '../../functions/apis')),
+      code,
+      runtime,
+      role,
       handler: 'create_schema.handler',
-      role: this.lambdaExecutionRole,
     });
 
     this.listSchemaArnsFunction = new lambda.Function(this, 'ListSchemaArnsFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
-      code: lambda.Code.fromAsset(path.resolve(__dirname, '../../functions/apis')),
+      code,
+      runtime,
+      role,
       handler: 'list_schema_arns.handler',
-      role: this.lambdaExecutionRole,
       timeout: cdk.Duration.seconds(15),
     });
 
     this.listSolutionVersionArnsFunction = new lambda.Function(this, 'ListSolutionVersionArnsFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
-      code: lambda.Code.fromAsset(path.resolve(__dirname, '../../functions/apis')),
+      code,
+      runtime,
+      role,
       handler: 'list_solution_version_arns.handler',
-      role: this.lambdaExecutionRole,
       timeout: cdk.Duration.seconds(15),
+    });
+
+    this.putEventsFunction = new lambda.Function(this, `PutEventsFunction`, {
+      code,
+      runtime,
+      role,
+      handler: 'put_events.handler',
+      timeout: cdk.Duration.seconds(10),
     });
   }
 

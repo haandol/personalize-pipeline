@@ -34,6 +34,7 @@ interface Props extends cdk.StackProps {
   createSchemaFunction: lambda.IFunction;
   listSchemaArnsFunction: lambda.IFunction;
   listSolutionVersionArnsFunction: lambda.IFunction;
+  putEventsFunction: lambda.IFunction;
 }
 
 interface IntegrationProps {
@@ -254,6 +255,24 @@ export class ApiIntegrationStack extends cdk.Stack {
         'application/json': JSON.stringify({}),
       },
       methodOptions,
+      integrationResponses,
+    });
+
+    this.registerLambdaIntegration({
+      credentialsRole: props.credentialsRole,
+      httpMethod: 'POST',
+      function: props.putEventsFunction,
+      resource: resource.addResource('put-events'),
+      requestTemplates: {
+        'application/json': `$input.json('$')`,
+      },
+      methodOptions: {
+        ...methodOptions,
+        requestModels: {
+          'application/json': props.requestModels.PutEventsModel,
+        },
+        requestValidator: props.requestValidators.bodyValidator,
+      },
       integrationResponses,
     });
   }
