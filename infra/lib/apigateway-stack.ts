@@ -45,7 +45,22 @@ export class ApiGatewayStack extends cdk.Stack {
           "Effect": "Allow",
           "Principal": "*",
           "Action": "execute-api:Invoke",
-          "Resource": "execute-api:/*/*/*"
+          "Resource": [
+            "execute-api:/*"
+          ]
+        },
+        {
+          "Effect": "Deny",
+          "Principal": "*",
+          "Action": "execute-api:Invoke",
+          "Resource": [
+            "execute-api:/*"
+          ],
+          "Condition": {
+            "StringNotEquals": {
+              "aws:SourceVpce": props.apigwVpcEndpoint.vpcEndpointId
+            }
+          }
         }
       ]
     };
