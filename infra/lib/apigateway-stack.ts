@@ -90,7 +90,6 @@ export class ApiGatewayStack extends cdk.Stack {
         { managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs' },
         { managedPolicyArn: 'arn:aws:iam::aws:policy/AWSStepFunctionsFullAccess' },
         { managedPolicyArn: 'arn:aws:iam::aws:policy/AWSLambdaFullAccess' },
-        { managedPolicyArn: 'arn:aws:iam::aws:policy/AmazonKinesisFullAccess' },
       ]
     });
 
