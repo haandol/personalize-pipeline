@@ -96,6 +96,7 @@ export class ApiGatewayStack extends cdk.Stack {
 
     this.apiRequestModels = {
       CreateSchemaModel: this.registerCreateSchemaModel(),
+      CreateFilterModel: this.registerCreateFilterModel(),
       PutEventsModel: this.registerPutEventsModel(),
     };
 
@@ -157,6 +158,31 @@ export class ApiGatewayStack extends cdk.Stack {
           },
         },
         required: ['name', 'schema'],
+      },
+    });
+  }
+
+  registerCreateFilterModel() {
+    return this.api.addModel(`ApiCreateFilterModel`, {
+      contentType: 'application/json',
+      modelName: 'ApiCreateFilter',
+      schema: {
+        description: 'create filter',
+        type: apigw.JsonSchemaType.OBJECT,
+        properties: {
+          name: {
+            description: 'name of filter',
+            type: apigw.JsonSchemaType.STRING
+          },
+          dataset_group_name: {
+            type: apigw.JsonSchemaType.STRING
+          },
+          filter_expression: {
+            description: 'sql like filter expression',
+            type: apigw.JsonSchemaType.STRING
+          },
+        },
+        required: ['name', 'dataset_group_name', 'filter_expression'],
       },
     });
   }

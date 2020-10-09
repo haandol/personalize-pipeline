@@ -32,9 +32,13 @@ interface Props extends cdk.StackProps {
   recommendRankingFunction: lambda.IFunction;
   listCampaignArnsFunction: lambda.IFunction;
   createSchemaFunction: lambda.IFunction;
+  deleteSchemaFunction: lambda.IFunction;
   listSchemaArnsFunction: lambda.IFunction;
   listSolutionVersionArnsFunction: lambda.IFunction;
   putEventsFunction: lambda.IFunction;
+  createFilterFunction: lambda.IFunction;
+  deleteFilterFunction: lambda.IFunction;
+  listFilterArnsFunction: lambda.IFunction;
 }
 
 interface IntegrationProps {
@@ -134,6 +138,7 @@ export class ApiIntegrationStack extends cdk.Stack {
       integrationResponses,
     });
 
+    // Recommend
     const recommendResource = resource.addResource('recommend');
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
@@ -207,6 +212,7 @@ export class ApiIntegrationStack extends cdk.Stack {
       integrationResponses,
     });
 
+    // Schema
     const schemaResource = resource.addResource('schema');
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
@@ -222,6 +228,26 @@ export class ApiIntegrationStack extends cdk.Stack {
           'application/json': props.requestModels.CreateSchemaModel,
         },
         requestValidator: props.requestValidators.bodyValidator,
+      },
+      integrationResponses,
+    });
+
+    this.registerLambdaIntegration({
+      credentialsRole: props.credentialsRole,
+      httpMethod: 'DELETE',
+      function: props.deleteSchemaFunction,
+      resource: schemaResource,
+      requestTemplates: {
+        'application/json': JSON.stringify({
+          "schema_arn": "$input.params('schema_arn')",
+        }),
+      },
+      methodOptions: {
+        ...methodOptions,
+        requestParameters: {
+          'method.request.querystring.schema_arn': true,
+        },
+        requestValidator: props.requestValidators.parameterValidator,
       },
       integrationResponses,
     });
@@ -246,6 +272,7 @@ export class ApiIntegrationStack extends cdk.Stack {
       integrationResponses,
     });
 
+    // Solutions
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
       httpMethod: 'GET',
@@ -258,6 +285,7 @@ export class ApiIntegrationStack extends cdk.Stack {
       integrationResponses,
     });
 
+    // Events
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
       httpMethod: 'POST',
@@ -272,6 +300,66 @@ export class ApiIntegrationStack extends cdk.Stack {
           'application/json': props.requestModels.PutEventsModel,
         },
         requestValidator: props.requestValidators.bodyValidator,
+      },
+      integrationResponses,
+    });
+
+    // Filter
+    const filterResource = resource.addResource('filter');
+    this.registerLambdaIntegration({
+      credentialsRole: props.credentialsRole,
+      httpMethod: 'POST',
+      function: props.createFilterFunction,
+      resource: filterResource,
+      requestTemplates: {
+        'application/json': `$input.json('$')`,
+      },
+      methodOptions: {
+        ...methodOptions,
+        requestModels: {
+          'application/json': props.requestModels.CreateFilterModel,
+        },
+        requestValidator: props.requestValidators.bodyValidator,
+      },
+      integrationResponses,
+    });
+
+    this.registerLambdaIntegration({
+      credentialsRole: props.credentialsRole,
+      httpMethod: 'DELETE',
+      function: props.deleteFilterFunction,
+      resource: filterResource,
+      requestTemplates: {
+        'application/json': JSON.stringify({
+          "filter_arn": "$input.params('filter_arn')",
+        }),
+      },
+      methodOptions: {
+        ...methodOptions,
+        requestParameters: {
+          'method.request.querystring.filter_arn': true,
+        },
+        requestValidator: props.requestValidators.parameterValidator,
+      },
+      integrationResponses,
+    });
+
+    this.registerLambdaIntegration({
+      credentialsRole: props.credentialsRole,
+      httpMethod: 'GET',
+      function: props.listFilterArnsFunction,
+      resource: filterResource,
+      requestTemplates: {
+        'application/json': JSON.stringify({
+          "name": "$input.params('name')",
+        }),
+      },
+      methodOptions: {
+        ...methodOptions,
+        requestParameters: {
+          'method.request.querystring.name': true,
+        },
+        requestValidator: props.requestValidators.parameterValidator,
       },
       integrationResponses,
     });

@@ -31,9 +31,13 @@ export class ApiLambdaStack extends cdk.Stack {
   public readonly recommendRankingFunction: lambda.IFunction;
   public readonly listCampaignArnsFunction: lambda.IFunction;
   public readonly createSchemaFunction: lambda.IFunction;
+  public readonly deleteSchemaFunction: lambda.IFunction;
   public readonly listSchemaArnsFunction: lambda.IFunction;
   public readonly listSolutionVersionArnsFunction: lambda.IFunction;
   public readonly putEventsFunction: lambda.IFunction;
+  public readonly createFilterFunction: lambda.IFunction;
+  public readonly deleteFilterFunction: lambda.IFunction;
+  public readonly listFilterArnsFunction: lambda.IFunction;
 
   constructor(scope: cdk.Construct, id: string, props?: Props) {
     super(scope, id, props);
@@ -108,6 +112,13 @@ export class ApiLambdaStack extends cdk.Stack {
       handler: 'create_schema.handler',
     });
 
+    this.deleteSchemaFunction = new lambda.Function(this, 'DeleteSchemaFunction', {
+      code,
+      runtime,
+      role,
+      handler: 'delete_schema.handler',
+    });
+
     this.listSchemaArnsFunction = new lambda.Function(this, 'ListSchemaArnsFunction', {
       code,
       runtime,
@@ -129,6 +140,30 @@ export class ApiLambdaStack extends cdk.Stack {
       runtime,
       role,
       handler: 'put_events.handler',
+      timeout: cdk.Duration.seconds(10),
+    });
+
+    this.createFilterFunction = new lambda.Function(this, `CreateFilterFunction`, {
+      code,
+      runtime,
+      role,
+      handler: 'create_filter.handler',
+      timeout: cdk.Duration.seconds(10),
+    });
+
+    this.deleteFilterFunction = new lambda.Function(this, `DeleteFilterFunction`, {
+      code,
+      runtime,
+      role,
+      handler: 'delete_filter.handler',
+      timeout: cdk.Duration.seconds(10),
+    });
+
+    this.listFilterArnsFunction = new lambda.Function(this, `ListFilterArnsFunction`, {
+      code,
+      runtime,
+      role,
+      handler: 'list_filter_arns.handler',
       timeout: cdk.Duration.seconds(10),
     });
   }

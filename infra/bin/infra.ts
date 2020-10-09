@@ -246,6 +246,7 @@ sfnIntegrationStack.addDependency(trainRecipeSfnStack);
 sfnIntegrationStack.addDependency(cleanupSfnStack);
 
 // ApiGateway LambdaIntegration
+// TODO: hide params into interface, e.g.) ...<IApiFunction>apiLambdaStack
 const apiIntegrationStack = new ApiIntegrationStack(app, `${ns}ApiIntegrationStack`, {
   ...StackProps,
   api: apiGwStack.api,
@@ -259,9 +260,13 @@ const apiIntegrationStack = new ApiIntegrationStack(app, `${ns}ApiIntegrationSta
   recommendRankingFunction: apiLambdaStack.recommendRankingFunction,
   listCampaignArnsFunction: apiLambdaStack.listCampaignArnsFunction,
   createSchemaFunction: apiLambdaStack.createSchemaFunction,
+  deleteSchemaFunction: apiLambdaStack.deleteSchemaFunction,
   listSchemaArnsFunction: apiLambdaStack.listSchemaArnsFunction,
   listSolutionVersionArnsFunction: apiLambdaStack.listSolutionVersionArnsFunction,
   putEventsFunction: apiLambdaStack.putEventsFunction,
+  createFilterFunction: apiLambdaStack.createFilterFunction,
+  deleteFilterFunction: apiLambdaStack.deleteFilterFunction,
+  listFilterArnsFunction: apiLambdaStack.listFilterArnsFunction,
 });
 apiIntegrationStack.addDependency(apiGwStack);
 apiIntegrationStack.addDependency(apiLambdaStack);

@@ -18,6 +18,7 @@ import * as apigw from '@aws-cdk/aws-apigateway';
 
 export interface ApiRequestModels {
   CreateSchemaModel: apigw.IModel;
+  CreateFilterModel: apigw.IModel;
   PutEventsModel: apigw.IModel;
 }
 
