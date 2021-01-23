@@ -19,26 +19,14 @@ import * as iam from '@aws-cdk/aws-iam';
 import * as lambda from '@aws-cdk/aws-lambda';
 import * as apigw from '@aws-cdk/aws-apigateway';
 import { ApiRequestModels, RequestValidators } from '../interfaces/interface';
+import { Api } from '../interfaces/base-stack';
+import { ApiLambdas } from '../constructs/api-lambdas';
 
 interface Props extends cdk.StackProps {
   api: apigw.IRestApi;
   requestModels: ApiRequestModels;
   requestValidators: RequestValidators;
   credentialsRole: iam.IRole;
-  getTrackingIdFunction: lambda.IFunction;
-  getMetricsFunction: lambda.IFunction;
-  recommendSimsFunction: lambda.IFunction;
-  recommendHrnnFunction: lambda.IFunction;
-  recommendRankingFunction: lambda.IFunction;
-  listCampaignArnsFunction: lambda.IFunction;
-  createSchemaFunction: lambda.IFunction;
-  deleteSchemaFunction: lambda.IFunction;
-  listSchemaArnsFunction: lambda.IFunction;
-  listSolutionVersionArnsFunction: lambda.IFunction;
-  putEventsFunction: lambda.IFunction;
-  createFilterFunction: lambda.IFunction;
-  deleteFilterFunction: lambda.IFunction;
-  listFilterArnsFunction: lambda.IFunction;
 }
 
 interface IntegrationProps {
@@ -51,57 +39,32 @@ interface IntegrationProps {
   integrationResponses: apigw.IntegrationResponse[];
 }
 
-export class ApiIntegrationStack extends cdk.Stack {
+export class ApiIntegrationStack extends Api.BaseStack {
   constructor(scope: cdk.Construct, id: string, props: Props) {
     super(scope, id, props);
 
+    const lambdaFunctions = new ApiLambdas(this, `ApiLambdas`)
+
     // Get common resource
     const resource = props.api.root.resourceForPath('personalize');
-    const methodOptions: apigw.MethodOptions = {
-      methodResponses: [
-        {
-          statusCode: '200',
-          responseModels: {
-            'application/json': apigw.Model.EMPTY_MODEL,
-          },
-          responseParameters: {
-            'method.response.header.Access-Control-Allow-Headers': true,
-            'method.response.header.Access-Control-Allow-Origin': true,
-            'method.response.header.Access-Control-Allow-Methods': true,
-            'method.response.header.Access-Control-Allow-Credentials': true,
-          },
-        }
-      ],
-    };
-    const integrationResponses: apigw.IntegrationResponse[] = [
-      {
-        statusCode: '200',
-        responseParameters: {
-          'method.response.header.Access-Control-Allow-Headers': "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-          'method.response.header.Access-Control-Allow-Origin': "'*'",
-          'method.response.header.Access-Control-Allow-Methods': "'OPTIONS,POST,GET'",
-          'method.response.header.Access-Control-Allow-Credentials': "'false'",
-        },
-      }
-    ];
 
     // Create lambda integrations (Apis)
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
       httpMethod: 'GET',
-      function: props.listCampaignArnsFunction,
+      function: lambdaFunctions.listCampaignArnsFunction,
       resource: resource.addResource('campaigns'),
       requestTemplates: {
         'application/json': JSON.stringify({}),
       },
-      methodOptions,
-      integrationResponses,
+      methodOptions: this.methodOptions,
+      integrationResponses: this.integrationResponses,
     });
 
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
       httpMethod: 'GET',
-      function: props.getTrackingIdFunction,
+      function: lambdaFunctions.getTrackingIdFunction,
       resource: resource.addResource('tracking'),
       requestTemplates: {
         'application/json': JSON.stringify({
@@ -109,19 +72,19 @@ export class ApiIntegrationStack extends cdk.Stack {
         }),
       },
       methodOptions: {
-        ...methodOptions,
+        ...this.methodOptions,
         requestParameters: {
           'method.request.querystring.name': true,
         },
         requestValidator: props.requestValidators.parameterValidator,
       },
-      integrationResponses,
+      integrationResponses: this.integrationResponses,
     });
 
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
       httpMethod: 'GET',
-      function: props.getMetricsFunction,
+      function: lambdaFunctions.getMetricsFunction,
       resource: resource.addResource('metrics'),
       requestTemplates: {
         'application/json': JSON.stringify({
@@ -129,13 +92,13 @@ export class ApiIntegrationStack extends cdk.Stack {
         }),
       },
       methodOptions: {
-        ...methodOptions,
+        ...this.methodOptions,
         requestParameters: {
           'method.request.querystring.name': true,
         },
         requestValidator: props.requestValidators.parameterValidator,
       },
-      integrationResponses,
+      integrationResponses: this.integrationResponses,
     });
 
     // Recommend
@@ -143,7 +106,7 @@ export class ApiIntegrationStack extends cdk.Stack {
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
       httpMethod: 'GET',
-      function: props.recommendSimsFunction,
+      function: lambdaFunctions.recommendSimsFunction,
       resource: recommendResource.addResource('sims'),
       requestTemplates: {
         'application/json': JSON.stringify({
@@ -153,7 +116,7 @@ export class ApiIntegrationStack extends cdk.Stack {
         }),
       },
       methodOptions: {
-        ...methodOptions,
+        ...this.methodOptions,
         requestParameters: {
           'method.request.querystring.campaign_arn': false,
           'method.request.querystring.item_id': true,
@@ -161,13 +124,13 @@ export class ApiIntegrationStack extends cdk.Stack {
         },
         requestValidator: props.requestValidators.parameterValidator,
       },
-      integrationResponses,
+      integrationResponses: this.integrationResponses,
     });
 
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
       httpMethod: 'GET',
-      function: props.recommendHrnnFunction,
+      function: lambdaFunctions.recommendHrnnFunction,
       resource: recommendResource.addResource('hrnn'),
       requestTemplates: {
         'application/json': JSON.stringify({
@@ -177,7 +140,7 @@ export class ApiIntegrationStack extends cdk.Stack {
         }),
       },
       methodOptions: {
-        ...methodOptions,
+        ...this.methodOptions,
         requestParameters: {
           'method.request.querystring.campaign_arn': false,
           'method.request.querystring.user_id': true,
@@ -185,13 +148,13 @@ export class ApiIntegrationStack extends cdk.Stack {
         },
         requestValidator: props.requestValidators.parameterValidator,
       },
-      integrationResponses,
+      integrationResponses: this.integrationResponses,
     });
 
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
       httpMethod: 'GET',
-      function: props.recommendRankingFunction,
+      function: lambdaFunctions.recommendRankingFunction,
       resource: recommendResource.addResource('ranking'),
       requestTemplates: {
         'application/json': JSON.stringify({
@@ -201,7 +164,7 @@ export class ApiIntegrationStack extends cdk.Stack {
         }),
       },
       methodOptions: {
-        ...methodOptions,
+        ...this.methodOptions,
         requestParameters: {
           'method.request.querystring.campaign_arn': false,
           'method.request.querystring.user_id': true,
@@ -209,7 +172,7 @@ export class ApiIntegrationStack extends cdk.Stack {
         },
         requestValidator: props.requestValidators.parameterValidator,
       },
-      integrationResponses,
+      integrationResponses: this.integrationResponses,
     });
 
     // Schema
@@ -217,25 +180,25 @@ export class ApiIntegrationStack extends cdk.Stack {
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
       httpMethod: 'POST',
-      function: props.createSchemaFunction,
+      function: lambdaFunctions.createSchemaFunction,
       resource: schemaResource,
       requestTemplates: {
         'application/json': `$input.json('$')`,
       },
       methodOptions: {
-        ...methodOptions,
+        ...this.methodOptions,
         requestModels: {
           'application/json': props.requestModels.CreateSchemaModel,
         },
         requestValidator: props.requestValidators.bodyValidator,
       },
-      integrationResponses,
+      integrationResponses: this.integrationResponses,
     });
 
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
       httpMethod: 'DELETE',
-      function: props.deleteSchemaFunction,
+      function: lambdaFunctions.deleteSchemaFunction,
       resource: schemaResource,
       requestTemplates: {
         'application/json': JSON.stringify({
@@ -243,19 +206,19 @@ export class ApiIntegrationStack extends cdk.Stack {
         }),
       },
       methodOptions: {
-        ...methodOptions,
+        ...this.methodOptions,
         requestParameters: {
           'method.request.querystring.schema_arn': true,
         },
         requestValidator: props.requestValidators.parameterValidator,
       },
-      integrationResponses,
+      integrationResponses: this.integrationResponses,
     });
 
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
       httpMethod: 'GET',
-      function: props.listSchemaArnsFunction,
+      function: lambdaFunctions.listSchemaArnsFunction,
       resource: schemaResource,
       requestTemplates: {
         'application/json': JSON.stringify({
@@ -263,45 +226,45 @@ export class ApiIntegrationStack extends cdk.Stack {
         }),
       },
       methodOptions: {
-        ...methodOptions,
+        ...this.methodOptions,
         requestParameters: {
           'method.request.querystring.schema_arn': false,
         },
         requestValidator: props.requestValidators.parameterValidator,
       },
-      integrationResponses,
+      integrationResponses: this.integrationResponses,
     });
 
     // Solutions
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
       httpMethod: 'GET',
-      function: props.listSolutionVersionArnsFunction,
+      function: lambdaFunctions.listSolutionVersionArnsFunction,
       resource: resource.addResource('solution-versions'),
       requestTemplates: {
         'application/json': JSON.stringify({}),
       },
-      methodOptions,
-      integrationResponses,
+      methodOptions: this.methodOptions,
+      integrationResponses: this.integrationResponses,
     });
 
     // Events
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
       httpMethod: 'POST',
-      function: props.putEventsFunction,
+      function: lambdaFunctions.putEventsFunction,
       resource: resource.addResource('put-events'),
       requestTemplates: {
         'application/json': `$input.json('$')`,
       },
       methodOptions: {
-        ...methodOptions,
+        ...this.methodOptions,
         requestModels: {
           'application/json': props.requestModels.PutEventsModel,
         },
         requestValidator: props.requestValidators.bodyValidator,
       },
-      integrationResponses,
+      integrationResponses: this.integrationResponses,
     });
 
     // Filter
@@ -309,25 +272,25 @@ export class ApiIntegrationStack extends cdk.Stack {
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
       httpMethod: 'POST',
-      function: props.createFilterFunction,
+      function: lambdaFunctions.createFilterFunction,
       resource: filterResource,
       requestTemplates: {
         'application/json': `$input.json('$')`,
       },
       methodOptions: {
-        ...methodOptions,
+        ...this.methodOptions,
         requestModels: {
           'application/json': props.requestModels.CreateFilterModel,
         },
         requestValidator: props.requestValidators.bodyValidator,
       },
-      integrationResponses,
+      integrationResponses: this.integrationResponses,
     });
 
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
       httpMethod: 'DELETE',
-      function: props.deleteFilterFunction,
+      function: lambdaFunctions.deleteFilterFunction,
       resource: filterResource,
       requestTemplates: {
         'application/json': JSON.stringify({
@@ -335,19 +298,19 @@ export class ApiIntegrationStack extends cdk.Stack {
         }),
       },
       methodOptions: {
-        ...methodOptions,
+        ...this.methodOptions,
         requestParameters: {
           'method.request.querystring.filter_arn': true,
         },
         requestValidator: props.requestValidators.parameterValidator,
       },
-      integrationResponses,
+      integrationResponses: this.integrationResponses,
     });
 
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
       httpMethod: 'GET',
-      function: props.listFilterArnsFunction,
+      function: lambdaFunctions.listFilterArnsFunction,
       resource: filterResource,
       requestTemplates: {
         'application/json': JSON.stringify({
@@ -355,13 +318,13 @@ export class ApiIntegrationStack extends cdk.Stack {
         }),
       },
       methodOptions: {
-        ...methodOptions,
+        ...this.methodOptions,
         requestParameters: {
           'method.request.querystring.name': true,
         },
         requestValidator: props.requestValidators.parameterValidator,
       },
-      integrationResponses,
+      integrationResponses: this.integrationResponses,
     });
   }
 

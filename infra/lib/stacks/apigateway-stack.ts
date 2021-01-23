@@ -20,7 +20,7 @@ import * as iam from '@aws-cdk/aws-iam';
 import * as apigw from '@aws-cdk/aws-apigateway';
 import {
   ApiRequestModels, StatesRequestModels, RequestValidators
-} from './interfaces/interface';
+} from '../interfaces/interface';
 
 interface Props extends cdk.StackProps {
   apigwVpcEndpoint: ec2.IVpcEndpoint;

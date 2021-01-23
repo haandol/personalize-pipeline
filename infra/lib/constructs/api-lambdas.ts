@@ -19,10 +19,7 @@ import * as cdk from '@aws-cdk/core';
 import * as iam from '@aws-cdk/aws-iam';
 import * as lambda from '@aws-cdk/aws-lambda';
 
-interface Props extends cdk.StackProps {
-}
-
-export class ApiLambdaStack extends cdk.Stack {
+export class ApiLambdas extends cdk.Construct {
   public readonly lambdaExecutionRole: iam.IRole;
   public readonly getTrackingIdFunction: lambda.IFunction;
   public readonly getMetricsFunction: lambda.IFunction;
@@ -39,8 +36,8 @@ export class ApiLambdaStack extends cdk.Stack {
   public readonly deleteFilterFunction: lambda.IFunction;
   public readonly listFilterArnsFunction: lambda.IFunction;
 
-  constructor(scope: cdk.Construct, id: string, props?: Props) {
-    super(scope, id, props);
+  constructor(scope: cdk.Construct, id: string) {
+    super(scope, id);
 
     this.lambdaExecutionRole = new iam.Role(this, 'ApiLambdaExecutionRole', {
       assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),

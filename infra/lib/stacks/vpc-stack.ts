@@ -48,9 +48,7 @@ export class VpcStack extends cdk.Stack {
       this.apigwVpcEndpoint = new ec2.InterfaceVpcEndpoint(this, `VpcEndpoint`, {
         vpc: this.vpc,
         service: ec2.InterfaceVpcEndpointAwsService.APIGATEWAY,
-        subnets: {
-          availabilityZones: props.availabilityZones,
-        },
+        subnets: { availabilityZones: props.availabilityZones },
         privateDnsEnabled: true,
       });
     } else {

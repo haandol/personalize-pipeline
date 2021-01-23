@@ -14,43 +14,47 @@
  * *************************************************************************** *
 */
 
-import * as path from 'path';
 import * as cdk from '@aws-cdk/core';
 import * as iam from '@aws-cdk/aws-iam';
 import * as lambda from '@aws-cdk/aws-lambda';
+import * as sfn from '@aws-cdk/aws-stepfunctions';
+import * as sns from '@aws-cdk/aws-sns';
+import * as apigw from '@aws-cdk/aws-apigateway';
+import { BatchInferenceStates } from '../constructs/batch-inference-states'
+import { StatesRequestModels, RequestValidators } from '../interfaces/interface';
+import { Sfn } from '../interfaces/base-stack'
 
 interface Props extends cdk.StackProps {
-  lambdaExecutionRole: iam.IRole;
+  api: apigw.IRestApi;
+  requestModels: StatesRequestModels;
+  requestValidators: RequestValidators;
+  credentialsRole: iam.IRole;
+  doneTopic: sns.ITopic;
+  failTopic: sns.ITopic;
 }
 
-export class CleanupLambdaStack extends cdk.Stack {
-  public readonly fetchArnFunction: lambda.IFunction;
-  public readonly deleteResourceFunction: lambda.IFunction;
-  public readonly checkDeleteFunction: lambda.IFunction;
+export class BatchInferenceStack extends Sfn.BaseStack {
+  public readonly stateMachine: sfn.IStateMachine;
 
   constructor(scope: cdk.Construct, id: string, props: Props) {
     super(scope, id, props);
 
-    this.fetchArnFunction = new lambda.Function(this, 'FetchArnFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
-      code: lambda.Code.fromAsset(path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'cleanup')),
-      handler: 'fetch_arn.handler',
-      role: props.lambdaExecutionRole,
-    });
+    const states = new BatchInferenceStates(this, 'BatchInferenceStates', props)
+    this.stateMachine = states.stateMachine
 
-    this.deleteResourceFunction = new lambda.Function(this, 'DeleteResourceFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
-      code: lambda.Code.fromAsset(path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'cleanup')),
-      handler: 'delete_resource.handler',
-      role: props.lambdaExecutionRole,
-    });
-
-    this.checkDeleteFunction = new lambda.Function(this, 'CheckDeleteFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
-      code: lambda.Code.fromAsset(path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'cleanup')),
-      handler: 'check_delete.handler',
-      role: props.lambdaExecutionRole,
-    });
+    const resource = props.api.root.resourceForPath('personalize');
+    this.registerSfnIntegration({
+      resource: resource.addResource('batch-inference'),
+      methodOptions: {
+        ...this.methodOptions,
+        requestModels: {
+          'application/json': props.requestModels.BatchInferenceModel,
+        },
+        requestValidator: props.requestValidators.bodyValidator,
+      },
+      credentialsRole: props.credentialsRole,
+      stateMachineArn: this.stateMachine.stateMachineArn,
+    })
   }
 
 }
