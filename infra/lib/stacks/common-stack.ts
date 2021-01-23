@@ -24,27 +24,14 @@ import { SnsEventSource } from '@aws-cdk/aws-lambda-event-sources'
 export class CommonStack extends cdk.Stack {
   public readonly doneTopic: sns.ITopic;
   public readonly failTopic: sns.ITopic;
-  public readonly sfnExecutionRole: iam.Role;
-  public readonly lambdaExecutionRole: iam.IRole;
 
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // Common Roles
-    this.sfnExecutionRole = new iam.Role(this, 'StateMachineRole', {
-      assumedBy: new iam.ServicePrincipal('states.amazonaws.com'),
-      managedPolicies: [
-        { managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole' },
-        { managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AWSLambdaRole' },
-        { managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AmazonPersonalizeFullAccess' },
-      ],
-    });
-    this.lambdaExecutionRole = new iam.Role(this, 'PersonalizeLambdaExecutionRole', {
+    const role = new iam.Role(this, 'NotifyLambdaRole', {
       assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
       managedPolicies: [
         { managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole' },
-        { managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AmazonPersonalizeFullAccess' },
-        { managedPolicyArn: 'arn:aws:iam::aws:policy/AmazonS3FullAccess' },
         { managedPolicyArn: 'arn:aws:iam::aws:policy/AmazonSESFullAccess' },
       ],
     });
@@ -62,7 +49,7 @@ export class CommonStack extends cdk.Stack {
       runtime: lambda.Runtime.PYTHON_3_7,
       code: lambda.Code.fromAsset(path.resolve(__dirname, '..', '..', 'functions', 'common')),
       handler: 'notify.handler',
-      role: this.lambdaExecutionRole,
+      role,
       timeout: cdk.Duration.seconds(5),
       environment: {
         'STATUS': 'DONE',
@@ -77,7 +64,7 @@ export class CommonStack extends cdk.Stack {
       runtime: lambda.Runtime.PYTHON_3_7,
       code: lambda.Code.fromAsset(path.resolve(__dirname, '..', '..', 'functions', 'common')),
       handler: 'notify.handler',
-      role: this.lambdaExecutionRole,
+      role,
       timeout: cdk.Duration.seconds(5),
       environment: {
         'STATUS': 'FAILED',
