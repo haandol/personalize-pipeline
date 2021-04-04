@@ -23,10 +23,10 @@ $ cd infra
 $ npm i
 ```
 
-Install cdk in global context and run `cdk init` if you did not initailize cdk yet.
+Install cdk in global context and run `cdk bootstrap` if you did not initailize cdk yet.
 
 ```bash
-$ npm i -g cdk
+$ npm i -g cdk@1.83.0
 $ cdk bootstrap
 ```
 
