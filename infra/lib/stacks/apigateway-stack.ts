@@ -84,14 +84,20 @@ export class ApiGatewayStack extends cdk.Stack {
     this.api.root.addMethod('ANY');
     this.api.root.addResource('personalize');
 
-    this.credentialsRole = new iam.Role(this, 'ApigwCredentialRole', {
+    const credentialsRole = new iam.Role(this, 'ApigwCredentialRole', {
       assumedBy: new iam.ServicePrincipal('apigateway.amazonaws.com'),
       managedPolicies: [
         { managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs' },
-        { managedPolicyArn: 'arn:aws:iam::aws:policy/AWSStepFunctionsFullAccess' },
-        { managedPolicyArn: 'arn:aws:iam::aws:policy/AWSLambda_FullAccess' },
       ],
     });
+    credentialsRole.addToPolicy(new iam.PolicyStatement({
+      actions: [
+        'lambda:InvokeFunction',
+        'states:StartExecution',
+      ],
+      resources: ['*'],
+    }));
+    this.credentialsRole = credentialsRole
 
     this.apiRequestModels = {
       CreateSchemaModel: this.registerCreateSchemaModel(),

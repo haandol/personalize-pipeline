@@ -61,9 +61,8 @@ export class UserPersonalizationStates extends cdk.Construct {
         { managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole' },
         { managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AmazonPersonalizeFullAccess' },
         { managedPolicyArn: 'arn:aws:iam::aws:policy/AmazonS3FullAccess' },
-        { managedPolicyArn: 'arn:aws:iam::aws:policy/AmazonSESFullAccess' },
       ],
-    })
+    });
 
     const datasetGroupFunction = new lambda.Function(this, 'DatasetGroupFunction', {
       runtime: lambda.Runtime.PYTHON_3_7,

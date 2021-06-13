@@ -51,9 +51,8 @@ export class InteractionDatasetStates extends cdk.Construct {
         { managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole' },
         { managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AmazonPersonalizeFullAccess' },
         { managedPolicyArn: 'arn:aws:iam::aws:policy/AmazonS3FullAccess' },
-        { managedPolicyArn: 'arn:aws:iam::aws:policy/AmazonSESFullAccess' },
       ],
-    })
+    });
 
     const personalizeRole = new iam.Role(this, 'InteractionsDatasetPersonalizeRole', {
       assumedBy: new iam.ServicePrincipal('personalize.amazonaws.com'),

@@ -32,9 +32,15 @@ export class CommonStack extends cdk.Stack {
       assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
       managedPolicies: [
         { managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole' },
-        { managedPolicyArn: 'arn:aws:iam::aws:policy/AmazonSESFullAccess' },
       ],
     });
+    role.addToPolicy(new iam.PolicyStatement({
+      actions: [
+        'SES:SendEmail',
+        'SES:SendRawEmail'
+      ],
+      resources: ['*'],
+    }));
 
     // Common Topics
     this.doneTopic = new sns.Topic(this, 'DoneTopic');

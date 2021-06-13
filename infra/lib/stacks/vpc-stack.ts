@@ -18,9 +18,10 @@ import * as cdk from '@aws-cdk/core';
 import * as ec2 from '@aws-cdk/aws-ec2';
 
 interface Props extends cdk.StackProps {
-  vpcId?: string;
-  vpceId?: string;
-  vpceSecurityGroupIds?: string[];
+  vpcId: string;
+  vpceId: string;
+  vpceSecurityGroupIds: string[];
+  bastionHost: boolean;
 }
 
 export class VpcStack extends cdk.Stack {
@@ -30,46 +31,55 @@ export class VpcStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props: Props) {
     super(scope, id, props);
 
-    const ns = scope.node.tryGetContext('ns');
+    this.vpc = this.getOrCreateVpc(props.vpcId)
+    this.apigwVpcEndpoint =  this.getOrCreateVpcEndpoint(props.vpceId, props.vpceSecurityGroupIds)
+    this.createBastionHost(props.bastionHost)
+  }
 
-    if (props.vpcId) {
-      this.vpc = ec2.Vpc.fromLookup(this, `Vpc`, { vpcId: props.vpcId });
+  private getOrCreateVpc(vpcId: string) {
+    if (!!vpcId) {
+      return ec2.Vpc.fromLookup(this, `Vpc`, { vpcId });
     } else {
-      this.vpc = new ec2.Vpc(this, `Vpc`, { maxAzs: 2 })
+      return new ec2.Vpc(this, `Vpc`, { maxAzs: 2 })
     }
+  }
 
-    if (props.vpceId) {
-      if (!props.vpceSecurityGroupIds) {
+  private getOrCreateVpcEndpoint(vpceId: string, vpceSecurityGroupIds: string[]) {
+    if (!!vpceId) {
+      if (vpceSecurityGroupIds.length === 0) {
         throw Error('vpceSecurityGroupIds should be provided along with vpceId.')
       }
 
-      const securityGroups: ec2.ISecurityGroup[] = props.vpceSecurityGroupIds.map((securityGroupId, index) => {
+      const securityGroups: ec2.ISecurityGroup[] = vpceSecurityGroupIds.map((securityGroupId, index) => {
         return ec2.SecurityGroup.fromSecurityGroupId(this, `VpcEndpointSecGrp${index}`, securityGroupId);
       });
-      this.apigwVpcEndpoint = ec2.InterfaceVpcEndpoint.fromInterfaceVpcEndpointAttributes(this, `${ns}ApigwVpcEndpoint`, {
-        vpcEndpointId: props.vpceId,
+      return ec2.InterfaceVpcEndpoint.fromInterfaceVpcEndpointAttributes(this, `ApigwVpcEndpoint`, {
+        vpcEndpointId: vpceId,
         securityGroups,
         port: 443,
       });
     } else {
-      this.apigwVpcEndpoint = new ec2.InterfaceVpcEndpoint(this, `VpcEndpoint`, {
+      return new ec2.InterfaceVpcEndpoint(this, `VpcEndpoint`, {
         vpc: this.vpc,
         service: ec2.InterfaceVpcEndpointAwsService.APIGATEWAY,
         privateDnsEnabled: true,
       });
     } 
+  }
 
-    const securityGroup = new ec2.SecurityGroup(this, `BastionHostSecGrp`, {
-      vpc: this.vpc,
-    });
+  private createBastionHost(isCreate: boolean): void {
+    if (!isCreate) {
+      return
+    }
+
+    const securityGroup = new ec2.SecurityGroup(this, `BastionHostSecGrp`, { vpc: this.vpc });
     const bastionHost = new ec2.BastionHostLinux(this, `BastionHost`, {
       vpc: this.vpc,
       securityGroup,
-      instanceName: `${ns}BastionHost`,
+      instanceName: `${cdk.Stack.of(this).stackName}BastionHost`,
     });
     bastionHost.allowSshAccessFrom(ec2.Peer.anyIpv4());
     bastionHost.connections.allowFrom(bastionHost.connections, ec2.Port.tcp(443))
-
     this.apigwVpcEndpoint.connections.allowFrom(securityGroup, ec2.Port.tcp(443));
   }
 

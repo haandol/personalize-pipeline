@@ -29,6 +29,7 @@ export const StackProps = {
  * @vpcId                 id of VPC
  * @vpceId                id of VPC Endpoint for API Gateway(execute-api)
  * @vpceSecurityGroupIds  id(s) of VPC Endpoint for API Gateway(execute-api)
+ * @bastionHost           create bastion host on the given VPC if set true
  * 
  * no vpc-id(vpcId) is given, code willl create it for you
  * no vpc-endpoint-id(vpceId) is given, code will create it for you
@@ -37,6 +38,7 @@ export const VpcProps = {
   vpcId: '',
   vpceId: '',
   vpceSecurityGroupIds: [],
+  bastionHost: false,
 }
 
 /*
