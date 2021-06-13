@@ -16,7 +16,6 @@
 
 import * as cdk from '@aws-cdk/core';
 import * as iam from '@aws-cdk/aws-iam';
-import * as lambda from '@aws-cdk/aws-lambda';
 import * as sfn from '@aws-cdk/aws-stepfunctions';
 import * as sns from '@aws-cdk/aws-sns';
 import * as apigw from '@aws-cdk/aws-apigateway';
