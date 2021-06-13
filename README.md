@@ -26,7 +26,7 @@ $ npm i
 Install cdk in global context and run `cdk bootstrap` if you did not initailize cdk yet.
 
 ```bash
-$ npm i -g cdk@1.83.0
+$ npm i -g cdk@1.108.1
 $ cdk bootstrap
 ```
 
@@ -64,7 +64,7 @@ $ docker-compose up
 
 **If you are not yet request increasing SES limitation, you can only send email to verified email.**
 
-2. open [**constant.ts**](infra/libs/interfaces/constant.ts) and replace values for your environment
+2. open [**config.ts**](infra/libs/interfaces/config.ts) and replace values for your environment
 
 3. Create S3 Bucket on [**AWS S3 Console**](https://console.aws.amazon.com/s3/home)
 

@@ -18,10 +18,9 @@ import * as cdk from '@aws-cdk/core';
 import * as ec2 from '@aws-cdk/aws-ec2';
 
 interface Props extends cdk.StackProps {
-  vpcId: string;
+  vpcId?: string;
   vpceId?: string;
   vpceSecurityGroupIds?: string[];
-  availabilityZones?: string[];
 }
 
 export class VpcStack extends cdk.Stack {
@@ -33,9 +32,17 @@ export class VpcStack extends cdk.Stack {
 
     const ns = scope.node.tryGetContext('ns');
 
-    this.vpc = ec2.Vpc.fromLookup(this, `Vpc`, { vpcId: props.vpcId });
+    if (props.vpcId) {
+      this.vpc = ec2.Vpc.fromLookup(this, `Vpc`, { vpcId: props.vpcId });
+    } else {
+      this.vpc = new ec2.Vpc(this, `Vpc`, { maxAzs: 2 })
+    }
 
-    if (props.vpceId && props.vpceSecurityGroupIds) {
+    if (props.vpceId) {
+      if (!props.vpceSecurityGroupIds) {
+        throw Error('vpceSecurityGroupIds should be provided along with vpceId.')
+      }
+
       const securityGroups: ec2.ISecurityGroup[] = props.vpceSecurityGroupIds.map((securityGroupId, index) => {
         return ec2.SecurityGroup.fromSecurityGroupId(this, `VpcEndpointSecGrp${index}`, securityGroupId);
       });
@@ -44,16 +51,13 @@ export class VpcStack extends cdk.Stack {
         securityGroups,
         port: 443,
       });
-    } else if (props.availabilityZones) {
+    } else {
       this.apigwVpcEndpoint = new ec2.InterfaceVpcEndpoint(this, `VpcEndpoint`, {
         vpc: this.vpc,
         service: ec2.InterfaceVpcEndpointAwsService.APIGATEWAY,
-        subnets: { availabilityZones: props.availabilityZones },
         privateDnsEnabled: true,
       });
-    } else {
-      throw Error('Insufficient information to setup VPC Endpoint');
-    }
+    } 
 
     const securityGroup = new ec2.SecurityGroup(this, `BastionHostSecGrp`, {
       vpc: this.vpc,

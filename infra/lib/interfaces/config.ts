@@ -14,6 +14,15 @@
  * *************************************************************************** *
 */
 
+export const ns = 'PersonalizeAlpha';
+
+export const StackProps = {
+  env: {
+    account: process.env.CDK_DEFAULT_ACCOUNT,
+    region: process.env.CDK_DEFAULT_REGION,
+  }
+};
+
 /*
  * TODO: replace vpc-id with yours for Private ApiGateway
  *
@@ -21,29 +30,14 @@
  * @vpceId                id of VPC Endpoint for API Gateway(execute-api)
  * @vpceSecurityGroupIds  id(s) of VPC Endpoint for API Gateway(execute-api)
  * 
- * no vpc endpoint id is given, code will generate it for you
+ * no vpc-id(vpcId) is given, code willl create it for you
+ * no vpc-endpoint-id(vpceId) is given, code will create it for you
  */
 export const VpcProps = {
   vpcId: '',
   vpceId: '',
   vpceSecurityGroupIds: [],
-  availabilityZones: ['ap-northeast-2a', 'ap-northeast-2b', 'ap-northeast-2c'],
 }
-
-/*
- * TODO: replace account and region with yours
- * 
- * @account   account id, e.g. 929831892372
- * @region    region of VPC, e.g. ap-northeast-2
- */
-export const StackProps = {
-  env: {
-    account: '',
-    region: 'ap-northeast-2',
-  }
-};
-
-export const ns = 'PersonalizeAlpha';
 
 /*
  * TODO: replace email and slack notifycation address
