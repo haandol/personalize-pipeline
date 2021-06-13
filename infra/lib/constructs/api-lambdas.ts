@@ -44,7 +44,6 @@ export class ApiLambdas extends cdk.Construct {
       managedPolicies: [
         { managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole' },
         { managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AmazonPersonalizeFullAccess' },
-        { managedPolicyArn: 'arn:aws:iam::aws:policy/AmazonS3FullAccess' },
       ],
     });
 
