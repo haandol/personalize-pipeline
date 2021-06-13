@@ -14,7 +14,7 @@
  * *************************************************************************** *
 */
 
-export const ns = 'PersonalizeAlpha';
+export const ns = 'PersonalizePipelineDev';
 
 export const StackProps = {
   env: {
@@ -35,9 +35,9 @@ export const StackProps = {
  * no vpc-endpoint-id(vpceId) is given, code will create it for you
  */
 export const VpcProps = {
-  vpcId: '',
-  vpceId: '',
-  vpceSecurityGroupIds: [],
+  vpcId: undefined,
+  vpceId: undefined,
+  vpceSecurityGroupIds: undefined,
   bastionHost: false,
 }
 

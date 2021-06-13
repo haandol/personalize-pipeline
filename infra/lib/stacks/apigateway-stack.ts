@@ -23,7 +23,7 @@ import {
 } from '../interfaces/interface';
 
 interface Props extends cdk.StackProps {
-  apigwVpcEndpoint: ec2.IVpcEndpoint;
+  apigwVpcEndpoint?: ec2.IVpcEndpoint;
 }
 
 export class ApiGatewayStack extends cdk.Stack {
@@ -36,37 +36,10 @@ export class ApiGatewayStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props: Props) {
     super(scope, id, props);
 
-    const ns = scope.node.tryGetContext('ns') || '';
-
-    const policyDocument = {
-      "Version": "2012-10-17",
-      "Statement": [
-        {
-          "Effect": "Allow",
-          "Principal": "*",
-          "Action": "execute-api:Invoke",
-          "Resource": [
-            "execute-api:/*"
-          ]
-        },
-        {
-          "Effect": "Deny",
-          "Principal": "*",
-          "Action": "execute-api:Invoke",
-          "Resource": [
-            "execute-api:/*"
-          ],
-          "Condition": {
-            "StringNotEquals": {
-              "aws:SourceVpce": props.apigwVpcEndpoint.vpcEndpointId
-            }
-          }
-        }
-      ]
-    };
     const stageName = 'dev'
+    const { policy, endpointConfiguration } = this.getApiOptions(props.apigwVpcEndpoint)
     this.api = new apigw.RestApi(this, `RestApi`, {
-      restApiName: `${ns}RestApi`,
+      restApiName: `${cdk.Stack.of(this).stackName}RestApi`,
       deploy: true,
       deployOptions: {
         stageName,
@@ -75,11 +48,8 @@ export class ApiGatewayStack extends cdk.Stack {
       defaultCorsPreflightOptions: {
         allowOrigins: apigw.Cors.ALL_ORIGINS,
       },
-      endpointConfiguration: {
-        types: [apigw.EndpointType.PRIVATE],
-        vpcEndpoints: [props.apigwVpcEndpoint]
-      },
-      policy: iam.PolicyDocument.fromJson(policyDocument),
+      endpointConfiguration,
+      policy,
     });
     this.api.root.addMethod('ANY');
     this.api.root.addResource('personalize');
@@ -129,8 +99,54 @@ export class ApiGatewayStack extends cdk.Stack {
     }
   }
 
+  private getApiOptions(apigwVpcEndpoint?: ec2.IVpcEndpoint) {
+    if (apigwVpcEndpoint) {
+      const policyDocument = {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "execute-api:Invoke",
+            "Resource": [
+              "execute-api:/*"
+            ]
+          },
+          {
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "execute-api:Invoke",
+            "Resource": [
+              "execute-api:/*"
+            ],
+            "Condition": {
+              "StringNotEquals": {
+                "aws:SourceVpce": apigwVpcEndpoint.vpcEndpointId
+              }
+            }
+          }
+        ]
+      };
+      const endpointConfiguration = {
+        types: [apigw.EndpointType.PRIVATE],
+        vpcEndpoints: [apigwVpcEndpoint],
+      }
+      return {
+        policy: iam.PolicyDocument.fromJson(policyDocument),
+        endpointConfiguration
+      }
+    } else {
+      return {
+        policy: undefined,
+        endpointConfiguration: {
+          types: [apigw.EndpointType.REGIONAL],
+        },
+      }
+    }
+  }
+
   // Apis Models
-  registerCreateSchemaModel() {
+  private registerCreateSchemaModel() {
     return this.api.addModel(`ApiCreateSchemaModel`, {
       contentType: 'application/json',
       modelName: 'ApiCreateSchema',
@@ -167,7 +183,7 @@ export class ApiGatewayStack extends cdk.Stack {
     });
   }
 
-  registerCreateFilterModel() {
+  private registerCreateFilterModel() {
     return this.api.addModel(`ApiCreateFilterModel`, {
       contentType: 'application/json',
       modelName: 'ApiCreateFilter',
@@ -193,7 +209,7 @@ export class ApiGatewayStack extends cdk.Stack {
   }
 
   // States Models
-  registerSimsHrnnModel() {
+  private registerSimsHrnnModel() {
     return this.api.addModel(`StatesSimsHrnnModel`, {
       contentType: 'application/json',
       modelName: 'StatesSimsHrnnModel',
@@ -260,7 +276,7 @@ export class ApiGatewayStack extends cdk.Stack {
     });
   }
 
-  registerUserPersonalizationModel() {
+  private registerUserPersonalizationModel() {
     return this.api.addModel(`StatesUserPersonalizationModel`, {
       contentType: 'application/json',
       modelName: 'StatesUserPersonalizationModel',
@@ -339,7 +355,7 @@ export class ApiGatewayStack extends cdk.Stack {
     });
   }
 
-  registerMetadataDatasetModel() {
+  private registerMetadataDatasetModel() {
     return this.api.addModel(`StatesMetadataDatasetModel`, {
       contentType: 'application/json',
       modelName: 'StatesMetadataDatasetModel',
@@ -420,7 +436,7 @@ export class ApiGatewayStack extends cdk.Stack {
     });
   }
 
-  registerInteractionsDatasetModel() {
+  private registerInteractionsDatasetModel() {
     return this.api.addModel(`StatesInteractionsDatasetModel`, {
       contentType: 'application/json',
       modelName: 'StatesInteractionsDatasetModel',
@@ -498,7 +514,7 @@ export class ApiGatewayStack extends cdk.Stack {
     });
   }
 
-  registerBatchInferenceModel() {
+  private registerBatchInferenceModel() {
     return this.api.addModel(`StatesBatchInferenceModel`, {
       contentType: 'application/json',
       modelName: 'StatesBatchInferenceModel',
@@ -544,7 +560,7 @@ export class ApiGatewayStack extends cdk.Stack {
     });
   }
 
-  registerTrainRecipeModel() {
+  private registerTrainRecipeModel() {
     return this.api.addModel(`StatesTrainRecipe`, {
       contentType: 'application/json',
       modelName: 'StatesTrainRecipe',
@@ -608,7 +624,7 @@ export class ApiGatewayStack extends cdk.Stack {
     });
   }
 
-  registerCleanupModel() {
+  private registerCleanupModel() {
     return this.api.addModel(`StatesCleanupModel`, {
       contentType: 'application/json',
       modelName: 'StatesCleanupModel',
@@ -627,7 +643,7 @@ export class ApiGatewayStack extends cdk.Stack {
   }
 
   // Event Models
-  registerPutEventsModel() {
+  private registerPutEventsModel() {
     return this.api.addModel(`PutEventsModel`, {
       contentType: 'application/json',
       modelName: 'PutEventsModel',
@@ -673,4 +689,5 @@ export class ApiGatewayStack extends cdk.Stack {
       },
     });
   }
+
 }

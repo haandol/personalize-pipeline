@@ -18,15 +18,15 @@ import * as cdk from '@aws-cdk/core';
 import * as ec2 from '@aws-cdk/aws-ec2';
 
 interface Props extends cdk.StackProps {
-  vpcId: string;
-  vpceId: string;
-  vpceSecurityGroupIds: string[];
+  vpcId?: string;
+  vpceId?: string;
+  vpceSecurityGroupIds?: string[];
   bastionHost: boolean;
 }
 
 export class VpcStack extends cdk.Stack {
-  public readonly vpc: ec2.IVpc;
-  public readonly apigwVpcEndpoint: ec2.IInterfaceVpcEndpoint;
+  public readonly vpc?: ec2.IVpc;
+  public readonly apigwVpcEndpoint?: ec2.IInterfaceVpcEndpoint;
 
   constructor(scope: cdk.Construct, id: string, props: Props) {
     super(scope, id, props);
@@ -36,17 +36,21 @@ export class VpcStack extends cdk.Stack {
     this.createBastionHost(props.bastionHost)
   }
 
-  private getOrCreateVpc(vpcId: string) {
+  private getOrCreateVpc(vpcId?: string) {
     if (!!vpcId) {
       return ec2.Vpc.fromLookup(this, `Vpc`, { vpcId });
     } else {
-      return new ec2.Vpc(this, `Vpc`, { maxAzs: 2 })
+      return undefined
     }
   }
 
-  private getOrCreateVpcEndpoint(vpceId: string, vpceSecurityGroupIds: string[]) {
+  private getOrCreateVpcEndpoint(vpceId?: string, vpceSecurityGroupIds?: string[]): ec2.IInterfaceVpcEndpoint | undefined {
+    if (!this.vpc) {
+      return undefined
+    }
+
     if (!!vpceId) {
-      if (vpceSecurityGroupIds.length === 0) {
+      if (!vpceSecurityGroupIds) {
         throw Error('vpceSecurityGroupIds should be provided along with vpceId.')
       }
 
@@ -68,7 +72,7 @@ export class VpcStack extends cdk.Stack {
   }
 
   private createBastionHost(isCreate: boolean): void {
-    if (!isCreate) {
+    if (!this.vpc || !this.apigwVpcEndpoint || !isCreate) {
       return
     }
 

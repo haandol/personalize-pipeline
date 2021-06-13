@@ -138,7 +138,7 @@ const cleanupStack = new CleanupStack(app, `${ns}CleanupStack`, {
 cleanupStack.addDependency(commonStack)
 
 // ApiGateway LambdaIntegration
-const apiIntegrationStack = new ApiIntegrationStack(app, `${ns}ApiIntegrationStack`, {
+new ApiIntegrationStack(app, `${ns}ApiIntegrationStack`, {
   ...StackProps,
   api: apiGwStack.api,
   requestModels: apiGwStack.apiRequestModels,
