@@ -170,6 +170,9 @@ export class ApiGatewayStack extends cdk.Stack {
                 type: apigw.JsonSchemaType.STRING,
               },
               fields: { 
+                items: {
+                  type: apigw.JsonSchemaType.OBJECT,
+                },
                 type: apigw.JsonSchemaType.ARRAY,
               },
               version: { 
@@ -682,6 +685,9 @@ export class ApiGatewayStack extends cdk.Stack {
           },
           impression: {
             description: 'list of item IDs',
+            items: {
+              type: apigw.JsonSchemaType.STRING,
+            },
             type: apigw.JsonSchemaType.ARRAY
           },
         },
