@@ -1,10 +1,10 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "2020-08-26T03:53:39Z",
-    "title": "PersonalizeAlphaRestApi"
+    "version": "2021-06-14T05:52:45Z",
+    "title": "PersonalizePipelineDevApiGatewayStackRestApi"
   },
-  "host": "gb6uwptgyi.execute-api.ap-northeast-2.amazonaws.com",
+  "host": "v8rbhcyd3c.execute-api.ap-northeast-2.amazonaws.com",
   "basePath": "/dev",
   "schemes": [
     "https"
@@ -238,7 +238,45 @@
         }
       }
     },
-    "/personalize/events": {
+    "/personalize/filter": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
       "post": {
         "consumes": [
           "application/json"
@@ -249,11 +287,49 @@
         "parameters": [
           {
             "in": "body",
-            "name": "PutEventsModel",
+            "name": "ApiCreateFilter",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/PutEventsModel"
+              "$ref": "#/definitions/ApiCreateFilter"
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "filter_arn",
+            "in": "query",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {
@@ -301,7 +377,7 @@
         }
       }
     },
-    "/personalize/interactions-dataset": {
+    "/personalize/interaction-dataset": {
       "post": {
         "consumes": [
           "application/json"
@@ -441,6 +517,69 @@
             "in": "query",
             "required": true,
             "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "204 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/personalize/put-events": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "PutEventsModel",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PutEventsModel"
+            }
           }
         ],
         "responses": {
@@ -872,6 +1011,44 @@
           }
         }
       },
+      "delete": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "schema_arn",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
       "options": {
         "consumes": [
           "application/json"
@@ -911,6 +1088,59 @@
               "$ref": "#/definitions/StatesSimsHrnnModel"
             }
           }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "204 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/personalize/solution-versions": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
         ],
         "responses": {
           "200": {
@@ -1178,7 +1408,10 @@
         },
         "impression": {
           "type": "array",
-          "description": "list of item IDs"
+          "description": "list of item IDs",
+          "items": {
+            "type": "string"
+          }
         },
         "event_value": {
           "type": "number"
@@ -1227,7 +1460,8 @@
           "type": "string"
         },
         "name": {
-          "type": "string"
+          "type": "string",
+          "description": "name for batch inference job"
         },
         "output_path": {
           "type": "string"
@@ -1255,6 +1489,10 @@
         },
         "event_type": {
           "type": "string"
+        },
+        "solution_arn": {
+          "type": "string",
+          "description": "training_mode requires solution_arn"
         },
         "schema_arn": {
           "type": "string"
@@ -1299,13 +1537,19 @@
           "type": "string"
         },
         "perform_hpo": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "set true to perform HPO"
+        },
+        "training_mode": {
+          "type": "string",
+          "description": "training_mode requires solution_arn"
         },
         "recipe_arn": {
           "type": "string"
         },
         "deploy": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "set true to create campaign"
         }
       },
       "description": "import new interaction dataset and create campaign"
@@ -1317,10 +1561,33 @@
       ],
       "properties": {
         "name": {
-          "type": "string"
+          "type": "string",
+          "description": "name of dataset-group"
         }
       },
       "description": "clean up dataset-group and its related resources"
+    },
+    "ApiCreateFilter": {
+      "type": "object",
+      "required": [
+        "dataset_group_name",
+        "filter_expression",
+        "name"
+      ],
+      "properties": {
+        "dataset_group_name": {
+          "type": "string"
+        },
+        "filter_expression": {
+          "type": "string",
+          "description": "sql like filter expression"
+        },
+        "name": {
+          "type": "string",
+          "description": "name of filter"
+        }
+      },
+      "description": "create filter"
     },
     "ApiCreateSchema": {
       "type": "object",
@@ -1330,7 +1597,28 @@
       ],
       "properties": {
         "schema": {
-          "type": "string"
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "fields": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {}
+              }
+            },
+            "version": {
+              "type": "string"
+            }
+          }
         },
         "name": {
           "type": "string"
@@ -1388,13 +1676,15 @@
           "type": "string"
         },
         "perform_hpo": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "set true to perform HPO"
         },
         "recipe_arn": {
           "type": "string"
         },
         "deploy": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "set true to create campaign"
         }
       },
       "description": "create campaign with given recipe for existing dataset"
@@ -1462,7 +1752,8 @@
           "type": "string"
         },
         "perform_hpo": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "set true to perform HPO"
         },
         "user_bucket": {
           "type": "string"
@@ -1471,7 +1762,8 @@
           "type": "string"
         },
         "deploy": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "set true to create campaign"
         }
       },
       "description": "start user-personalization pipeline"
@@ -1487,6 +1779,10 @@
         },
         "event_type": {
           "type": "string"
+        },
+        "solution_arn": {
+          "type": "string",
+          "description": "training_mode required solution_arn"
         },
         "solution_config": {
           "type": "object",
@@ -1531,7 +1827,12 @@
           "type": "string"
         },
         "perform_hpo": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "set true to perform HPO"
+        },
+        "training_mode": {
+          "type": "string",
+          "description": "training_mode required solution_arn"
         },
         "user_bucket": {
           "type": "string"
@@ -1540,7 +1841,8 @@
           "type": "string"
         },
         "deploy": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "set true to create campaign"
         }
       },
       "description": "import new metadata and create campaign"
@@ -1602,29 +1904,15 @@
           "type": "string"
         },
         "perform_hpo": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "set true to perform HPO"
         },
         "deploy": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "set true to create campaign"
         }
       },
       "description": "start sims / hrnn / ranking pipeline"
     }
-  },
-  "x-amazon-apigateway-policy": {
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Effect": "Allow",
-        "Principal": "*",
-        "Action": "execute-api:Invoke",
-        "Resource": "*"
-      }
-    ]
-  },
-  "x-amazon-apigateway-endpoint-configuration": {
-    "vpcEndpointIds": [
-      "vpce-07c47784c237c8b04"
-    ]
   }
 }
