@@ -77,6 +77,7 @@ export class RankingStates extends cdk.Construct {
       environment: {
         ROLE_ARN: personalizeRole.roleArn,
       },
+      timeout: cdk.Duration.seconds(30),
     });
 
     const solutionFunction = new lambda.Function(this, 'SolutionFunction', {
@@ -138,6 +139,7 @@ export class RankingStates extends cdk.Construct {
     const datasetTask = new tasks.LambdaInvoke(this, 'RankingDatasetTask', {
       lambdaFunction: stateFunctions.datasetFunction,
       outputPath: '$.Payload',
+      timeout: cdk.Duration.seconds(30),
     });
     datasetTask.next(checkReadyTask);
     datasetTask.addCatch(failTask);

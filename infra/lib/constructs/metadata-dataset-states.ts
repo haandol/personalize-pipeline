@@ -134,6 +134,7 @@ export class MetadataDatasetStates extends cdk.Construct {
     const itemDatasetTask = new tasks.LambdaInvoke(this, 'MetadataDatasetDatasetItemTask', {
       lambdaFunction: stateFunctions.itemDatasetFunction,
       outputPath: '$.Payload',
+      timeout: cdk.Duration.seconds(30),
     });
     itemDatasetTask.next(checkReadyTask);
     itemDatasetTask.addCatch(failTask);
@@ -141,6 +142,7 @@ export class MetadataDatasetStates extends cdk.Construct {
     const userDatasetTask = new tasks.LambdaInvoke(this, 'MetadataDatasetDatasetUserTask', {
       lambdaFunction: stateFunctions.userDatasetFunction,
       outputPath: '$.Payload',
+      timeout: cdk.Duration.seconds(30),
     });
     userDatasetTask.next(checkReadyTask);
     userDatasetTask.addCatch(failTask);

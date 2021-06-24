@@ -79,6 +79,7 @@ export class UserPersonalizationStates extends cdk.Construct {
       environment: {
         ROLE_ARN: personalizeRole.roleArn,
       },
+      timeout: cdk.Duration.seconds(30),
     })
 
     const itemDatasetFunction = new lambda.Function(this, 'ItemDatasetFunction', {
@@ -162,6 +163,7 @@ export class UserPersonalizationStates extends cdk.Construct {
     const datasetTask = new tasks.LambdaInvoke(this, 'UserPersonalizationDatasetTask', {
       lambdaFunction: stateFunctions.datasetFunction,
       outputPath: '$.Payload',
+      timeout: cdk.Duration.seconds(30),
     })
     datasetTask.next(checkReadyTask)
     datasetTask.addCatch(failTask)
@@ -169,6 +171,7 @@ export class UserPersonalizationStates extends cdk.Construct {
     const itemDatasetTask = new tasks.LambdaInvoke(this, 'UserPersonalizationDatasetItemTask', {
       lambdaFunction: stateFunctions.itemDatasetFunction,
       outputPath: '$.Payload',
+      timeout: cdk.Duration.seconds(30),
     })
     itemDatasetTask.next(checkReadyTask)
     itemDatasetTask.addCatch(failTask)
@@ -176,6 +179,7 @@ export class UserPersonalizationStates extends cdk.Construct {
     const userDatasetTask = new tasks.LambdaInvoke(this, 'UserPersonalizationDatasetUserTask', {
       lambdaFunction: stateFunctions.userDatasetFunction,
       outputPath: '$.Payload',
+      timeout: cdk.Duration.seconds(30),
     })
     userDatasetTask.next(checkReadyTask)
     userDatasetTask.addCatch(failTask)
