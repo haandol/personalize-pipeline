@@ -17,6 +17,7 @@ import os
 import json
 import boto3
 import logging
+from time import sleep
 
 logger = logging.getLogger('dataset')
 logger.setLevel(logging.INFO)
@@ -41,6 +42,9 @@ def handler(event, context):
         dataset_arn, is_created = get_or_create_dataset(dataset_group_arn, schema_arn, name)
         if is_created:
             attach_policy(bucket)
+
+            # wait for dataset is ready
+            sleep(10)
  
         create_dataset_import_job_response = personalize.create_dataset_import_job(
             jobName=f'{name}-user-{suffix}',
