@@ -51,7 +51,7 @@ def handler(event, context):
         attach_policy(bucket)
 
         # wait for dataset is ready
-        sleep(10)
+        sleep(20)
 
         create_dataset_import_job_response = personalize.create_dataset_import_job(
             jobName=f'{name}-user-{suffix}',
