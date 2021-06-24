@@ -90,6 +90,7 @@ export class UserPersonalizationStates extends cdk.Construct {
       environment: {
         ROLE_ARN: personalizeRole.roleArn,
       },
+      timeout: cdk.Duration.seconds(30),
     })
 
     const userDatasetFunction = new lambda.Function(this, 'UserDatasetFunction', {
@@ -100,6 +101,7 @@ export class UserPersonalizationStates extends cdk.Construct {
       environment: {
         ROLE_ARN: personalizeRole.roleArn,
       },
+      timeout: cdk.Duration.seconds(30),
     })
 
     const solutionFunction = new lambda.Function(this, 'SolutionFunction', {
