@@ -30,6 +30,9 @@ def handler(event, context):
     if stage == 'DATASET_GROUP':
         dataset_group_arn = event['dataset_group_arn']
         event['status'] = check_dataset_group(dataset_group_arn)
+    elif stage == 'DATASET':
+        dataset_arn = event['dataset_arn']
+        event['status'] = check_dataset(dataset_arn)
     elif stage == 'DATASET_IMPORT':
         dataset_import_job_arn = event['dataset_import_job_arn']
         event['status'] = check_dataset_import_job(dataset_import_job_arn)
@@ -57,6 +60,20 @@ def check_dataset_group(dataset_group_arn):
     )
     status = describe_dataset_group_response['datasetGroup']['status']
     logger.info('DatasetGroup: {}'.format(status))
+    return status
+
+
+def check_dataset(dataset_arn):
+    # skip creating dataset
+    if not dataset_arn:
+        return 'ACTIVE'
+
+    describe_dataset_response = personalize.describe_dataset(
+        datasetArn=dataset_arn
+    )
+
+    status = describe_dataset_response['dataset']['status']
+    logger.info('Dataset: {}'.format(status))
     return status
 
 
