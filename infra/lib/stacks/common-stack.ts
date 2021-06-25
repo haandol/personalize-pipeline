@@ -50,6 +50,7 @@ export class CommonStack extends cdk.Stack {
     const notifySender = scope.node.tryGetContext('notifySender') || '';
     const notifyEmail = scope.node.tryGetContext('notifyEmail') || '';
     const notifySlack = scope.node.tryGetContext('notifySlack') || '';
+    const notifyChime = scope.node.tryGetContext('notifyChime') || '';
 
     const notifyDoneFunction = new lambda.Function(this, 'NotifyDoneFunction', {
       runtime: lambda.Runtime.PYTHON_3_7,
@@ -62,6 +63,7 @@ export class CommonStack extends cdk.Stack {
         'SENDER': notifySender,
         'TO_ADDR': notifyEmail,
         'SLACK_WEBHOOK_URL': notifySlack,
+        'CHIME_WEBHOOK_URL': notifyChime,
       },
     });
     notifyDoneFunction.addEventSource(new SnsEventSource(this.doneTopic));
@@ -77,6 +79,7 @@ export class CommonStack extends cdk.Stack {
         'SENDER': notifySender,
         'TO_ADDR': notifyEmail,
         'SLACK_WEBHOOK_URL': notifySlack,
+        'CHIME_WEBHOOK_URL': notifyChime,
       },
     });
     notifyFailFunction.addEventSource(new SnsEventSource(this.failTopic));

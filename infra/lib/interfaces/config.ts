@@ -47,10 +47,12 @@ export const VpcProps = {
  * @notifySender    // sender's email address, e.g. DongGyun Lee <dongkyl@amazon.com>
  * @notifyEmail     // receiver's email address
  * @notifySlack     // webhook url for slack notification
+ * @notifyChime     // webhook url for chime notification
  */
 export const AppContext = {
   ns,
   notifySender: '',
   notifyEmail: '',
   notifySlack: '',
+  notifyChime: '',
 }

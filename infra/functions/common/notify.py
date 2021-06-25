@@ -31,6 +31,7 @@ STATUS = os.environ['STATUS']
 SENDER = os.environ.get('SENDER', '')
 TO_ADDR = os.environ.get('TO_ADDR', '')
 SLACK_WEBHOOK_URL = os.environ.get('SLACK_WEBHOOK_URL', '')
+CHIME_WEBHOOK_URL = os.environ.get('CHIME_WEBHOOK_URL', '')
 
 
 def send_email(event):
@@ -95,7 +96,19 @@ def send_slack_msg(event):
         }).encode('utf-8')
         headers = { 'Content-type': 'application/json' }
         req = urllib.request.Request(SLACK_WEBHOOK_URL, data=data, headers=headers)
-        resp = urllib.request.urlopen(req)
+        resp = urllib.request.urlopen(req, timeout=3)
+    except:
+        logger.error(traceback.format_exc())
+
+
+def send_chime_msg(event):
+    try:
+        err_msg = event['Records'][0]['Sns']['Message']
+        data = json.dumps({
+            'Content': f'Deploy: *{STATUS}*\n ```{err_msg}```',
+        }).encode('utf-8')
+        req = urllib.request.Request(CHIME_WEBHOOK_URL, data=data)
+        resp = urllib.request.urlopen(req, timeout=3)
     except:
         logger.error(traceback.format_exc())
 
@@ -106,3 +119,5 @@ def handler(event, context):
         send_email(event)
     if SLACK_WEBHOOK_URL:
         send_slack_msg(event)
+    if CHIME_WEBHOOK_URL:
+        send_chime_msg(event)
