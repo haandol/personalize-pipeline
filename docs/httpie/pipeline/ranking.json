@@ -1,6 +1,6 @@
 {
   "name": "ranking-baseline",
-  "schema_arn": "arn:aws:personalize:ap-northeast-2:776556808198:schema/interactions-baseline",
-  "bucket": "s3://dongkyl-personalize-partner-demo/interactions.csv",
+  "schema_arn": "",
+  "bucket": "s3://$BUCKET/interactions.csv",
   "deploy": true
 }
