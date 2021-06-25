@@ -1,6 +1,6 @@
 {
   "name": "sims-baseline-batch",
   "solution_version_arn": "",
-  "input_path": "s3://REPLACE_WITH_YOUR_BUCKET_NAME/input.json",
-  "output_path": "s3://REPLACE_WITH_YOUR_BUCKET_NAME/output/"
+  "input_path": "s3://$BUCKET/input.batch",
+  "output_path": "s3://$BUCKET/output/"
 }
