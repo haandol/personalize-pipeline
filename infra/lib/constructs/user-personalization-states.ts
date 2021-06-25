@@ -30,8 +30,11 @@ interface IProps {
 interface IStateFunctions {
   datasetGroupFunction: lambda.IFunction
   datasetFunction: lambda.IFunction
+  datasetImportFunction: lambda.IFunction
   itemDatasetFunction: lambda.IFunction
+  itemDatasetImportFunction: lambda.IFunction
   userDatasetFunction: lambda.IFunction
+  userDatasetImportFunction: lambda.IFunction
   solutionFunction: lambda.IFunction
   campaignFunction: lambda.IFunction
   checkReadyFunction: lambda.IFunction
@@ -76,10 +79,16 @@ export class UserPersonalizationStates extends cdk.Construct {
       code: lambda.Code.fromAsset(path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'user-personalization')),
       handler: 'create_dataset.handler',
       role: lambdaExecutionRole,
+    })
+
+    const datasetImportFunction = new lambda.Function(this, 'DatasetImportFunction', {
+      runtime: lambda.Runtime.PYTHON_3_7,
+      code: lambda.Code.fromAsset(path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'user-personalization')),
+      handler: 'create_dataset_import.handler',
+      role: lambdaExecutionRole,
       environment: {
         ROLE_ARN: personalizeRole.roleArn,
       },
-      timeout: cdk.Duration.seconds(30),
     })
 
     const itemDatasetFunction = new lambda.Function(this, 'ItemDatasetFunction', {
@@ -87,10 +96,16 @@ export class UserPersonalizationStates extends cdk.Construct {
       code: lambda.Code.fromAsset(path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'user-personalization')),
       handler: 'create_item_dataset.handler',
       role: lambdaExecutionRole,
+    })
+
+    const itemDatasetImportFunction = new lambda.Function(this, 'ItemDatasetImportFunction', {
+      runtime: lambda.Runtime.PYTHON_3_7,
+      code: lambda.Code.fromAsset(path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'user-personalization')),
+      handler: 'create_item_dataset_import.handler',
+      role: lambdaExecutionRole,
       environment: {
         ROLE_ARN: personalizeRole.roleArn,
       },
-      timeout: cdk.Duration.seconds(30),
     })
 
     const userDatasetFunction = new lambda.Function(this, 'UserDatasetFunction', {
@@ -98,10 +113,16 @@ export class UserPersonalizationStates extends cdk.Construct {
       code: lambda.Code.fromAsset(path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'user-personalization')),
       handler: 'create_user_dataset.handler',
       role: lambdaExecutionRole,
+    })
+
+    const userDatasetImportFunction = new lambda.Function(this, 'UserDatasetImportFunction', {
+      runtime: lambda.Runtime.PYTHON_3_7,
+      code: lambda.Code.fromAsset(path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'user-personalization')),
+      handler: 'create_user_dataset_import.handler',
+      role: lambdaExecutionRole,
       environment: {
         ROLE_ARN: personalizeRole.roleArn,
       },
-      timeout: cdk.Duration.seconds(30),
     })
 
     const solutionFunction = new lambda.Function(this, 'SolutionFunction', {
@@ -128,8 +149,11 @@ export class UserPersonalizationStates extends cdk.Construct {
     return {
       datasetGroupFunction,
       datasetFunction,
+      datasetImportFunction,
       itemDatasetFunction,
+      itemDatasetImportFunction,
       userDatasetFunction,
+      userDatasetImportFunction,
       solutionFunction,
       campaignFunction,
       checkReadyFunction,
@@ -165,26 +189,44 @@ export class UserPersonalizationStates extends cdk.Construct {
     const datasetTask = new tasks.LambdaInvoke(this, 'UserPersonalizationDatasetTask', {
       lambdaFunction: stateFunctions.datasetFunction,
       outputPath: '$.Payload',
-      timeout: cdk.Duration.seconds(30),
     })
     datasetTask.next(checkReadyTask)
     datasetTask.addCatch(failTask)
 
+    const datasetImportTask = new tasks.LambdaInvoke(this, 'UserPersonalizationDatasetImportTask', {
+      lambdaFunction: stateFunctions.datasetImportFunction,
+      outputPath: '$.Payload',
+    })
+    datasetImportTask.next(checkReadyTask)
+    datasetImportTask.addCatch(failTask)
+
     const itemDatasetTask = new tasks.LambdaInvoke(this, 'UserPersonalizationDatasetItemTask', {
       lambdaFunction: stateFunctions.itemDatasetFunction,
       outputPath: '$.Payload',
-      timeout: cdk.Duration.seconds(30),
     })
     itemDatasetTask.next(checkReadyTask)
     itemDatasetTask.addCatch(failTask)
 
+    const itemDatasetImportTask = new tasks.LambdaInvoke(this, 'UserPersonalizationDatasetItemImportTask', {
+      lambdaFunction: stateFunctions.itemDatasetImportFunction,
+      outputPath: '$.Payload',
+    })
+    itemDatasetImportTask.next(checkReadyTask)
+    itemDatasetImportTask.addCatch(failTask)
+
     const userDatasetTask = new tasks.LambdaInvoke(this, 'UserPersonalizationDatasetUserTask', {
       lambdaFunction: stateFunctions.userDatasetFunction,
       outputPath: '$.Payload',
-      timeout: cdk.Duration.seconds(30),
     })
     userDatasetTask.next(checkReadyTask)
     userDatasetTask.addCatch(failTask)
+
+    const userDatasetImportTask = new tasks.LambdaInvoke(this, 'UserPersonalizationDatasetUserImportTask', {
+      lambdaFunction: stateFunctions.userDatasetImportFunction,
+      outputPath: '$.Payload',
+    })
+    userDatasetImportTask.next(checkReadyTask)
+    userDatasetImportTask.addCatch(failTask)
 
     const solutionTask = new tasks.LambdaInvoke(this, 'UserPersonalizationSolutionTask', {
       lambdaFunction: stateFunctions.solutionFunction,
@@ -206,13 +248,25 @@ export class UserPersonalizationStates extends cdk.Construct {
         sfn.Condition.stringEquals('$.status', 'ACTIVE'),
       ), datasetTask)
       .when(sfn.Condition.and(
+        sfn.Condition.stringEquals('$.stage', 'DATASET'),
+        sfn.Condition.stringEquals('$.status', 'ACTIVE'),
+      ), datasetImportTask)
+      .when(sfn.Condition.and(
         sfn.Condition.stringEquals('$.stage', 'DATASET_IMPORT'),
         sfn.Condition.stringEquals('$.status', 'ACTIVE'),
       ), itemDatasetTask)
       .when(sfn.Condition.and(
+        sfn.Condition.stringEquals('$.stage', 'ITEM_DATASET'),
+        sfn.Condition.stringEquals('$.status', 'ACTIVE'),
+      ), itemDatasetImportTask)
+      .when(sfn.Condition.and(
         sfn.Condition.stringEquals('$.stage', 'ITEM_DATASET_IMPORT'),
         sfn.Condition.stringEquals('$.status', 'ACTIVE'),
       ), userDatasetTask)
+      .when(sfn.Condition.and(
+        sfn.Condition.stringEquals('$.stage', 'USER_DATASET'),
+        sfn.Condition.stringEquals('$.status', 'ACTIVE'),
+      ), userDatasetImportTask)
       .when(sfn.Condition.and(
         sfn.Condition.stringEquals('$.stage', 'USER_DATASET_IMPORT'),
         sfn.Condition.stringEquals('$.status', 'ACTIVE'),

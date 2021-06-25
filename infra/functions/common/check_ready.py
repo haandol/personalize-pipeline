@@ -30,16 +30,10 @@ def handler(event, context):
     if stage == 'DATASET_GROUP':
         dataset_group_arn = event['dataset_group_arn']
         event['status'] = check_dataset_group(dataset_group_arn)
-    elif stage == 'DATASET':
+    elif stage in ['DATASET', 'ITEM_DATASET', 'USER_DATASET']:
         dataset_arn = event['dataset_arn']
         event['status'] = check_dataset(dataset_arn)
-    elif stage == 'DATASET_IMPORT':
-        dataset_import_job_arn = event['dataset_import_job_arn']
-        event['status'] = check_dataset_import_job(dataset_import_job_arn)
-    elif stage == 'ITEM_DATASET_IMPORT':
-        dataset_import_job_arn = event['dataset_import_job_arn']
-        event['status'] = check_dataset_import_job(dataset_import_job_arn)
-    elif stage == 'USER_DATASET_IMPORT':
+    elif stage in ['DATASET_IMPORT', 'ITEM_DATASET_IMPORT', 'USER_DATASET_IMPORT']:
         dataset_import_job_arn = event['dataset_import_job_arn']
         event['status'] = check_dataset_import_job(dataset_import_job_arn)
     elif stage == 'SOLUTION':

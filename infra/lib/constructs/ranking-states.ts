@@ -30,6 +30,7 @@ interface IProps {
 interface IStateFunctions {
   datasetGroupFunction: lambda.IFunction;
   datasetFunction: lambda.IFunction;
+  datasetImportFunction: lambda.IFunction;
   solutionFunction: lambda.IFunction;
   campaignFunction: lambda.IFunction;
   checkReadyFunction: lambda.IFunction;
@@ -74,10 +75,16 @@ export class RankingStates extends cdk.Construct {
       code: lambda.Code.fromAsset(path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'ranking')),
       handler: 'create_dataset.handler',
       role: lambdaExecutionRole,
+    });
+
+    const datasetImportFunction = new lambda.Function(this, 'DatasetImportFunction', {
+      runtime: lambda.Runtime.PYTHON_3_7,
+      code: lambda.Code.fromAsset(path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'ranking')),
+      handler: 'create_dataset_import.handler',
+      role: lambdaExecutionRole,
       environment: {
         ROLE_ARN: personalizeRole.roleArn,
       },
-      timeout: cdk.Duration.seconds(30),
     });
 
     const solutionFunction = new lambda.Function(this, 'SolutionFunction', {
@@ -104,6 +111,7 @@ export class RankingStates extends cdk.Construct {
     return {
       datasetGroupFunction,
       datasetFunction,
+      datasetImportFunction,
       solutionFunction,
       campaignFunction,
       checkReadyFunction,
@@ -139,10 +147,16 @@ export class RankingStates extends cdk.Construct {
     const datasetTask = new tasks.LambdaInvoke(this, 'RankingDatasetTask', {
       lambdaFunction: stateFunctions.datasetFunction,
       outputPath: '$.Payload',
-      timeout: cdk.Duration.seconds(30),
     });
     datasetTask.next(checkReadyTask);
     datasetTask.addCatch(failTask);
+
+    const datasetImportTask = new tasks.LambdaInvoke(this, 'RankingDatasetImportTask', {
+      lambdaFunction: stateFunctions.datasetImportFunction,
+      outputPath: '$.Payload',
+    });
+    datasetImportTask.next(checkReadyTask);
+    datasetImportTask.addCatch(failTask);
 
     const solutionTask = new tasks.LambdaInvoke(this, 'RankingSolutionTask', {
       lambdaFunction: stateFunctions.solutionFunction,
@@ -163,6 +177,10 @@ export class RankingStates extends cdk.Construct {
         sfn.Condition.stringEquals('$.stage', 'DATASET_GROUP'),
         sfn.Condition.stringEquals('$.status', 'ACTIVE'),
       ), datasetTask)
+      .when(sfn.Condition.and(
+        sfn.Condition.stringEquals('$.stage', 'DATASET'),
+        sfn.Condition.stringEquals('$.status', 'ACTIVE'),
+      ), datasetImportTask)
       .when(sfn.Condition.and(
         sfn.Condition.stringEquals('$.stage', 'DATASET_IMPORT'),
         sfn.Condition.stringEquals('$.status', 'ACTIVE'),

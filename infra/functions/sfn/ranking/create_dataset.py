@@ -13,19 +13,15 @@
 #  permissions and limitations under the License.                             #
 ###############################################################################
 
-import os
 import json
 import boto3
 import logging
-from time import sleep
 from datetime import datetime
 
 logger = logging.getLogger('dataset')
 logger.setLevel(logging.INFO)
 
 personalize = boto3.client(service_name='personalize')
-
-ROLE_ARN = os.environ['ROLE_ARN']
 
 
 def handler(event, context):
@@ -49,29 +45,10 @@ def handler(event, context):
 
     attach_policy(bucket)
 
-    # wait for dataset is ready
-    sleep(20)
-
-    create_dataset_import_job_response = personalize.create_dataset_import_job(
-        jobName=f'{name}-{suffix}',
-        datasetArn=dataset_arn,
-        dataSource={'dataLocation': bucket},
-        roleArn=ROLE_ARN,
-    )
-    dataset_import_job_arn = create_dataset_import_job_response['datasetImportJobArn']
-    logger.info(json.dumps(create_dataset_import_job_response, indent=2))
-
-    create_event_tracker_response = personalize.create_event_tracker(
-        name=name,
-        datasetGroupArn=dataset_group_arn
-    )
-    logger.info(json.dumps(create_event_tracker_response, indent=2))
-
     event.update({
-        'stage': 'DATASET_IMPORT',
+        'stage': 'DATASET',
         'suffix': suffix,
         'dataset_arn': dataset_arn,
-        'dataset_import_job_arn': dataset_import_job_arn,
     })
     return event
 

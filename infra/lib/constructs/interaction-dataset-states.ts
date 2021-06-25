@@ -29,6 +29,7 @@ interface IProps {
 
 interface IStateFunctions {
   datasetFunction: lambda.IFunction;
+  datasetImportFunction: lambda.IFunction;
   solutionFunction: lambda.IFunction;
   campaignFunction: lambda.IFunction;
   checkReadyFunction: lambda.IFunction;
@@ -66,12 +67,18 @@ export class InteractionDatasetStates extends cdk.Construct {
       code: lambda.Code.fromAsset(path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'interactions-dataset')),
       handler: 'create_dataset.handler',
       role: lambdaExecutionRole,
+    });
+
+    const datasetImportFunction = new lambda.Function(this, 'DatasetImportFunction', {
+      runtime: lambda.Runtime.PYTHON_3_7,
+      code: lambda.Code.fromAsset(path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'interactions-dataset')),
+      handler: 'create_dataset_import.handler',
+      role: lambdaExecutionRole,
       environment: {
         ROLE_ARN: personalizeRole.roleArn,
       },
-      timeout: cdk.Duration.seconds(30),
     });
-
+ 
     const solutionFunction = new lambda.Function(this, 'SolutionFunction', {
       runtime: lambda.Runtime.PYTHON_3_7,
       code: lambda.Code.fromAsset(path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'interactions-dataset')),
@@ -95,6 +102,7 @@ export class InteractionDatasetStates extends cdk.Construct {
 
     return {
       datasetFunction,
+      datasetImportFunction,
       solutionFunction,
       campaignFunction,
       checkReadyFunction,
@@ -123,10 +131,16 @@ export class InteractionDatasetStates extends cdk.Construct {
     const datasetTask = new tasks.LambdaInvoke(this, 'InteractionsDatasetDatasetTask', {
       lambdaFunction: stateFunctions.datasetFunction,
       outputPath: '$.Payload',
-      timeout: cdk.Duration.seconds(30),
     });
     datasetTask.next(checkReadyTask);
     datasetTask.addCatch(failTask);
+
+    const datasetImportTask = new tasks.LambdaInvoke(this, 'InteractionsDatasetDatasetImportTask', {
+      lambdaFunction: stateFunctions.datasetImportFunction,
+      outputPath: '$.Payload',
+    });
+    datasetImportTask.next(checkReadyTask);
+    datasetImportTask.addCatch(failTask);
 
     const solutionTask = new tasks.LambdaInvoke(this, 'InteractionsDatasetSolutionTask', {
       lambdaFunction: stateFunctions.solutionFunction,
@@ -143,6 +157,10 @@ export class InteractionDatasetStates extends cdk.Construct {
     campaignTask.addCatch(failTask);
 
     retryCheckReadyTask
+      .when(sfn.Condition.and(
+        sfn.Condition.stringEquals('$.stage', 'DATASET'),
+        sfn.Condition.stringEquals('$.status', 'ACTIVE'),
+      ), datasetImportTask)
       .when(sfn.Condition.and(
         sfn.Condition.stringEquals('$.stage', 'DATASET_IMPORT'),
         sfn.Condition.stringEquals('$.status', 'ACTIVE'),

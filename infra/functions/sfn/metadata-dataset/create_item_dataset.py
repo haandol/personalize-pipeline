@@ -13,22 +13,19 @@
 #  permissions and limitations under the License.                             #
 ###############################################################################
 
-import os
 import json
 import boto3
 import logging
-from time import sleep
 from datetime import datetime
 
-logger = logging.getLogger('dataset')
+logger = logging.getLogger('item-dataset')
 logger.setLevel(logging.INFO)
 
 personalize = boto3.client(service_name='personalize')
 
-ROLE_ARN = os.environ['ROLE_ARN']
-
 
 def handler(event, context):
+    '''check validity for all input fields'''
     logger.info(event)
 
     name = event['name']
@@ -46,8 +43,6 @@ def handler(event, context):
 
     bucket = event.get('item_bucket', '')
     schema_arn = event.get('item_schema_arn', '')
-    dataset_arn = ''
-    dataset_import_job_arn = ''
 
     user_bucket = event.get('user_bucket', '')
     user_schema_arn = event.get('user_schema_arn', '')
@@ -67,25 +62,15 @@ def handler(event, context):
         if not user_schema_arn:
             raise RuntimeError('user_schema_arn should be provided')
 
+    dataset_arn = ''
+    dataset_import_job_arn = ''
     if bucket and schema_arn:
         dataset_arn, is_created = get_or_create_dataset(dataset_group_arn, schema_arn, name)
         if is_created:
             attach_policy(bucket)
 
-            # wait for dataset is ready
-            sleep(20)
-
-        create_dataset_import_job_response = personalize.create_dataset_import_job(
-            jobName=f'{name}-item-{suffix}',
-            datasetArn=dataset_arn,
-            dataSource={ 'dataLocation': bucket },
-            roleArn=ROLE_ARN,
-        )
-        dataset_import_job_arn = create_dataset_import_job_response['datasetImportJobArn']
-        logger.info(json.dumps(create_dataset_import_job_response, indent=2))
-
     event.update({
-        'stage': 'ITEM_DATASET_IMPORT',
+        'stage': 'ITEM_DATASET',
         'name': name,
         'suffix': suffix,
         'user_bucket': user_bucket,
