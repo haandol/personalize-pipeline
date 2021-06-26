@@ -13,7 +13,6 @@
 #  permissions and limitations under the License.                             #
 ###############################################################################
 
-import os
 import json
 import boto3
 import logging
