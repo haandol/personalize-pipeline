@@ -1,9 +1,9 @@
 {
-    "tracking_id": "",
+    "tracking_id": "<TRACKING_ID>",
     "session_id": "sess1",
     "event_type": "Click",
     "event_value": 5,
     "user_id": "242",
     "item_id": "736",
-    "sent_at": 1599609600
+    "sent_at": <SENT_AT>
 }
