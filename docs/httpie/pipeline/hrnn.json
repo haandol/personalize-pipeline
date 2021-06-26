@@ -1,6 +1,6 @@
 {
   "name": "hrnn-baseline",
-  "schema_arn": "<SCHEMA>",
+  "schema_arn": "<SCHEMA_ARN>",
   "bucket": "s3://<BUCKET>/interactions.csv",
   "deploy": true
 }
