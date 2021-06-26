@@ -1,10 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
+import os
 import csv
 import json
 import boto3
 import requests
 from pprint import pprint
+
+SIMS_ARN = os.environ.get('SIMS_ARN', '')
+HRNN_ARN = os.environ.get('HRNN_ARN', '')
 
 
 def get_apigw_addr():
@@ -27,9 +31,9 @@ def get_movies(path):
     return D
 
 
-def recommend_sims(base_url, campaign_arn, item_id, num_results=10):
+def recommend_sims(base_url, item_id, num_results=10):
     params = {
-        'campaign_arn': campaign_arn,
+        'campaign_arn': SIMS_ARN,
         'item_id': item_id,
         'num_results': 10
     }
@@ -37,9 +41,9 @@ def recommend_sims(base_url, campaign_arn, item_id, num_results=10):
     return resp.json()['itemList']
 
 
-def recommend_hrnn(base_url, campaign_arn, user_id, num_results=10):
+def recommend_hrnn(base_url, user_id, num_results=10):
     params = {
-        'campaign_arn': campaign_arn,
+        'campaign_arn': HRNN_ARN,
         'user_id': user_id,
         'num_results': 10
     }
@@ -57,12 +61,10 @@ if __name__ == '__main__':
 
     movies = get_movies(path)
 
-    campaign_arn = 'arn:aws:personalize:ap-northeast-2:929831892372:campaign/sims-baseline-20210626T082714'
-    items = recommend_sims(APIGW, campaign_arn, '1')
+    items = recommend_sims(APIGW, '1')
     print(json.dumps(convert_item_to_movies(movies, items), indent=2))
 
     '''
-    campaign_arn = 'arn:aws:personalize:ap-northeast-2:929831892372:campaign/hrnn-baseline-20210626T083913'
-    items = recommend_hrnn(APIGW, campaign_arn, '242')
+    items = recommend_hrnn(APIGW, '242')
     print(json.dumps(convert_item_to_movies(movies, items), indent=2))
     '''
