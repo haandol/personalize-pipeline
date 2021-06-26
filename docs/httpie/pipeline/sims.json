@@ -1,7 +1,7 @@
 {
   "name": "sims-baseline",
-  "schema_arn": "",
-  "bucket": "s3://$BUCKET/interactions.csv",
+  "schema_arn": "<SCHEMA>",
+  "bucket": "s3://<BUCKET>/interactions.csv",
   "deploy": true,
   "solution_config": {
     "algorithmHyperParameters": {

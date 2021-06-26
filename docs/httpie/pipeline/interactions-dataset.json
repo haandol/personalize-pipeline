@@ -1,7 +1,7 @@
 {
   "name": "sims-baseline",
-  "schema_arn": "",
-  "bucket": "s3://$BUCKET/interactions.csv",
+  "schema_arn": "<SCHEMA>",
+  "bucket": "s3://<BUCKET>/interactions.csv",
   "recipe_arn": "arn:aws:personalize:::recipe/aws-sims",
   "deploy": true,
   "solution_config": {

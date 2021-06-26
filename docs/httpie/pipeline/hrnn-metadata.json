@@ -1,6 +1,6 @@
 {
   "name": "hrnn-baseline",
-  "item_schema_arn": "",
-  "item_bucket": "s3://$BUCKET/item_metadata.csv",
+  "item_schema_arn": "<SCHEMA>",
+  "item_bucket": "s3://<BUCKET>/item_metadata.csv",
   "deploy": true
 }
