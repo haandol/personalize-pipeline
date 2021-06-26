@@ -18,6 +18,7 @@
 
 import 'source-map-support/register'
 import * as cdk from '@aws-cdk/core'
+import { DemoStack } from '../lib/stacks/demo-stack'
 import { VpcStack } from '../lib/stacks/vpc-stack'
 import { ApiGatewayStack } from '../lib/stacks/apigateway-stack'
 import { CommonStack } from '../lib/stacks/common-stack'
@@ -35,6 +36,11 @@ import { ns, StackProps, AppContext, VpcProps } from '../lib/interfaces/config'
 const app = new cdk.App({
   context: AppContext
 })
+
+// Only for demo
+if (AppContext.isDemo) {
+  new DemoStack(app, `${ns}DemoStack`)
+}
 
 // Common
 const vpcStack = new VpcStack(app, `${ns}VpcStack`, {
