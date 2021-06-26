@@ -82,14 +82,14 @@ def send_email(event):
 
 def send_slack_msg(event):
     try:
-        err_msg = event['Records'][0]['Sns']['Message']
+        msg = event['Records'][0]['Sns']['Message']
         data = json.dumps({
             'blocks': [
                 {
                     'type': 'section',
                     'text': {
                         'type': 'mrkdwn',
-                        'text': f'Deploy: *{STATUS}*\n ```{err_msg}```',
+                        'text': f'Deploy: *{STATUS}*\n ```{msg}```',
                     }
                 },
             ],
@@ -103,9 +103,9 @@ def send_slack_msg(event):
 
 def send_chime_msg(event):
     try:
-        err_msg = event['Records'][0]['Sns']['Message']
+        msg = event['Records'][0]['Sns']['Message']
         data = json.dumps({
-            'Content': f'Deploy: *{STATUS}*\n ```{err_msg}```',
+            'Content': f'Deploy: *{STATUS}*\n ```{msg}```',
         }).encode('utf-8')
         req = urllib.request.Request(CHIME_WEBHOOK_URL, data=data)
         resp = urllib.request.urlopen(req, timeout=3)
