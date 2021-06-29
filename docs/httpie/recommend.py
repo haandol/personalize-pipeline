@@ -7,7 +7,10 @@ import boto3
 import logging
 import requests
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    format='[%(levelname)s] %(message)s',
+    level=logging.INFO,
+)
 
 SIMS_ARN = os.environ.get('SIMS_ARN', '')
 HRNN_ARN = os.environ.get('HRNN_ARN', '')
