@@ -19,39 +19,28 @@
 import 'source-map-support/register'
 import * as cdk from '@aws-cdk/core'
 import { DemoStack } from '../lib/stacks/demo-stack'
-import { VpcStack } from '../lib/stacks/vpc-stack'
 import { ApiGatewayStack } from '../lib/stacks/apigateway-stack'
 import { CommonStack } from '../lib/stacks/common-stack'
 import { SimsStack } from '../lib/stacks/sims-stack'
 import { UserPersonalizationStack } from '../lib/stacks/user-personalization-stack'
 import { MetadataDatasetStack } from '../lib/stacks/metadata-dataset-stack'
-import { InteractionDatasetStack } from '../lib/stacks/interaction-dataset-stack'
-import { RankingStack } from '../lib/stacks/ranking-stack'
 import { BatchInferenceStack } from '../lib/stacks/batch-inference-stack'
 import { TrainRecipeStack } from '../lib/stacks/train-recipe-stack'
 import { CleanupStack } from '../lib/stacks/cleanup-stack'
 import { ApiIntegrationStack } from '../lib/stacks/api-integration-stack'
-import { ns, StackProps, AppContext, VpcProps } from '../lib/interfaces/config'
+import { ns, StackProps, AppContext } from '../lib/interfaces/config'
 
 const app = new cdk.App({
   context: AppContext
 })
 
 // Only for demo
-if (AppContext.isDemo) {
-  new DemoStack(app, `${ns}DemoStack`)
-}
+new DemoStack(app, `${ns}DemoStack`)
 
 // Common
-const vpcStack = new VpcStack(app, `${ns}VpcStack`, {
-  ...StackProps,
-  ...VpcProps,
-})
 const apiGwStack = new ApiGatewayStack(app, `${ns}ApiGatewayStack`, {
   ...StackProps,
-  apigwVpcEndpoint: vpcStack.apigwVpcEndpoint,
 })
-apiGwStack.addDependency(vpcStack)
 
 const commonStack = new CommonStack(app, `${ns}CommonStack`, StackProps)
 
@@ -87,28 +76,6 @@ const metadataDatasetStack = new MetadataDatasetStack(app, `${ns}MetadataDataset
   failTopic: commonStack.failTopic,
 })
 metadataDatasetStack.addDependency(commonStack)
-
-const interactionDatasetStack = new InteractionDatasetStack(app, `${ns}InteractionDatasetStack`, {
-  ...StackProps,
-  api: apiGwStack.api,
-  requestModels: apiGwStack.statesRequestModels,
-  requestValidators: apiGwStack.requestValidators,
-  credentialsRole: apiGwStack.credentialsRole,
-  doneTopic: commonStack.doneTopic,
-  failTopic: commonStack.failTopic,
-})
-interactionDatasetStack.addDependency(commonStack)
-
-const rankingStack = new RankingStack(app, `${ns}RankingStack`, {
-  ...StackProps,
-  api: apiGwStack.api,
-  requestModels: apiGwStack.statesRequestModels,
-  requestValidators: apiGwStack.requestValidators,
-  credentialsRole: apiGwStack.credentialsRole,
-  doneTopic: commonStack.doneTopic,
-  failTopic: commonStack.failTopic,
-})
-rankingStack.addDependency(commonStack)
 
 const batchInferenceStack = new BatchInferenceStack(app, `${ns}BatchInferenceStack`, {
   ...StackProps,
