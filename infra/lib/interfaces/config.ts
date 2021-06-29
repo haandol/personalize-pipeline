@@ -24,24 +24,6 @@ export const StackProps = {
 };
 
 /*
- * TODO: replace vpc-id with yours for Private ApiGateway
- *
- * @vpcId                 id of VPC
- * @vpceId                id of VPC Endpoint for API Gateway(execute-api)
- * @vpceSecurityGroupIds  id(s) of VPC Endpoint for API Gateway(execute-api)
- * @bastionHost           create bastion host on the given VPC if set true
- * 
- * no vpc-id(vpcId) is given, code willl create it for you
- * no vpc-endpoint-id(vpceId) is given, code will create it for you
- */
-export const VpcProps = {
-  vpcId: undefined,
-  vpceId: undefined,
-  vpceSecurityGroupIds: undefined,
-  bastionHost: false,
-}
-
-/*
  * TODO: replace email and slack notifycation address
  *
  * @notifySender    // sender's email address, e.g. DongGyun Lee <dongkyl@amazon.com>
@@ -51,7 +33,6 @@ export const VpcProps = {
  */
 export const AppContext = {
   ns,
-  isDemo: true,
   notifySender: '',
   notifyEmail: '',
   notifySlack: '',
