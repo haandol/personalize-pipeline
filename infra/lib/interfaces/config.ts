@@ -51,7 +51,6 @@ export const VpcProps = {
  */
 export const AppContext = {
   ns,
-  isDemo: true,
   notifySender: '',
   notifyEmail: '',
   notifySlack: '',
