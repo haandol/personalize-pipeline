@@ -7,8 +7,7 @@ import boto3
 import logging
 import requests
 
-logger = logging.getLogger('recommend')
-logger.setLevel(logging.INFO)
+logging.basicConfig(level=logging.INFO)
 
 SIMS_ARN = os.environ.get('SIMS_ARN', '')
 HRNN_ARN = os.environ.get('HRNN_ARN', '')
@@ -36,7 +35,7 @@ def get_movies(path):
 
 def recommend_sims(base_url, item_id, num_results=10):
     if not SIMS_ARN:
-        logger.warning('SIMS_ARN should be setted to invoke recommend_sims. use `export SIMS_ARN` in terminal')
+        logging.error('SIMS_ARN should be setted to invoke recommend_sims. use `export SIMS_ARN` in terminal')
         return []
 
     params = {
@@ -50,7 +49,7 @@ def recommend_sims(base_url, item_id, num_results=10):
 
 def recommend_hrnn(base_url, user_id, num_results=10):
     if not HRNN_ARN:
-        logger.warning('HRNN_ARN should be setted to invoke recommend_hrnn. use `export HRNN_ARN` in terminal')
+        logging.error('HRNN_ARN should be setted to invoke recommend_hrnn. use `export HRNN_ARN` in terminal')
         return []
 
     params = {
@@ -73,7 +72,9 @@ if __name__ == '__main__':
     movies = get_movies(path)
 
     items = recommend_sims(APIGW, '1')
-    logger.info(json.dumps(convert_item_to_movies(movies, items), indent=2))
+    if items:
+        logging.info('SIMS: \n{}'.format(json.dumps(convert_item_to_movies(movies, items), indent=2)))
 
     items = recommend_hrnn(APIGW, '242')
-    logger.info(json.dumps(convert_item_to_movies(movies, items), indent=2))
+    if items:
+        logging.info('HRNN: \n{}'.format(json.dumps(convert_item_to_movies(movies, items), indent=2)))
