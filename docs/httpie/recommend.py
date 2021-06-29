@@ -8,7 +8,7 @@ import logging
 import requests
 
 logging.basicConfig(
-    format='[%(levelname)s] %(message)s',
+    format='[%(levelname)s] %(asctime)s - %(message)s',
     level=logging.INFO,
 )
 
