@@ -22,7 +22,6 @@ import * as lambda from '@aws-cdk/aws-lambda';
 export class ApiLambdas extends cdk.Construct {
   public readonly lambdaExecutionRole: iam.IRole;
   public readonly getTrackingIdFunction: lambda.IFunction;
-  public readonly getMetricsFunction: lambda.IFunction;
   public readonly recommendSimsFunction: lambda.IFunction;
   public readonly recommendHrnnFunction: lambda.IFunction;
   public readonly recommendRankingFunction: lambda.IFunction;
@@ -32,9 +31,6 @@ export class ApiLambdas extends cdk.Construct {
   public readonly listSchemaArnsFunction: lambda.IFunction;
   public readonly listSolutionVersionArnsFunction: lambda.IFunction;
   public readonly putEventsFunction: lambda.IFunction;
-  public readonly createFilterFunction: lambda.IFunction;
-  public readonly deleteFilterFunction: lambda.IFunction;
-  public readonly listFilterArnsFunction: lambda.IFunction;
 
   constructor(scope: cdk.Construct, id: string) {
     super(scope, id);
@@ -56,14 +52,6 @@ export class ApiLambdas extends cdk.Construct {
       runtime,
       role,
       handler: 'get_tracking_id.handler',
-    });
-
-    this.getMetricsFunction = new lambda.Function(this, 'GetMetricsFunction', {
-      code,
-      runtime,
-      role,
-      handler: 'get_metrics.handler',
-      timeout: cdk.Duration.seconds(15),
     });
 
     this.recommendSimsFunction = new lambda.Function(this, 'RecommendSimsFunction', {
@@ -136,30 +124,6 @@ export class ApiLambdas extends cdk.Construct {
       runtime,
       role,
       handler: 'put_events.handler',
-      timeout: cdk.Duration.seconds(10),
-    });
-
-    this.createFilterFunction = new lambda.Function(this, `CreateFilterFunction`, {
-      code,
-      runtime,
-      role,
-      handler: 'create_filter.handler',
-      timeout: cdk.Duration.seconds(10),
-    });
-
-    this.deleteFilterFunction = new lambda.Function(this, `DeleteFilterFunction`, {
-      code,
-      runtime,
-      role,
-      handler: 'delete_filter.handler',
-      timeout: cdk.Duration.seconds(10),
-    });
-
-    this.listFilterArnsFunction = new lambda.Function(this, `ListFilterArnsFunction`, {
-      code,
-      runtime,
-      role,
-      handler: 'list_filter_arns.handler',
       timeout: cdk.Duration.seconds(10),
     });
   }

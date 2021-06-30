@@ -81,26 +81,6 @@ export class ApiIntegrationStack extends Api.BaseStack {
       integrationResponses: this.integrationResponses,
     });
 
-    this.registerLambdaIntegration({
-      credentialsRole: props.credentialsRole,
-      httpMethod: 'GET',
-      function: lambdaFunctions.getMetricsFunction,
-      resource: resource.addResource('metrics'),
-      requestTemplates: {
-        'application/json': JSON.stringify({
-          "name": "$input.params('name')",
-        }),
-      },
-      methodOptions: {
-        ...this.methodOptions,
-        requestParameters: {
-          'method.request.querystring.name': true,
-        },
-        requestValidator: props.requestValidators.parameterValidator,
-      },
-      integrationResponses: this.integrationResponses,
-    });
-
     // Recommend
     const recommendResource = resource.addResource('recommend');
     this.registerLambdaIntegration({
@@ -263,66 +243,6 @@ export class ApiIntegrationStack extends Api.BaseStack {
           'application/json': props.requestModels.PutEventsModel,
         },
         requestValidator: props.requestValidators.bodyValidator,
-      },
-      integrationResponses: this.integrationResponses,
-    });
-
-    // Filter
-    const filterResource = resource.addResource('filter');
-    this.registerLambdaIntegration({
-      credentialsRole: props.credentialsRole,
-      httpMethod: 'POST',
-      function: lambdaFunctions.createFilterFunction,
-      resource: filterResource,
-      requestTemplates: {
-        'application/json': `$input.json('$')`,
-      },
-      methodOptions: {
-        ...this.methodOptions,
-        requestModels: {
-          'application/json': props.requestModels.CreateFilterModel,
-        },
-        requestValidator: props.requestValidators.bodyValidator,
-      },
-      integrationResponses: this.integrationResponses,
-    });
-
-    this.registerLambdaIntegration({
-      credentialsRole: props.credentialsRole,
-      httpMethod: 'DELETE',
-      function: lambdaFunctions.deleteFilterFunction,
-      resource: filterResource,
-      requestTemplates: {
-        'application/json': JSON.stringify({
-          "filter_arn": "$input.params('filter_arn')",
-        }),
-      },
-      methodOptions: {
-        ...this.methodOptions,
-        requestParameters: {
-          'method.request.querystring.filter_arn': true,
-        },
-        requestValidator: props.requestValidators.parameterValidator,
-      },
-      integrationResponses: this.integrationResponses,
-    });
-
-    this.registerLambdaIntegration({
-      credentialsRole: props.credentialsRole,
-      httpMethod: 'GET',
-      function: lambdaFunctions.listFilterArnsFunction,
-      resource: filterResource,
-      requestTemplates: {
-        'application/json': JSON.stringify({
-          "name": "$input.params('name')",
-        }),
-      },
-      methodOptions: {
-        ...this.methodOptions,
-        requestParameters: {
-          'method.request.querystring.name': true,
-        },
-        requestValidator: props.requestValidators.parameterValidator,
       },
       integrationResponses: this.integrationResponses,
     });
