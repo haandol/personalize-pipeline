@@ -35,7 +35,7 @@ export class ApiIntegrationStack extends Api.BaseStack {
       restApiId: props.api.restApiId,
       rootResourceId: props.api.restApiRootResourceId,
     });
-    const resource = api.root.resourceForPath('personalize');
+    const resource = api.root.resourceForPath('/personalize')!;
 
     // Create lambda integrations (Apis)
     this.registerLambdaIntegration({
