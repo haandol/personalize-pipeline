@@ -54,8 +54,6 @@ $ docker-compose up
 
 5. Visit `localhost:80`
 
-> You should set SSH Tunneling via BastionHost to invoke API on localhost
-
 <img src="docs/img/swagger2.png">
 
 # Usage
@@ -64,35 +62,11 @@ $ docker-compose up
 
 **If you are not yet request increasing SES limitation, you can only send email to verified email.**
 
-2. open [**config.ts**](infra/libs/interfaces/config.ts) and replace values for your environment
+2. open [**config.ts**](infra/config/dev.toml) and replace values for your environment
 
-3. Create S3 Bucket on [**AWS S3 Console**](https://console.aws.amazon.com/s3/home)
+3. Generate _csv_ file by following intructions of [**Amazon Personalize Samples**](https://github.com/aws-samples/amazon-personalize-samples/blob/master/getting_started/notebooks/1.Building_Your_First_Campaign.ipynb)
 
-4. Generate _csv_ file by following intructions of [**Amazon Personalize Samples**](https://github.com/aws-samples/amazon-personalize-samples/blob/master/core_use_cases/related_items/personalize_sims_example.ipynb)
-
-5. Upload _csv_ file to _S3 Bucket_
-
-## Connect to BastionHost
-
-1. Visit EC2 Service page on Console and copy Instance-id for BastionHost
-
-> You can get Instance-id for BastionHost from `cdk deploy` also.
-
-2. Connect to BastionHost using SSM
-
-```bash
-$ aws ssm start-session --target i-0f956edfbb92e272e
-
-Starting session with SessionId: dongkyl.test-0bc606182f76f4391
-sh-4.2$
-```
-
-3. Install python3 and [**Httpie**](https://httpie.org/)
-
-```bash
-sh-4.2$ sudo yum install python3
-sh-4.2$ pip3 install --user httpie
-```
+4. Upload _csv_ file to _S3 Bucket_
 
 ## Create SIMS Campaign
 
@@ -102,7 +76,7 @@ sh-4.2$ pip3 install --user httpie
 $ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/schema name=my-demo-schema schema={"type": "record", "name": "Interactions", "namespace": "com.amazonaws.personalize.schema", "fields": [{"name": "USER_ID", "type": "string"}, {"name": "ITEM_ID", "type": "string"}, {"name": "TIMESTAMP", "type": "long"}], "version": "1.0"}
 ```
 
-2. Invoke api to create Personalize SIMS campaign
+2. Invoke api to create Personalize Similar-Items campaign
 
 ```bash
 $ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/sims name=my-sims-model schema="arn:aws:personalize:ap-northeast-2:776556808198:schema/my-demo-schema" bucket="s3://demo-sims-67914/DEMO-sims.csv"

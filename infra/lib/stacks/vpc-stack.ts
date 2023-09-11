@@ -20,7 +20,6 @@ export class VpcStack extends cdk.Stack {
       props?.vpceId,
       props?.vpceSecurityGroupIds
     );
-    // this.createBastionHost(props.bastionHost);
   }
 
   private getOrCreateVpc(vpcId?: string) {
@@ -71,29 +70,5 @@ export class VpcStack extends cdk.Stack {
         privateDnsEnabled: true,
       });
     }
-  }
-
-  private createBastionHost(isCreate: boolean): void {
-    if (!this.vpc || !this.apigwVpcEndpoint || !isCreate) {
-      return;
-    }
-
-    const securityGroup = new ec2.SecurityGroup(this, `BastionHostSecGrp`, {
-      vpc: this.vpc,
-    });
-    const bastionHost = new ec2.BastionHostLinux(this, `BastionHost`, {
-      vpc: this.vpc,
-      securityGroup,
-      instanceName: `${cdk.Stack.of(this).stackName}BastionHost`,
-    });
-    bastionHost.allowSshAccessFrom(ec2.Peer.anyIpv4());
-    bastionHost.connections.allowFrom(
-      bastionHost.connections,
-      ec2.Port.tcp(443)
-    );
-    this.apigwVpcEndpoint.connections.allowFrom(
-      securityGroup,
-      ec2.Port.tcp(443)
-    );
   }
 }

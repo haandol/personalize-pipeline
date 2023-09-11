@@ -10,7 +10,6 @@ region="ap-northeast-2"
 # id=""
 # endpointId=""
 # endpointSecurityGroupIds=[""]
-# useBastionHost=false
 
 [notification]
 emailSender="ldg55d@gmail.com"

@@ -15,7 +15,6 @@ interface IConfig {
     id: string;
     endpointId: string;
     endpointSecurityGroupIds: string[];
-    useBasitionHost: boolean;
   };
   notification?: {
     emailSender?: string;
@@ -44,7 +43,6 @@ const schema = joi
         id: joi.string(),
         endpointId: joi.string(),
         endpointSecurityGroupIds: joi.array().items(joi.string()),
-        useBastionHost: joi.bool().default(false),
       })
       .optional(),
     notification: joi
