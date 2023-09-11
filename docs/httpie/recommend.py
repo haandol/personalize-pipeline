@@ -47,7 +47,7 @@ def recommend_similar_items(base_url, item_id, num_results=10):
         'item_id': item_id,
         'num_results': num_results,
     }
-    resp = requests.get(f'{base_url}/personalize/recommend/similar-items', params=params)
+    resp = requests.get(f'{base_url}/recommend/similar-items', params=params)
     return resp.json()['itemList']
 
 
@@ -61,7 +61,7 @@ def recommend_user_personalization(base_url, user_id, num_results=10):
         'user_id': user_id,
         'num_results': num_results,
     }
-    resp = requests.get(f'{base_url}/personalize/recommend/user-personalization', params=params)
+    resp = requests.get(f'{base_url}/recommend/user-personalization', params=params)
     return resp.json()['itemList']
 
 

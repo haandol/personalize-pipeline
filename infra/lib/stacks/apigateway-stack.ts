@@ -3,6 +3,7 @@ import { Construct } from 'constructs';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as apigw from 'aws-cdk-lib/aws-apigateway';
+import * as logs from 'aws-cdk-lib/aws-logs';
 import {
   ApiRequestModels,
   StatesRequestModels,
@@ -23,22 +24,41 @@ export class ApiGatewayStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: Props) {
     super(scope, id, props);
 
-    const stageName = 'dev';
     const { policy, endpointConfiguration } = this.getApiOptions(
       props.apigwVpcEndpoint
     );
+    const prdLogGroup = new logs.LogGroup(this, 'PrdLogs');
     this.api = new apigw.RestApi(this, `RestApi`, {
       restApiName: `${cdk.Stack.of(this).stackName}RestApi`,
-      deploy: true,
       deployOptions: {
-        stageName,
-        loggingLevel: apigw.MethodLoggingLevel.ERROR,
+        accessLogDestination: new apigw.LogGroupLogDestination(prdLogGroup),
+        accessLogFormat: apigw.AccessLogFormat.jsonWithStandardFields(),
       },
       defaultCorsPreflightOptions: {
         allowOrigins: apigw.Cors.ALL_ORIGINS,
       },
       endpointConfiguration,
       policy,
+    });
+
+    const deployment = new apigw.Deployment(this, 'Deployment', {
+      api: this.api,
+    });
+    const devLogGroup = new logs.LogGroup(this, 'DevLogs');
+    new apigw.Stage(this, 'dev', {
+      deployment,
+      accessLogDestination: new apigw.LogGroupLogDestination(devLogGroup),
+      accessLogFormat: apigw.AccessLogFormat.jsonWithStandardFields({
+        caller: false,
+        httpMethod: true,
+        ip: true,
+        protocol: true,
+        requestTime: true,
+        resourcePath: true,
+        responseLength: true,
+        status: true,
+        user: true,
+      }),
     });
 
     const credentialsRole = new iam.Role(this, 'ApigwCredentialRole', {

@@ -73,13 +73,13 @@ $ docker-compose up
 1. Create Schema
 
 ```bash
-$ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/schema name=my-demo-schema schema={"type": "record", "name": "Interactions", "namespace": "com.amazonaws.personalize.schema", "fields": [{"name": "USER_ID", "type": "string"}, {"name": "ITEM_ID", "type": "string"}, {"name": "TIMESTAMP", "type": "long"}], "version": "1.0"}
+$ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/schema name=my-demo-schema schema={"type": "record", "name": "Interactions", "namespace": "com.amazonaws.personalize.schema", "fields": [{"name": "USER_ID", "type": "string"}, {"name": "ITEM_ID", "type": "string"}, {"name": "TIMESTAMP", "type": "long"}], "version": "1.0"}
 ```
 
 2. Invoke api to create Personalize Similar-Items campaign
 
 ```bash
-$ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/similar-items name=my-similar-items-model schema="arn:aws:personalize:ap-northeast-2:776556808198:schema/my-demo-schema" bucket="s3://demo-similar-items-67914/DEMO-similar-items.csv"
+$ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/similar-items name=my-similar-items-model schema="arn:aws:personalize:ap-northeast-2:776556808198:schema/my-demo-schema" bucket="s3://demo-similar-items-67914/DEMO-similar-items.csv"
 ```
 
 ## Invoke API to get recommendations
@@ -87,20 +87,20 @@ $ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/pers
 1. Invoke api to get list of campaign_arn and copy your campaign arn
 
 ```bash
-$ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/campaigns
+$ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/campaigns
 ```
 
 2. Invoke api to get recommendations realtime
 
 ```bash
-$ http post https://jts3jq4ygi.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/recommend/similar-items  campaign_arn=arn:aws:personalize:ap-northeast-2:929831892372:campaign/my-similar-items-model
+$ http post https://jts3jq4ygi.execute-api.ap-northeast-2.amazonaws.com/dev/recommend/similar-items  campaign_arn=arn:aws:personalize:ap-northeast-2:929831892372:campaign/my-similar-items-model
  item_id=323
 ```
 
 3. Invoke api to get recommendations in batch
 
 ```bash
-$ http post https://jts3jq4ygi.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/batch-inference name=my-batch-job solution_version_arn=arn:aws:personalize:ap-northeast-2:929831892372:solution/my-similar-items-model/84e322ff num_results=150 input_path="s3://demo-similar-items-67914/batch/input.json" output_path="s3://demo-similar-items-67914/batch/output/"
+$ http post https://jts3jq4ygi.execute-api.ap-northeast-2.amazonaws.com/dev/batch-inference name=my-batch-job solution_version_arn=arn:aws:personalize:ap-northeast-2:929831892372:solution/my-similar-items-model/84e322ff num_results=150 input_path="s3://demo-similar-items-67914/batch/input.json" output_path="s3://demo-similar-items-67914/batch/output/"
 ```
 
 ## Put events
@@ -108,13 +108,13 @@ $ http post https://jts3jq4ygi.execute-api.ap-northeast-2.amazonaws.com/dev/pers
 1. Get tracking id for dataset group
 
 ```bash
-$ http get http post https://jts3jq4ygi.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/tracking name==user-personalization-baseline
+$ http get http post https://jts3jq4ygi.execute-api.ap-northeast-2.amazonaws.com/dev/tracking name==user-personalization-baseline
 ```
 
 2. Put event via API Gateway
 
 ```bash
-http post https://jts3jq4ygi.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/events tracking_id=a6006e6f-8623-4684-bda4-33bec98aade9 session_id=user-personalization-session-1 event_type=click user_id=242 item_id=88 sent_at=1596258382
+http post https://jts3jq4ygi.execute-api.ap-northeast-2.amazonaws.com/dev/events tracking_id=a6006e6f-8623-4684-bda4-33bec98aade9 session_id=user-personalization-session-1 event_type=click user_id=242 item_id=88 sent_at=1596258382
 ```
 
 ## Cleanup Resources
@@ -122,7 +122,7 @@ http post https://jts3jq4ygi.execute-api.ap-northeast-2.amazonaws.com/dev/person
 1. Invoke api to remove dataset-group
 
 ```bash
-$ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/cleanup name=my-similar-items-model
+$ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/cleanup name=my-similar-items-model
 ```
 
 # Cleanup
