@@ -31,27 +31,17 @@ export class ApiIntegrationStack extends Api.BaseStack {
     const lambdaFunctions = new ApiLambdas(this, `ApiLambdas`);
 
     // Get common resource
-    const api = apigw.RestApi.fromRestApiId(
-      this,
-      'RestApi',
-      props.api.restApiId
-    );
-    const resource = apigw.Resource.fromResourceAttributes(
-      this,
-      'PersonalizeResource',
-      {
-        resourceId: props.api.restApiRootResourceId,
-        restApi: api,
-        path: '/personalize',
-      }
-    );
+    const api = apigw.RestApi.fromRestApiAttributes(this, 'RestApi', {
+      restApiId: props.api.restApiId,
+      rootResourceId: props.api.root.resourceId,
+    });
 
     // Create lambda integrations (Apis)
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
       httpMethod: 'GET',
       function: lambdaFunctions.listCampaignArnsFunction,
-      resource: resource.addResource('campaigns'),
+      resource: api.root.addResource('campaigns'),
       requestTemplates: {
         'application/json': JSON.stringify({}),
       },
@@ -63,7 +53,7 @@ export class ApiIntegrationStack extends Api.BaseStack {
       credentialsRole: props.credentialsRole,
       httpMethod: 'GET',
       function: lambdaFunctions.getTrackingIdFunction,
-      resource: resource.addResource('tracking'),
+      resource: api.root.addResource('tracking'),
       requestTemplates: {
         'application/json': JSON.stringify({
           name: "$input.params('name')",
@@ -83,7 +73,7 @@ export class ApiIntegrationStack extends Api.BaseStack {
       credentialsRole: props.credentialsRole,
       httpMethod: 'GET',
       function: lambdaFunctions.getMetricsFunction,
-      resource: resource.addResource('metrics'),
+      resource: api.root.addResource('metrics'),
       requestTemplates: {
         'application/json': JSON.stringify({
           name: "$input.params('name')",
@@ -100,7 +90,7 @@ export class ApiIntegrationStack extends Api.BaseStack {
     });
 
     // Recommend
-    const recommendResource = resource.addResource('recommend');
+    const recommendResource = api.root.addResource('recommend');
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
       httpMethod: 'GET',
@@ -174,7 +164,7 @@ export class ApiIntegrationStack extends Api.BaseStack {
     });
 
     // Schema
-    const schemaResource = resource.addResource('schema');
+    const schemaResource = api.root.addResource('schema');
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
       httpMethod: 'POST',
@@ -238,7 +228,7 @@ export class ApiIntegrationStack extends Api.BaseStack {
       credentialsRole: props.credentialsRole,
       httpMethod: 'GET',
       function: lambdaFunctions.listSolutionVersionArnsFunction,
-      resource: resource.addResource('solution-versions'),
+      resource: api.root.addResource('solution-versions'),
       requestTemplates: {
         'application/json': JSON.stringify({}),
       },
@@ -251,7 +241,7 @@ export class ApiIntegrationStack extends Api.BaseStack {
       credentialsRole: props.credentialsRole,
       httpMethod: 'POST',
       function: lambdaFunctions.putEventsFunction,
-      resource: resource.addResource('put-events'),
+      resource: api.root.addResource('put-events'),
       requestTemplates: {
         'application/json': `$input.json('$')`,
       },
@@ -266,7 +256,7 @@ export class ApiIntegrationStack extends Api.BaseStack {
     });
 
     // Filter
-    const filterResource = resource.addResource('filter');
+    const filterResource = api.root.addResource('filter');
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
       httpMethod: 'POST',

@@ -29,23 +29,13 @@ export class SimilarItemsStack extends Sfn.BaseStack {
     const states = new SimilarItemsStates(this, 'SimilarItemsStates', props);
     this.stateMachine = states.stateMachine;
 
-    const api = apigw.RestApi.fromRestApiId(
-      this,
-      'RestApi',
-      props.api.restApiId
-    );
-    const resource = apigw.Resource.fromResourceAttributes(
-      this,
-      'PersonalizeResource',
-      {
-        resourceId: props.api.restApiRootResourceId,
-        restApi: api,
-        path: '/personalize',
-      }
-    );
+    const api = apigw.RestApi.fromRestApiAttributes(this, 'RestApi', {
+      restApiId: props.api.restApiId,
+      rootResourceId: props.api.root.resourceId,
+    });
 
     this.registerSfnIntegration({
-      resource: resource!.addResource('similar-items'),
+      resource: api.root.addResource('similar-items'),
       methodOptions: {
         ...this.methodOptions,
         requestModels: {

@@ -40,8 +40,6 @@ export class ApiGatewayStack extends cdk.Stack {
       endpointConfiguration,
       policy,
     });
-    this.api.root.addMethod('ANY');
-    this.api.root.addResource('personalize');
 
     const credentialsRole = new iam.Role(this, 'ApigwCredentialRole', {
       assumedBy: new iam.ServicePrincipal('apigateway.amazonaws.com'),
