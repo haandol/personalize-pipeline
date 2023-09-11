@@ -14,6 +14,7 @@ import { BatchInferenceStack } from '../lib/stacks/batch-inference-stack';
 import { TrainRecipeStack } from '../lib/stacks/train-recipe-stack';
 import { CleanupStack } from '../lib/stacks/cleanup-stack';
 import { ApiIntegrationStack } from '../lib/stacks/api-integration-stack';
+import { StorageStack } from '../lib/stacks/storage-stack';
 import { Config } from '../config/loader';
 
 const app = new cdk.App({
@@ -24,6 +25,8 @@ const app = new cdk.App({
 });
 
 // Common
+new StorageStack(app, `${Config.app.ns}StorageStack`);
+
 const vpcStack = new VpcStack(app, `${Config.app.ns}VpcStack`);
 const apiGwStack = new ApiGatewayStack(app, `${Config.app.ns}ApiGatewayStack`, {
   apigwVpcEndpoint: vpcStack.apigwVpcEndpoint,
