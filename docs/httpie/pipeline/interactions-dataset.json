@@ -2,7 +2,7 @@
   "name": "sims-baseline",
   "schema_arn": "<SCHEMA_ARN>",
   "bucket": "s3://<BUCKET>/interactions.csv",
-  "recipe_arn": "arn:aws:personalize:::recipe/aws-sims",
+  "recipe_arn": "arn:aws:personalize:::recipe/aws-similar-items",
   "deploy": true,
   "solution_config": {
     "algorithmHyperParameters": {

@@ -13,7 +13,7 @@ def handler(event, context):
 
     name = event['name']
     dataset_group_arn = event['dataset_group_arn']
-    recipe_arn = 'arn:aws:personalize:::recipe/aws-sims'
+    recipe_arn = 'arn:aws:personalize:::recipe/aws-similar-items'
 
     solution_params = dict(
         name=name,
