@@ -31,11 +31,20 @@ export class ApiIntegrationStack extends Api.BaseStack {
     const lambdaFunctions = new ApiLambdas(this, `ApiLambdas`);
 
     // Get common resource
-    const api = apigw.RestApi.fromRestApiAttributes(this, 'RestApi', {
-      restApiId: props.api.restApiId,
-      rootResourceId: props.api.restApiRootResourceId,
-    });
-    const resource = api.root.resourceForPath('/personalize')!;
+    const api = apigw.RestApi.fromRestApiId(
+      this,
+      'RestApi',
+      props.api.restApiId
+    );
+    const resource = apigw.Resource.fromResourceAttributes(
+      this,
+      'PersonalizeResource',
+      {
+        resourceId: props.api.restApiRootResourceId,
+        restApi: api,
+        path: '/personalize',
+      }
+    );
 
     // Create lambda integrations (Apis)
     this.registerLambdaIntegration({
