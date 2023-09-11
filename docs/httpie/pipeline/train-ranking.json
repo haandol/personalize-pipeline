@@ -1,5 +1,5 @@
 {
-  "name": "sims-baseline",
+  "name": "similar-items-baseline",
   "recipe_arn": "arn:aws:personalize:::recipe/aws-personalized-ranking",
   "deploy": true
 }

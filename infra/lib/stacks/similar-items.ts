@@ -4,7 +4,7 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as sfn from 'aws-cdk-lib/aws-stepfunctions';
 import * as sns from 'aws-cdk-lib/aws-sns';
 import * as apigw from 'aws-cdk-lib/aws-apigateway';
-import { SimsStates } from '../constructs/sims-states';
+import { SimilarItemsStates } from '../constructs/similar-items-states';
 import {
   StatesRequestModels,
   RequestValidators,
@@ -20,22 +20,22 @@ interface Props extends cdk.StackProps {
   failTopic: sns.ITopic;
 }
 
-export class SimsStack extends Sfn.BaseStack {
+export class SimilarItemsStack extends Sfn.BaseStack {
   public readonly stateMachine: sfn.IStateMachine;
 
   constructor(scope: Construct, id: string, props: Props) {
     super(scope, id, props);
 
-    const states = new SimsStates(this, 'SimsStates', props);
+    const states = new SimilarItemsStates(this, 'SimilarItemsStates', props);
     this.stateMachine = states.stateMachine;
 
     const resource = props.api.root.resourceForPath('personalize');
     this.registerSfnIntegration({
-      resource: resource.addResource('sims'),
+      resource: resource.addResource('similar-items'),
       methodOptions: {
         ...this.methodOptions,
         requestModels: {
-          'application/json': props.requestModels.SimsModel,
+          'application/json': props.requestModels.SimilarItemsModel,
         },
         requestValidator: props.requestValidators.bodyValidator,
       },

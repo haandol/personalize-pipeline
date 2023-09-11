@@ -8,8 +8,8 @@ export class ApiLambdas extends Construct {
   public readonly lambdaExecutionRole: iam.IRole;
   public readonly getTrackingIdFunction: lambda.IFunction;
   public readonly getMetricsFunction: lambda.IFunction;
-  public readonly recommendSimsFunction: lambda.IFunction;
-  public readonly recommendHrnnFunction: lambda.IFunction;
+  public readonly recommendSimilarItemsFunction: lambda.IFunction;
+  public readonly recommendUserPersonalizationFunction: lambda.IFunction;
   public readonly recommendRankingFunction: lambda.IFunction;
   public readonly listCampaignArnsFunction: lambda.IFunction;
   public readonly createSchemaFunction: lambda.IFunction;
@@ -63,28 +63,28 @@ export class ApiLambdas extends Construct {
       timeout: cdk.Duration.seconds(15),
     });
 
-    this.recommendSimsFunction = new lambda.Function(
+    this.recommendSimilarItemsFunction = new lambda.Function(
       this,
-      'RecommendSimsFunction',
+      'RecommendSimilarItemsFunction',
       {
         code,
         runtime,
         role,
-        handler: 'recommend_sims.handler',
+        handler: 'recommend_similar_items.handler',
         currentVersionOptions: {
           removalPolicy: cdk.RemovalPolicy.RETAIN,
         },
       }
     );
 
-    this.recommendHrnnFunction = new lambda.Function(
+    this.recommendUserPersonalizationFunction = new lambda.Function(
       this,
-      'RecommendHrnnFunction',
+      'RecommendUserPersonalizationFunction',
       {
         code,
         runtime,
         role,
-        handler: 'recommend_hrnn.handler',
+        handler: 'recommend_user_personalization.handler',
         currentVersionOptions: {
           removalPolicy: cdk.RemovalPolicy.RETAIN,
         },

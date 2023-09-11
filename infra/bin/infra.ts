@@ -5,7 +5,7 @@ import * as cdk from 'aws-cdk-lib';
 import { VpcStack } from '../lib/stacks/vpc-stack';
 import { ApiGatewayStack } from '../lib/stacks/apigateway-stack';
 import { CommonStack } from '../lib/stacks/common-stack';
-import { SimsStack } from '../lib/stacks/sims-stack';
+import { SimilarItemsStack } from '../lib/stacks/similar-items';
 import { UserPersonalizationStack } from '../lib/stacks/user-personalization-stack';
 import { MetadataDatasetStack } from '../lib/stacks/metadata-dataset-stack';
 import { InteractionDatasetStack } from '../lib/stacks/interaction-dataset-stack';
@@ -35,15 +35,19 @@ apiGwStack.addDependency(vpcStack);
 
 const commonStack = new CommonStack(app, `${Config.app.ns}CommonStack`);
 
-const simsStack = new SimsStack(app, `${Config.app.ns}SimsStack`, {
-  api: apiGwStack.api,
-  requestModels: apiGwStack.statesRequestModels,
-  requestValidators: apiGwStack.requestValidators,
-  credentialsRole: apiGwStack.credentialsRole,
-  doneTopic: commonStack.doneTopic,
-  failTopic: commonStack.failTopic,
-});
-simsStack.addDependency(commonStack);
+const simItemStack = new SimilarItemsStack(
+  app,
+  `${Config.app.ns}SimilarItemsStack`,
+  {
+    api: apiGwStack.api,
+    requestModels: apiGwStack.statesRequestModels,
+    requestValidators: apiGwStack.requestValidators,
+    credentialsRole: apiGwStack.credentialsRole,
+    doneTopic: commonStack.doneTopic,
+    failTopic: commonStack.failTopic,
+  }
+);
+simItemStack.addDependency(commonStack);
 
 const userPersonalizationStack = new UserPersonalizationStack(
   app,

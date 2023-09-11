@@ -91,8 +91,8 @@ export class ApiIntegrationStack extends Api.BaseStack {
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
       httpMethod: 'GET',
-      function: lambdaFunctions.recommendSimsFunction,
-      resource: recommendResource.addResource('sims'),
+      function: lambdaFunctions.recommendSimilarItemsFunction,
+      resource: recommendResource.addResource('similar-items'),
       requestTemplates: {
         'application/json': JSON.stringify({
           campaign_arn: "$input.params('campaign_arn')",
@@ -115,8 +115,8 @@ export class ApiIntegrationStack extends Api.BaseStack {
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
       httpMethod: 'GET',
-      function: lambdaFunctions.recommendHrnnFunction,
-      resource: recommendResource.addResource('hrnn'),
+      function: lambdaFunctions.recommendUserPersonalizationFunction,
+      resource: recommendResource.addResource('user-personalization'),
       requestTemplates: {
         'application/json': JSON.stringify({
           campaign_arn: "$input.params('campaign_arn')",

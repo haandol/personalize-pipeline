@@ -7,7 +7,7 @@ export interface ApiRequestModels {
 }
 
 export interface StatesRequestModels {
-  SimsModel: apigw.IModel;
+  SimilarItemsModel: apigw.IModel;
   MetadataDatasetModel: apigw.IModel;
   UserPersonalizationModel: apigw.IModel;
   InteractionsDatasetModel: apigw.IModel;

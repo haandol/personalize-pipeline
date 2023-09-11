@@ -1,5 +1,5 @@
 {
-  "name": "hrnn-baseline",
+  "name": "user-personalization-baseline",
   "item_schema_arn": "<SCHEMA_ARN>",
   "item_bucket": "s3://<BUCKET>/item_metadata.csv",
   "deploy": true

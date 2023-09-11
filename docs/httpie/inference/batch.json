@@ -1,5 +1,5 @@
 {
-  "name": "sims-baseline-batch",
+  "name": "similar-items-baseline-batch",
   "solution_version_arn": "<SOLUTION_VERSION_ARN>",
   "input_path": "s3://<BUCKET>/input.batch",
   "output_path": "s3://<BUCKET>/output/"

@@ -21,7 +21,7 @@ interface IStateFunctions {
   checkReadyFunction: lambda.IFunction;
 }
 
-export class SimsStates extends Construct {
+export class SimilarItemsStates extends Construct {
   public readonly stateMachine: sfn.StateMachine;
 
   constructor(scope: Construct, id: string, props: IProps) {
@@ -32,26 +32,30 @@ export class SimsStates extends Construct {
   }
 
   private createSfnFunctions(): IStateFunctions {
-    const personalizeRole = new iam.Role(this, 'SimsPersonalizeRole', {
+    const personalizeRole = new iam.Role(this, 'SimilarItemsPersonalizeRole', {
       assumedBy: new iam.ServicePrincipal('personalize.amazonaws.com'),
       managedPolicies: [
         { managedPolicyArn: 'arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess' },
       ],
     });
-    const lambdaExecutionRole = new iam.Role(this, 'SimsLambdaExecutionRole', {
-      assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
-      managedPolicies: [
-        {
-          managedPolicyArn:
-            'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
-        },
-        {
-          managedPolicyArn:
-            'arn:aws:iam::aws:policy/service-role/AmazonPersonalizeFullAccess',
-        },
-        { managedPolicyArn: 'arn:aws:iam::aws:policy/AmazonS3FullAccess' },
-      ],
-    });
+    const lambdaExecutionRole = new iam.Role(
+      this,
+      'SimilarItemsLambdaExecutionRole',
+      {
+        assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
+        managedPolicies: [
+          {
+            managedPolicyArn:
+              'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
+          },
+          {
+            managedPolicyArn:
+              'arn:aws:iam::aws:policy/service-role/AmazonPersonalizeFullAccess',
+          },
+          { managedPolicyArn: 'arn:aws:iam::aws:policy/AmazonS3FullAccess' },
+        ],
+      }
+    );
 
     const datasetGroupFunction = new lambda.Function(
       this,
@@ -59,7 +63,14 @@ export class SimsStates extends Construct {
       {
         runtime: lambda.Runtime.PYTHON_3_7,
         code: lambda.Code.fromAsset(
-          path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'sims')
+          path.resolve(
+            __dirname,
+            '..',
+            '..',
+            'functions',
+            'sfn',
+            'similar-items'
+          )
         ),
         handler: 'create_dataset_group.handler',
         role: lambdaExecutionRole,
@@ -69,7 +80,7 @@ export class SimsStates extends Construct {
     const datasetFunction = new lambda.Function(this, 'DatasetFunction', {
       runtime: lambda.Runtime.PYTHON_3_7,
       code: lambda.Code.fromAsset(
-        path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'sims')
+        path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'similar-items')
       ),
       handler: 'create_dataset.handler',
       role: lambdaExecutionRole,
@@ -81,7 +92,14 @@ export class SimsStates extends Construct {
       {
         runtime: lambda.Runtime.PYTHON_3_7,
         code: lambda.Code.fromAsset(
-          path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'sims')
+          path.resolve(
+            __dirname,
+            '..',
+            '..',
+            'functions',
+            'sfn',
+            'similar-items'
+          )
         ),
         handler: 'create_dataset_import.handler',
         role: lambdaExecutionRole,
@@ -94,7 +112,7 @@ export class SimsStates extends Construct {
     const solutionFunction = new lambda.Function(this, 'SolutionFunction', {
       runtime: lambda.Runtime.PYTHON_3_7,
       code: lambda.Code.fromAsset(
-        path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'sims')
+        path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'similar-items')
       ),
       handler: 'create_solution.handler',
       role: lambdaExecutionRole,
@@ -133,20 +151,24 @@ export class SimsStates extends Construct {
     stateFunctions: IStateFunctions
   ): sfn.StateMachine {
     // Common states
-    const doneTask = new tasks.SnsPublish(this, 'SimsDonePublishTask', {
+    const doneTask = new tasks.SnsPublish(this, 'SimilarItemsDonePublishTask', {
       topic: props.doneTopic,
       message: sfn.TaskInput.fromJsonPathAt('$'),
     });
-    const failTask = new tasks.SnsPublish(this, 'SimsFailPublishTask', {
+    const failTask = new tasks.SnsPublish(this, 'SimilarItemsFailPublishTask', {
       topic: props.failTopic,
       message: sfn.TaskInput.fromJsonPathAt('$'),
     });
-    const checkReadyTask = new tasks.LambdaInvoke(this, 'SimsCheckReadyTask', {
-      lambdaFunction: stateFunctions.checkReadyFunction,
-    });
+    const checkReadyTask = new tasks.LambdaInvoke(
+      this,
+      'SimilarItemsCheckReadyTask',
+      {
+        lambdaFunction: stateFunctions.checkReadyFunction,
+      }
+    );
     const retryCheckReadyTask = new sfn.Choice(
       this,
-      'SimsRetryCheckReadyTask',
+      'SimilarItemsRetryCheckReadyTask',
       {
         inputPath: '$.Payload',
       }
@@ -156,7 +178,7 @@ export class SimsStates extends Construct {
     // Worker states
     const datasetGroupTask = new tasks.LambdaInvoke(
       this,
-      'SimsDatasetGroupTask',
+      'SimilarItemsDatasetGroupTask',
       {
         lambdaFunction: stateFunctions.datasetGroupFunction,
         outputPath: '$.Payload',
@@ -165,16 +187,20 @@ export class SimsStates extends Construct {
     datasetGroupTask.next(checkReadyTask);
     datasetGroupTask.addCatch(failTask);
 
-    const datasetTask = new tasks.LambdaInvoke(this, 'SimsDatasetTask', {
-      lambdaFunction: stateFunctions.datasetFunction,
-      outputPath: '$.Payload',
-    });
+    const datasetTask = new tasks.LambdaInvoke(
+      this,
+      'SimilarItemsDatasetTask',
+      {
+        lambdaFunction: stateFunctions.datasetFunction,
+        outputPath: '$.Payload',
+      }
+    );
     datasetTask.next(checkReadyTask);
     datasetTask.addCatch(failTask);
 
     const datasetImportTask = new tasks.LambdaInvoke(
       this,
-      'SimsDatasetImportTask',
+      'SimilarItemsDatasetImportTask',
       {
         lambdaFunction: stateFunctions.datasetImportFunction,
         outputPath: '$.Payload',
@@ -183,17 +209,25 @@ export class SimsStates extends Construct {
     datasetImportTask.next(checkReadyTask);
     datasetImportTask.addCatch(failTask);
 
-    const solutionTask = new tasks.LambdaInvoke(this, 'SimsSolutionTask', {
-      lambdaFunction: stateFunctions.solutionFunction,
-      outputPath: '$.Payload',
-    });
+    const solutionTask = new tasks.LambdaInvoke(
+      this,
+      'SimilarItemsSolutionTask',
+      {
+        lambdaFunction: stateFunctions.solutionFunction,
+        outputPath: '$.Payload',
+      }
+    );
     solutionTask.next(checkReadyTask);
     solutionTask.addCatch(failTask);
 
-    const campaignTask = new tasks.LambdaInvoke(this, 'SimsCampaignTask', {
-      lambdaFunction: stateFunctions.campaignFunction,
-      outputPath: '$.Payload',
-    });
+    const campaignTask = new tasks.LambdaInvoke(
+      this,
+      'SimilarItemsCampaignTask',
+      {
+        lambdaFunction: stateFunctions.campaignFunction,
+        outputPath: '$.Payload',
+      }
+    );
     campaignTask.next(checkReadyTask);
     campaignTask.addCatch(failTask);
 
@@ -235,7 +269,7 @@ export class SimsStates extends Construct {
       )
       .when(sfn.Condition.stringEquals('$.status', 'CREATE FAILED'), failTask)
       .otherwise(
-        new sfn.Wait(this, 'WaitForSimsTask', {
+        new sfn.Wait(this, 'WaitForSimilarItemsTask', {
           time: sfn.WaitTime.duration(cdk.Duration.seconds(60)),
         }).next(checkReadyTask)
       );
@@ -258,8 +292,8 @@ export class SimsStates extends Construct {
         },
       ],
     });
-    return new sfn.StateMachine(this, 'SimsStateMachine', {
-      stateMachineName: 'SimsStateMachine',
+    return new sfn.StateMachine(this, 'SimilarItemsStateMachine', {
+      stateMachineName: 'SimilarItemsStateMachine',
       definitionBody: sfn.DefinitionBody.fromChainable(definition),
       role,
     });

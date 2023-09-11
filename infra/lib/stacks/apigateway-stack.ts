@@ -68,7 +68,7 @@ export class ApiGatewayStack extends cdk.Stack {
 
     const simsHrnnModel = this.registerSimsHrnnModel();
     this.statesRequestModels = {
-      SimsModel: simsHrnnModel,
+      SimilarItemsModel: simsHrnnModel,
       RankingModel: simsHrnnModel,
       UserPersonalizationModel: this.registerUserPersonalizationModel(),
       MetadataDatasetModel: this.registerMetadataDatasetModel(),
@@ -204,7 +204,8 @@ export class ApiGatewayStack extends cdk.Stack {
       contentType: 'application/json',
       modelName: 'StatesSimsHrnnModel',
       schema: {
-        description: 'start sims / hrnn / ranking pipeline',
+        description:
+          'start similar-items / user-personalization / ranking pipeline',
         type: apigw.JsonSchemaType.OBJECT,
         properties: {
           name: {
