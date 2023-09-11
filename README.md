@@ -10,8 +10,8 @@ Manage resources of Amazon Personalize using API Gateway
 # Prerequisites
 
 - awscli
-- Nodejs 12.16+
-- Python 3.7+
+- Nodejs 14+
+- Python 3.10+
 - AWS Account and Locally configured AWS credential
 
 # Installation
@@ -26,7 +26,7 @@ $ npm i
 Install cdk in global context and run `cdk bootstrap` if you did not initailize cdk yet.
 
 ```bash
-$ npm i -g cdk@1.108.1
+$ npm i -g cdk@2.95.1
 $ cdk bootstrap
 ```
 
@@ -68,9 +68,9 @@ $ docker-compose up
 
 3. Create S3 Bucket on [**AWS S3 Console**](https://console.aws.amazon.com/s3/home)
 
-4. Generate *csv* file by following intructions of [**Amazon Personalize Samples**](https://github.com/aws-samples/amazon-personalize-samples/blob/master/core_use_cases/related_items/personalize_sims_example.ipynb)
+4. Generate _csv_ file by following intructions of [**Amazon Personalize Samples**](https://github.com/aws-samples/amazon-personalize-samples/blob/master/core_use_cases/related_items/personalize_sims_example.ipynb)
 
-5. Upload *csv* file to *S3 Bucket*
+5. Upload _csv_ file to _S3 Bucket_
 
 ## Connect to BastionHost
 
@@ -79,6 +79,7 @@ $ docker-compose up
 > You can get Instance-id for BastionHost from `cdk deploy` also.
 
 2. Connect to BastionHost using SSM
+
 ```bash
 $ aws ssm start-session --target i-0f956edfbb92e272e
 
@@ -102,6 +103,7 @@ $ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/pers
 ```
 
 2. Invoke api to create Personalize SIMS campaign
+
 ```bash
 $ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/sims name=my-sims-model schema="arn:aws:personalize:ap-northeast-2:776556808198:schema/my-demo-schema" bucket="s3://demo-sims-67914/DEMO-sims.csv"
 ```
@@ -115,12 +117,14 @@ $ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/pers
 ```
 
 2. Invoke api to get recommendations realtime
+
 ```bash
 $ http post https://jts3jq4ygi.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/recommend/sims  campaign_arn=arn:aws:personalize:ap-northeast-2:929831892372:campaign/my-sims-model
  item_id=323
 ```
 
 3. Invoke api to get recommendations in batch
+
 ```bash
 $ http post https://jts3jq4ygi.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/batch-inference name=my-batch-job solution_version_arn=arn:aws:personalize:ap-northeast-2:929831892372:solution/my-sims-model/84e322ff num_results=150 input_path="s3://demo-sims-67914/batch/input.json" output_path="s3://demo-sims-67914/batch/output/"
 ```
@@ -128,11 +132,13 @@ $ http post https://jts3jq4ygi.execute-api.ap-northeast-2.amazonaws.com/dev/pers
 ## Put events
 
 1. Get tracking id for dataset group
+
 ```bash
 $ http get http post https://jts3jq4ygi.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/tracking name==hrnn-baseline
 ```
 
 2. Put event via API Gateway
+
 ```bash
 http post https://jts3jq4ygi.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/events tracking_id=a6006e6f-8623-4684-bda4-33bec98aade9 session_id=hrnn-session-1 event_type=click user_id=242 item_id=88 sent_at=1596258382
 ```
@@ -140,6 +146,7 @@ http post https://jts3jq4ygi.execute-api.ap-northeast-2.amazonaws.com/dev/person
 ## Cleanup Resources
 
 1. Invoke api to remove dataset-group
+
 ```bash
 $ http post https://f5crbjcb3k.execute-api.ap-northeast-2.amazonaws.com/dev/personalize/cleanup name=my-sims-model
 ```

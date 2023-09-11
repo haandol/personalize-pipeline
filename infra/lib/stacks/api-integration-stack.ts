@@ -1,23 +1,8 @@
-/* *****************************************************************************
- * * Copyright 2019 Amazon.com, Inc. and its affiliates. All Rights Reserved.  *
- *                                                                             *
- * Licensed under the Amazon Software License (the "License").                 *
- *  You may not use this file except in compliance with the License.           *
- * A copy of the License is located at                                         *
- *                                                                             *
- *  http://aws.amazon.com/asl/                                                 *
- *                                                                             *
- *  or in the "license" file accompanying this file. This file is distributed  *
- *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either  *
- *  express or implied. See the License for the specific language governing    *
- *  permissions and limitations under the License.                             *
- * *************************************************************************** *
-*/
-
-import * as cdk from '@aws-cdk/core';
-import * as iam from '@aws-cdk/aws-iam';
-import * as lambda from '@aws-cdk/aws-lambda';
-import * as apigw from '@aws-cdk/aws-apigateway';
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as apigw from 'aws-cdk-lib/aws-apigateway';
 import { ApiRequestModels, RequestValidators } from '../interfaces/interface';
 import { Api } from '../interfaces/base-stack';
 import { ApiLambdas } from '../constructs/api-lambdas';
@@ -34,16 +19,16 @@ interface IntegrationProps {
   httpMethod: string;
   function: lambda.IFunction;
   resource: apigw.IResource;
-  requestTemplates: {[contentType: string]: string};
+  requestTemplates: { [contentType: string]: string };
   methodOptions: apigw.MethodOptions;
   integrationResponses: apigw.IntegrationResponse[];
 }
 
 export class ApiIntegrationStack extends Api.BaseStack {
-  constructor(scope: cdk.Construct, id: string, props: Props) {
+  constructor(scope: Construct, id: string, props: Props) {
     super(scope, id, props);
 
-    const lambdaFunctions = new ApiLambdas(this, `ApiLambdas`)
+    const lambdaFunctions = new ApiLambdas(this, `ApiLambdas`);
 
     // Get common resource
     const resource = props.api.root.resourceForPath('personalize');
@@ -68,7 +53,7 @@ export class ApiIntegrationStack extends Api.BaseStack {
       resource: resource.addResource('tracking'),
       requestTemplates: {
         'application/json': JSON.stringify({
-          "name": "$input.params('name')",
+          name: "$input.params('name')",
         }),
       },
       methodOptions: {
@@ -88,7 +73,7 @@ export class ApiIntegrationStack extends Api.BaseStack {
       resource: resource.addResource('metrics'),
       requestTemplates: {
         'application/json': JSON.stringify({
-          "name": "$input.params('name')",
+          name: "$input.params('name')",
         }),
       },
       methodOptions: {
@@ -110,9 +95,9 @@ export class ApiIntegrationStack extends Api.BaseStack {
       resource: recommendResource.addResource('sims'),
       requestTemplates: {
         'application/json': JSON.stringify({
-          "campaign_arn": "$input.params('campaign_arn')",
-          "item_id": "$input.params('item_id')",
-          "num_results": "$input.params('num_results')"
+          campaign_arn: "$input.params('campaign_arn')",
+          item_id: "$input.params('item_id')",
+          num_results: "$input.params('num_results')",
         }),
       },
       methodOptions: {
@@ -134,9 +119,9 @@ export class ApiIntegrationStack extends Api.BaseStack {
       resource: recommendResource.addResource('hrnn'),
       requestTemplates: {
         'application/json': JSON.stringify({
-          "campaign_arn": "$input.params('campaign_arn')",
-          "user_id": "$input.params('user_id')",
-          "num_results": "$input.params('num_results')"
+          campaign_arn: "$input.params('campaign_arn')",
+          user_id: "$input.params('user_id')",
+          num_results: "$input.params('num_results')",
         }),
       },
       methodOptions: {
@@ -158,9 +143,9 @@ export class ApiIntegrationStack extends Api.BaseStack {
       resource: recommendResource.addResource('ranking'),
       requestTemplates: {
         'application/json': JSON.stringify({
-          "campaign_arn": "$input.params('campaign_arn')",
-          "user_id": "$input.params('user_id')",
-          "item_list": "$input.params('item_list')"
+          campaign_arn: "$input.params('campaign_arn')",
+          user_id: "$input.params('user_id')",
+          item_list: "$input.params('item_list')",
         }),
       },
       methodOptions: {
@@ -202,7 +187,7 @@ export class ApiIntegrationStack extends Api.BaseStack {
       resource: schemaResource,
       requestTemplates: {
         'application/json': JSON.stringify({
-          "schema_arn": "$input.params('schema_arn')",
+          schema_arn: "$input.params('schema_arn')",
         }),
       },
       methodOptions: {
@@ -222,7 +207,7 @@ export class ApiIntegrationStack extends Api.BaseStack {
       resource: schemaResource,
       requestTemplates: {
         'application/json': JSON.stringify({
-          "schema_arn": "$input.params('schema_arn')",
+          schema_arn: "$input.params('schema_arn')",
         }),
       },
       methodOptions: {
@@ -294,7 +279,7 @@ export class ApiIntegrationStack extends Api.BaseStack {
       resource: filterResource,
       requestTemplates: {
         'application/json': JSON.stringify({
-          "filter_arn": "$input.params('filter_arn')",
+          filter_arn: "$input.params('filter_arn')",
         }),
       },
       methodOptions: {
@@ -314,7 +299,7 @@ export class ApiIntegrationStack extends Api.BaseStack {
       resource: filterResource,
       requestTemplates: {
         'application/json': JSON.stringify({
-          "name": "$input.params('name')",
+          name: "$input.params('name')",
         }),
       },
       methodOptions: {
@@ -336,7 +321,10 @@ export class ApiIntegrationStack extends Api.BaseStack {
       requestTemplates: props.requestTemplates,
       integrationResponses: props.integrationResponses,
     });
-    props.resource.addMethod(props.httpMethod, lambdaIntegration, props.methodOptions);
+    props.resource.addMethod(
+      props.httpMethod,
+      lambdaIntegration,
+      props.methodOptions
+    );
   }
-
 }

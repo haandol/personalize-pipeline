@@ -1,21 +1,22 @@
-import * as cdk from '@aws-cdk/core';
-import * as iam from '@aws-cdk/aws-iam';
-import * as lambda from '@aws-cdk/aws-lambda';
-import * as apigw from '@aws-cdk/aws-apigateway';
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as apigw from 'aws-cdk-lib/aws-apigateway';
 
 export namespace Sfn {
   export interface IntegrationProps {
-    resource: apigw.IResource,
+    resource: apigw.IResource;
     methodOptions: apigw.MethodOptions;
-    credentialsRole: iam.IRole,
+    credentialsRole: iam.IRole;
     stateMachineArn: string;
   }
 
   export abstract class BaseStack extends cdk.Stack {
-    protected readonly methodOptions: apigw.MethodOptions
+    protected readonly methodOptions: apigw.MethodOptions;
 
-    constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
-      super(scope, id, props)
+    constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+      super(scope, id, props);
 
       this.methodOptions = {
         methodResponses: [
@@ -30,7 +31,7 @@ export namespace Sfn {
               'method.response.header.Access-Control-Allow-Methods': true,
               'method.response.header.Access-Control-Allow-Credentials': true,
             },
-          }
+          },
         ],
       };
     }
@@ -50,15 +51,20 @@ export namespace Sfn {
             }
           `,
           },
-          integrationResponses: [{
-            statusCode: '200',
-            responseParameters: {
-              'method.response.header.Access-Control-Allow-Headers': "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-              'method.response.header.Access-Control-Allow-Origin': "'*'",
-              'method.response.header.Access-Control-Allow-Methods': "'OPTIONS,POST,GET'",
-              'method.response.header.Access-Control-Allow-Credentials': "'false'",
+          integrationResponses: [
+            {
+              statusCode: '200',
+              responseParameters: {
+                'method.response.header.Access-Control-Allow-Headers':
+                  "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                'method.response.header.Access-Control-Allow-Origin': "'*'",
+                'method.response.header.Access-Control-Allow-Methods':
+                  "'OPTIONS,POST,GET'",
+                'method.response.header.Access-Control-Allow-Credentials':
+                  "'false'",
+              },
             },
-          }],
+          ],
         },
       });
       props.resource.addMethod('POST', sfnIntegration, props.methodOptions);
@@ -72,17 +78,17 @@ export namespace Api {
     httpMethod: string;
     function: lambda.IFunction;
     resource: apigw.IResource;
-    requestTemplates: {[contentType: string]: string};
+    requestTemplates: { [contentType: string]: string };
     methodOptions: apigw.MethodOptions;
     integrationResponses: apigw.IntegrationResponse[];
   }
 
   export abstract class BaseStack extends cdk.Stack {
-    protected readonly methodOptions: apigw.MethodOptions
-    protected readonly integrationResponses: apigw.IntegrationResponse[]
+    protected readonly methodOptions: apigw.MethodOptions;
+    protected readonly integrationResponses: apigw.IntegrationResponse[];
 
-    constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
-      super(scope, id, props)
+    constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+      super(scope, id, props);
 
       this.methodOptions = {
         methodResponses: [
@@ -97,7 +103,7 @@ export namespace Api {
               'method.response.header.Access-Control-Allow-Methods': true,
               'method.response.header.Access-Control-Allow-Credentials': true,
             },
-          }
+          },
         ],
       };
 
@@ -105,12 +111,15 @@ export namespace Api {
         {
           statusCode: '200',
           responseParameters: {
-            'method.response.header.Access-Control-Allow-Headers': "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+            'method.response.header.Access-Control-Allow-Headers':
+              "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
             'method.response.header.Access-Control-Allow-Origin': "'*'",
-            'method.response.header.Access-Control-Allow-Methods': "'OPTIONS,POST,GET'",
-            'method.response.header.Access-Control-Allow-Credentials': "'false'",
+            'method.response.header.Access-Control-Allow-Methods':
+              "'OPTIONS,POST,GET'",
+            'method.response.header.Access-Control-Allow-Credentials':
+              "'false'",
           },
-        }
+        },
       ];
     }
 
@@ -122,9 +131,11 @@ export namespace Api {
         requestTemplates: props.requestTemplates,
         integrationResponses: props.integrationResponses,
       });
-      props.resource.addMethod(props.httpMethod, lambdaIntegration, props.methodOptions);
+      props.resource.addMethod(
+        props.httpMethod,
+        lambdaIntegration,
+        props.methodOptions
+      );
     }
-
   }
-
 }

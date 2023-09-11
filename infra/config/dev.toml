@@ -1,0 +1,18 @@
+[app]
+ns="PersonalizePipelineDemo"
+stage="Dev"
+
+[aws]
+region="ap-northeast-2"
+
+# if vpc is not given, cdk will create a new one for you
+# [vpc]
+# id=""
+# endpointId=""
+# endpointSecurityGroupIds=[""]
+
+[notification]
+emailSender="ldg55d@gmail.com"
+emailReceiver="ldg55d@gmail.com"
+# slackWebhook=""
+# chimeWebhook=""
