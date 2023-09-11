@@ -45,7 +45,7 @@ export class ApiGatewayStack extends cdk.Stack {
       api: this.api,
     });
     const devLogGroup = new logs.LogGroup(this, 'DevLogs');
-    const stage = new apigw.Stage(this, 'DevStage', {
+    new apigw.Stage(this, 'DevStage', {
       deployment,
       stageName: 'dev',
       accessLogDestination: new apigw.LogGroupLogDestination(devLogGroup),
