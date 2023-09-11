@@ -12,11 +12,13 @@ def handler(event, context):
     logger.info(event)
 
     name = event['name']
+    domain = event.get('domain', None)
     schema = json.dumps(event['schema'])
 
     create_schema_response = personalize.create_schema(
         name=name,
-        schema=schema
+        schema=schema,
+        domain=domain,
     )
     logger.info(json.dumps(create_schema_response, indent=2))
     schema_arn = create_schema_response['schemaArn']

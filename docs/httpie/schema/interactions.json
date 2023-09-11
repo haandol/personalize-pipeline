@@ -1,5 +1,6 @@
 {
   "name": "interactions-baseline",
+  "domain": "VIDEO_ON_DEMAND",
   "schema": {
     "type": "record",
     "name": "Interactions",
@@ -19,10 +20,7 @@
       },
       {
         "name": "EVENT_VALUE",
-        "type": [
-          "float",
-          "null"
-        ]
+        "type": ["float", "null"]
       },
       {
         "name": "TIMESTAMP",
