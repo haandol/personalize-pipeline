@@ -29,7 +29,11 @@ export class TrainRecipeStack extends Sfn.BaseStack {
     const states = new TrainRecipeStates(this, 'TrainRecipeStates', props);
     this.stateMachine = states.stateMachine;
 
-    const resource = props.api.root.resourceForPath('personalize');
+    const api = apigw.RestApi.fromRestApiAttributes(this, 'RestApi', {
+      restApiId: props.api.restApiId,
+      rootResourceId: props.api.restApiRootResourceId,
+    });
+    const resource = api.root.resourceForPath('personalize');
     this.registerSfnIntegration({
       resource: resource.addResource('train-recipe'),
       methodOptions: {

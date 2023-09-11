@@ -47,6 +47,7 @@ const simItemStack = new SimilarItemsStack(
     failTopic: commonStack.failTopic,
   }
 );
+simItemStack.addDependency(apiGwStack);
 simItemStack.addDependency(commonStack);
 
 const userPersonalizationStack = new UserPersonalizationStack(
@@ -61,6 +62,7 @@ const userPersonalizationStack = new UserPersonalizationStack(
     failTopic: commonStack.failTopic,
   }
 );
+userPersonalizationStack.addDependency(apiGwStack);
 userPersonalizationStack.addDependency(commonStack);
 
 const metadataDatasetStack = new MetadataDatasetStack(
@@ -75,6 +77,7 @@ const metadataDatasetStack = new MetadataDatasetStack(
     failTopic: commonStack.failTopic,
   }
 );
+metadataDatasetStack.addDependency(apiGwStack);
 metadataDatasetStack.addDependency(commonStack);
 
 const interactionDatasetStack = new InteractionDatasetStack(
@@ -89,6 +92,7 @@ const interactionDatasetStack = new InteractionDatasetStack(
     failTopic: commonStack.failTopic,
   }
 );
+interactionDatasetStack.addDependency(apiGwStack);
 interactionDatasetStack.addDependency(commonStack);
 
 const rankingStack = new RankingStack(app, `${Config.app.ns}RankingStack`, {
@@ -99,6 +103,7 @@ const rankingStack = new RankingStack(app, `${Config.app.ns}RankingStack`, {
   doneTopic: commonStack.doneTopic,
   failTopic: commonStack.failTopic,
 });
+rankingStack.addDependency(apiGwStack);
 rankingStack.addDependency(commonStack);
 
 const batchInferenceStack = new BatchInferenceStack(
@@ -113,6 +118,7 @@ const batchInferenceStack = new BatchInferenceStack(
     failTopic: commonStack.failTopic,
   }
 );
+batchInferenceStack.addDependency(apiGwStack);
 batchInferenceStack.addDependency(commonStack);
 
 const trainRecipeStack = new TrainRecipeStack(
@@ -127,6 +133,7 @@ const trainRecipeStack = new TrainRecipeStack(
     failTopic: commonStack.failTopic,
   }
 );
+trainRecipeStack.addDependency(apiGwStack);
 trainRecipeStack.addDependency(commonStack);
 
 const cleanupStack = new CleanupStack(app, `${Config.app.ns}CleanupStack`, {
@@ -137,12 +144,18 @@ const cleanupStack = new CleanupStack(app, `${Config.app.ns}CleanupStack`, {
   doneTopic: commonStack.doneTopic,
   failTopic: commonStack.failTopic,
 });
+cleanupStack.addDependency(apiGwStack);
 cleanupStack.addDependency(commonStack);
 
 // ApiGateway LambdaIntegration
-new ApiIntegrationStack(app, `${Config.app.ns}ApiIntegrationStack`, {
-  api: apiGwStack.api,
-  requestModels: apiGwStack.apiRequestModels,
-  requestValidators: apiGwStack.requestValidators,
-  credentialsRole: apiGwStack.credentialsRole,
-});
+const apiIntegrationStack = new ApiIntegrationStack(
+  app,
+  `${Config.app.ns}ApiIntegrationStack`,
+  {
+    api: apiGwStack.api,
+    requestModels: apiGwStack.apiRequestModels,
+    requestValidators: apiGwStack.requestValidators,
+    credentialsRole: apiGwStack.credentialsRole,
+  }
+);
+apiIntegrationStack.addDependency(apiGwStack);
