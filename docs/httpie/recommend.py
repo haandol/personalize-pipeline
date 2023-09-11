@@ -14,12 +14,13 @@ logging.basicConfig(
 
 SIMS_ARN = os.environ.get('SIMS_ARN', '')
 HRNN_ARN = os.environ.get('HRNN_ARN', '')
+REGION = os.environ.get('AWS_DEFAULT_REGION', 'us-east-1')
 
 
 def get_apigw_addr():
-    cfn = boto3.client('cloudformation')
+    cfn = boto3.client('cloudformation', region_name=REGION)
     return cfn.describe_stacks(
-        StackName='PersonalizePipelineDevApiGatewayStack'
+        StackName='PersonalizePipelineDemoDevApiGatewayStack'
     )['Stacks'][0]['Outputs'][0]['OutputValue']
 
 
