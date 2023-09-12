@@ -27,39 +27,32 @@ export class ApiGatewayStack extends cdk.Stack {
     const { policy, endpointConfiguration } = this.getApiOptions(
       props.apigwVpcEndpoint
     );
-    const prdLogGroup = new logs.LogGroup(this, 'PrdLogs');
+    const devLogGroup = new logs.LogGroup(this, 'DevLogs');
     this.api = new apigw.RestApi(this, `RestApi`, {
       restApiName: `${cdk.Stack.of(this).stackName}RestApi`,
+      deploy: true,
       deployOptions: {
-        accessLogDestination: new apigw.LogGroupLogDestination(prdLogGroup),
-        accessLogFormat: apigw.AccessLogFormat.jsonWithStandardFields(),
+        stageName: 'dev',
+        metricsEnabled: true,
+        loggingLevel: apigw.MethodLoggingLevel.INFO,
+        accessLogDestination: new apigw.LogGroupLogDestination(devLogGroup),
+        accessLogFormat: apigw.AccessLogFormat.jsonWithStandardFields({
+          caller: false,
+          httpMethod: true,
+          ip: true,
+          protocol: true,
+          requestTime: true,
+          resourcePath: true,
+          responseLength: true,
+          status: true,
+          user: true,
+        }),
       },
       defaultCorsPreflightOptions: {
         allowOrigins: apigw.Cors.ALL_ORIGINS,
       },
       endpointConfiguration,
       policy,
-    });
-
-    const deployment = new apigw.Deployment(this, 'Deployment', {
-      api: this.api,
-    });
-    const devLogGroup = new logs.LogGroup(this, 'DevLogs');
-    new apigw.Stage(this, 'DevStage', {
-      deployment,
-      stageName: 'dev',
-      accessLogDestination: new apigw.LogGroupLogDestination(devLogGroup),
-      accessLogFormat: apigw.AccessLogFormat.jsonWithStandardFields({
-        caller: false,
-        httpMethod: true,
-        ip: true,
-        protocol: true,
-        requestTime: true,
-        resourcePath: true,
-        responseLength: true,
-        status: true,
-        user: true,
-      }),
     });
 
     const credentialsRole = new iam.Role(this, 'ApigwCredentialRole', {
