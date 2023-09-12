@@ -12,6 +12,7 @@ def handler(event, context):
     logger.info(event)
 
     name = event['name']
+    domain = event['domain']
     schema_arn = event['schema_arn']
     bucket = event['bucket']
     if not bucket.startswith('s3://') and not bucket.endswith('.csv'):
@@ -34,7 +35,10 @@ def handler(event, context):
         raise Exception(f'user_schema_arn should be provided')
 
     # create dataset group
-    create_dataset_group_response = personalize.create_dataset_group(name=name)
+    create_dataset_group_response = personalize.create_dataset_group(
+        name=name,
+        domain=domain,
+    )
     logger.info(json.dumps(create_dataset_group_response, indent=2))
     dataset_group_arn = create_dataset_group_response['datasetGroupArn']
 
