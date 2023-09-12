@@ -11,8 +11,12 @@
         "type": "string"
       },
       {
+        "name": "CREATION_TIMESTAMP",
+        "type": "long"
+      },
+      {
         "name": "GENRES",
-        "type": ["null", "string"],
+        "type": "string",
         "categorical": true
       }
     ],
