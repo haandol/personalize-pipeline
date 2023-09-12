@@ -1,5 +1,5 @@
 {
-  "name": "item-metadata-baseline",
+  "name": "user-personalization-baseline",
   "domain": "VIDEO_ON_DEMAND",
   "schema": {
     "type": "record",
