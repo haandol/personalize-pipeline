@@ -11,6 +11,7 @@ import { MetadataDatasetStack } from '../lib/stacks/metadata-dataset-stack';
 import { InteractionDatasetStack } from '../lib/stacks/interaction-dataset-stack';
 import { RankingStack } from '../lib/stacks/ranking-stack';
 import { BatchInferenceStack } from '../lib/stacks/batch-inference-stack';
+import { BatchSegmentStack } from '../lib/stacks/batch-segment-stack';
 import { TrainRecipeStack } from '../lib/stacks/train-recipe-stack';
 import { CleanupStack } from '../lib/stacks/cleanup-stack';
 import { ApiIntegrationStack } from '../lib/stacks/api-integration-stack';
@@ -127,6 +128,21 @@ const batchInferenceStack = new BatchInferenceStack(
 );
 batchInferenceStack.addDependency(apiGwStack);
 batchInferenceStack.addDependency(commonStack);
+
+const batchSegmentStack = new BatchSegmentStack(
+  app,
+  `${Config.app.ns}BatchSegmentStack`,
+  {
+    api: apiGwStack.api,
+    requestModels: apiGwStack.statesRequestModels,
+    requestValidators: apiGwStack.requestValidators,
+    credentialsRole: apiGwStack.credentialsRole,
+    doneTopic: commonStack.doneTopic,
+    failTopic: commonStack.failTopic,
+  }
+);
+batchSegmentStack.addDependency(apiGwStack);
+batchSegmentStack.addDependency(commonStack);
 
 const trainRecipeStack = new TrainRecipeStack(
   app,

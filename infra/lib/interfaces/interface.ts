@@ -13,6 +13,7 @@ export interface StatesRequestModels {
   InteractionsDatasetModel: apigw.IModel;
   RankingModel: apigw.IModel;
   BatchInferenceModel: apigw.IModel;
+  BatchSegmentModel: apigw.IModel;
   TrainRecipeModel: apigw.IModel;
   CleanupModel: apigw.IModel;
 }

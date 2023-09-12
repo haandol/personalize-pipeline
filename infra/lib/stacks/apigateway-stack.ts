@@ -91,6 +91,7 @@ export class ApiGatewayStack extends cdk.Stack {
       MetadataDatasetModel: this.registerMetadataDatasetModel(),
       InteractionsDatasetModel: this.registerInteractionsDatasetModel(),
       BatchInferenceModel: this.registerBatchInferenceModel(),
+      BatchSegmentModel: this.registerBatchSegmentModel(),
       TrainRecipeModel: this.registerTrainRecipeModel(),
       CleanupModel: this.registerCleanupModel(),
     };
@@ -561,6 +562,36 @@ export class ApiGatewayStack extends cdk.Stack {
                 },
               },
             },
+          },
+        },
+        required: ['name', 'solution_version_arn', 'input_path', 'output_path'],
+      },
+    });
+  }
+
+  private registerBatchSegmentModel() {
+    return this.api.addModel(`StatesBatchSegmentModel`, {
+      contentType: 'application/json',
+      modelName: 'StatesBatchSegmentModel',
+      schema: {
+        description: 'start batch segment pipeline',
+        type: apigw.JsonSchemaType.OBJECT,
+        properties: {
+          name: {
+            description: 'name for batch segment job',
+            type: apigw.JsonSchemaType.STRING,
+          },
+          solution_version_arn: {
+            type: apigw.JsonSchemaType.STRING,
+          },
+          input_path: {
+            type: apigw.JsonSchemaType.STRING,
+          },
+          output_path: {
+            type: apigw.JsonSchemaType.STRING,
+          },
+          num_results: {
+            type: apigw.JsonSchemaType.INTEGER,
           },
         },
         required: ['name', 'solution_version_arn', 'input_path', 'output_path'],

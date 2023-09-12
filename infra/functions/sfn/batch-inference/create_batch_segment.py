@@ -4,7 +4,7 @@ import boto3
 import logging
 from datetime import datetime
 
-logger = logging.getLogger("recommend-batch-inference")
+logger = logging.getLogger("recommend-batch-segment")
 logger.setLevel(logging.INFO)
 
 s3 = boto3.client("s3")
@@ -49,13 +49,9 @@ def handler(event, context):
         },
         roleArn=ROLE_ARN,
     )
-    batch_inference_job_config = event.get("batch_inference_job_config", {})
-    if batch_inference_job_config:
-        params["batchInferenceJobConfig"] = batch_inference_job_config
-
-    batch_inference_job_resp = client.create_batch_inference_job(**params)
+    batch_segment_job_resp = client.create_batch_segment_job(**params)
     return {
-        "batch_inference_job_arn": batch_inference_job_resp["batchInferenceJobArn"],
+        "batch_segment_job_arn": batch_segment_job_resp["batchSegmentJobArn"],
     }
 
 
