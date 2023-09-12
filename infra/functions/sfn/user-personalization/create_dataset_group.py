@@ -12,7 +12,7 @@ def handler(event, context):
     logger.info(event)
 
     name = event["name"]
-    domain = event.get(domain, None)
+    domain = event.get("domain", None)
     schema_arn = event["schema_arn"]
     bucket = event["bucket"]
     if not bucket.startswith("s3://") and not bucket.endswith(".csv"):
