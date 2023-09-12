@@ -1,5 +1,6 @@
 {
   "name": "item-metadata-baseline",
+  "domain": "VIDEO_ON_DEMAND",
   "schema": {
     "type": "record",
     "name": "Items",
@@ -11,10 +12,7 @@
       },
       {
         "name": "GENRES",
-        "type": [
-          "null",
-          "string"
-        ],
+        "type": ["null", "string"],
         "categorical": true
       }
     ],
