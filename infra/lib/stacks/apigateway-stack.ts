@@ -27,7 +27,7 @@ export class ApiGatewayStack extends cdk.Stack {
     const { policy, endpointConfiguration } = this.getApiOptions(
       props.apigwVpcEndpoint
     );
-    const devLogGroup = new logs.LogGroup(this, 'DevLogs');
+
     this.api = new apigw.RestApi(this, `RestApi`, {
       restApiName: `${cdk.Stack.of(this).stackName}RestApi`,
       deploy: true,
@@ -35,7 +35,12 @@ export class ApiGatewayStack extends cdk.Stack {
         stageName: 'dev',
         metricsEnabled: true,
         loggingLevel: apigw.MethodLoggingLevel.INFO,
-        accessLogDestination: new apigw.LogGroupLogDestination(devLogGroup),
+        accessLogDestination: new apigw.LogGroupLogDestination(
+          new logs.LogGroup(this, 'DevLogs', {
+            retention: logs.RetentionDays.ONE_DAY,
+            removalPolicy: cdk.RemovalPolicy.DESTROY,
+          })
+        ),
         accessLogFormat: apigw.AccessLogFormat.jsonWithStandardFields({
           caller: false,
           httpMethod: true,
