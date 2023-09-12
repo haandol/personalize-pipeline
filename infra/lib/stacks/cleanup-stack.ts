@@ -46,5 +46,12 @@ export class CleanupStack extends Sfn.BaseStack {
       credentialsRole: props.credentialsRole,
       stateMachineArn: this.stateMachine.stateMachineArn,
     });
+
+    const deployment = new apigw.Deployment(this, 'Deployment', {
+      api,
+      description: `deployed at ${new Date()}`,
+      retainDeployments: false,
+    });
+    (deployment as any).resource.stageName = 'dev';
   }
 }
