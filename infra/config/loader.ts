@@ -16,7 +16,7 @@ interface IConfig {
     endpointId: string;
     endpointSecurityGroupIds: string[];
   };
-  notification?: {
+  notification: {
     emailSender?: string;
     emailReceiver?: string;
     slackWebhook?: string;
@@ -45,14 +45,12 @@ const schema = joi
         endpointSecurityGroupIds: joi.array().items(joi.string()),
       })
       .optional(),
-    notification: joi
-      .object({
-        emailSender: joi.string().optional(),
-        emailReceiver: joi.string().optional(),
-        slackWebhook: joi.string().optional(),
-        chimeWebhook: joi.string().optional(),
-      })
-      .optional(),
+    notification: joi.object({
+      emailSender: joi.string().optional(),
+      emailReceiver: joi.string().optional(),
+      slackWebhook: joi.string().optional(),
+      chimeWebhook: joi.string().optional(),
+    }),
   })
   .unknown();
 

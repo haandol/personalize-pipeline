@@ -33,7 +33,14 @@ const apiGwStack = new ApiGatewayStack(app, `${Config.app.ns}ApiGatewayStack`, {
 });
 apiGwStack.addDependency(vpcStack);
 
-const commonStack = new CommonStack(app, `${Config.app.ns}CommonStack`);
+const commonStack = new CommonStack(app, `${Config.app.ns}CommonStack`, {
+  notification: {
+    emailSender: Config.notification?.emailSender,
+    emailReceiver: Config.notification?.emailReceiver,
+    slackWebhook: Config.notification?.slackWebhook,
+    chimeWebhook: Config.notification?.chimeWebhook,
+  },
+});
 
 const simItemStack = new SimilarItemsStack(
   app,
