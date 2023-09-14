@@ -142,6 +142,30 @@ export class ApiIntegrationStack extends Api.BaseStack {
     this.registerLambdaIntegration({
       credentialsRole: props.credentialsRole,
       httpMethod: 'GET',
+      function: lambdaFunctions.recommendUsecaseFunction,
+      resource: recommendResource.addResource('usecase'),
+      requestTemplates: {
+        'application/json': JSON.stringify({
+          recommender_arn: "$input.params('recommender_arn')",
+          user_id: "$input.params('user_id')",
+          item_id: "$input.params('item_id')",
+        }),
+      },
+      methodOptions: {
+        ...this.methodOptions,
+        requestParameters: {
+          'method.request.querystring.recommender_arn': false,
+          'method.request.querystring.user_id': true,
+          'method.request.querystring.item_id': false,
+        },
+        requestValidator: props.requestValidators.parameterValidator,
+      },
+      integrationResponses: this.integrationResponses,
+    });
+
+    this.registerLambdaIntegration({
+      credentialsRole: props.credentialsRole,
+      httpMethod: 'GET',
       function: lambdaFunctions.recommendRankingFunction,
       resource: recommendResource.addResource('ranking'),
       requestTemplates: {
