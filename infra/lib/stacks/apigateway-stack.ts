@@ -88,11 +88,13 @@ export class ApiGatewayStack extends cdk.Stack {
       SimilarItemsModel: simsHrnnModel,
       RankingModel: simsHrnnModel,
       UserPersonalizationModel: this.registerUserPersonalizationModel(),
+      UsecaseModel: this.registerUsecaseModel(),
       MetadataDatasetModel: this.registerMetadataDatasetModel(),
       InteractionsDatasetModel: this.registerInteractionsDatasetModel(),
       BatchInferenceModel: this.registerBatchInferenceModel(),
       BatchSegmentModel: this.registerBatchSegmentModel(),
       TrainRecipeModel: this.registerTrainRecipeModel(),
+      TrainUsecaseModel: this.registerTrainUsecaseModel(),
       CleanupModel: this.registerCleanupModel(),
     };
 
@@ -360,6 +362,62 @@ export class ApiGatewayStack extends cdk.Stack {
           },
         },
         required: ['name', 'schema_arn', 'bucket'],
+      },
+    });
+  }
+
+  private registerUsecaseModel() {
+    return this.api.addModel(`StatesUsecaseModel`, {
+      contentType: 'application/json',
+      modelName: 'StatesUsecaseModel',
+      schema: {
+        description: 'start usecase pipeline',
+        type: apigw.JsonSchemaType.OBJECT,
+        properties: {
+          name: {
+            type: apigw.JsonSchemaType.STRING,
+          },
+          domain: {
+            type: apigw.JsonSchemaType.STRING,
+          },
+          schema_arn: {
+            type: apigw.JsonSchemaType.STRING,
+          },
+          bucket: {
+            type: apigw.JsonSchemaType.STRING,
+          },
+          item_schema_arn: {
+            type: apigw.JsonSchemaType.STRING,
+          },
+          item_bucket: {
+            type: apigw.JsonSchemaType.STRING,
+          },
+          user_schema_arn: {
+            type: apigw.JsonSchemaType.STRING,
+          },
+          user_bucket: {
+            type: apigw.JsonSchemaType.STRING,
+          },
+          deploy: {
+            description: 'set true to create recommender',
+            type: apigw.JsonSchemaType.BOOLEAN,
+          },
+          recommender_config: {
+            type: apigw.JsonSchemaType.OBJECT,
+            properties: {
+              minRecommendationRequestsPerSecond: {
+                type: apigw.JsonSchemaType.INTEGER,
+              },
+              itemExplorationConfig: {
+                type: apigw.JsonSchemaType.OBJECT,
+              },
+              trainingDataConfig: {
+                type: apigw.JsonSchemaType.OBJECT,
+              },
+            },
+          },
+        },
+        required: ['name', 'domain', 'schema_arn', 'bucket'],
       },
     });
   }
@@ -654,6 +712,41 @@ export class ApiGatewayStack extends cdk.Stack {
                     type: apigw.JsonSchemaType.STRING,
                   },
                 },
+              },
+            },
+          },
+        },
+        required: ['name', 'recipe_arn'],
+      },
+    });
+  }
+
+  private registerTrainUsecaseModel() {
+    return this.api.addModel(`StatesTrainUsecase`, {
+      contentType: 'application/json',
+      modelName: 'StatesTrainUsecase',
+      schema: {
+        description:
+          'create recommender with given recipe for existing dataset',
+        type: apigw.JsonSchemaType.OBJECT,
+        properties: {
+          name: {
+            type: apigw.JsonSchemaType.STRING,
+          },
+          recipe_arn: {
+            type: apigw.JsonSchemaType.STRING,
+          },
+          recommender_config: {
+            type: apigw.JsonSchemaType.OBJECT,
+            properties: {
+              itemExplorationConfig: {
+                type: apigw.JsonSchemaType.OBJECT,
+              },
+              minRecommendationRequestsPerSecond: {
+                type: apigw.JsonSchemaType.INTEGER,
+              },
+              trainingDataConfig: {
+                type: apigw.JsonSchemaType.OBJECT,
               },
             },
           },

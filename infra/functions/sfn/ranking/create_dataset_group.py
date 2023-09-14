@@ -11,16 +11,14 @@ personalize = boto3.client(service_name="personalize")
 def handler(event, context):
     logger.info(event)
 
+    _ = event["schema_arn"]  # check existance
+
     name = event["name"]
-    domain = event.get("domain", None)
-    schema_arn = event["schema_arn"]
     bucket = event["bucket"]
     if not bucket.startswith("s3://") and not bucket.endswith(".csv"):
         raise Exception(f"Invalid bucket format, s3://BUCKET_NAME/XYZ.csv but {bucket}")
 
     params = dict(name=name)
-    if domain in ["VIDEO_ON_DEMAND", "ECOMMERCE"]:
-        params.update(dict(domain=domain))
     create_dataset_group_response = personalize.create_dataset_group(**params)
     logger.info(json.dumps(create_dataset_group_response, indent=2))
     dataset_group_arn = create_dataset_group_response["datasetGroupArn"]

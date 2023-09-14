@@ -7,12 +7,14 @@ import { ApiGatewayStack } from '../lib/stacks/apigateway-stack';
 import { CommonStack } from '../lib/stacks/common-stack';
 import { SimilarItemsStack } from '../lib/stacks/similar-items';
 import { UserPersonalizationStack } from '../lib/stacks/user-personalization-stack';
+import { UsecaseStack } from '../lib/stacks/usecase-stack';
 import { MetadataDatasetStack } from '../lib/stacks/metadata-dataset-stack';
 import { InteractionDatasetStack } from '../lib/stacks/interaction-dataset-stack';
 import { RankingStack } from '../lib/stacks/ranking-stack';
 import { BatchInferenceStack } from '../lib/stacks/batch-inference-stack';
 import { BatchSegmentStack } from '../lib/stacks/batch-segment-stack';
 import { TrainRecipeStack } from '../lib/stacks/train-recipe-stack';
+import { TrainUsecaseStack } from '../lib/stacks/train-usecase-stack';
 import { CleanupStack } from '../lib/stacks/cleanup-stack';
 import { ApiIntegrationStack } from '../lib/stacks/api-integration-stack';
 import { StorageStack } from '../lib/stacks/storage-stack';
@@ -72,6 +74,17 @@ const userPersonalizationStack = new UserPersonalizationStack(
 );
 userPersonalizationStack.addDependency(apiGwStack);
 userPersonalizationStack.addDependency(commonStack);
+
+const usecaseStack = new UsecaseStack(app, `${Config.app.ns}UsecaseStack`, {
+  api: apiGwStack.api,
+  requestModels: apiGwStack.statesRequestModels,
+  requestValidators: apiGwStack.requestValidators,
+  credentialsRole: apiGwStack.credentialsRole,
+  doneTopic: commonStack.doneTopic,
+  failTopic: commonStack.failTopic,
+});
+usecaseStack.addDependency(apiGwStack);
+usecaseStack.addDependency(commonStack);
 
 const metadataDatasetStack = new MetadataDatasetStack(
   app,
@@ -158,6 +171,21 @@ const trainRecipeStack = new TrainRecipeStack(
 );
 trainRecipeStack.addDependency(apiGwStack);
 trainRecipeStack.addDependency(commonStack);
+
+const trainUsecaseStack = new TrainUsecaseStack(
+  app,
+  `${Config.app.ns}TrainUsecaseStack`,
+  {
+    api: apiGwStack.api,
+    requestModels: apiGwStack.statesRequestModels,
+    requestValidators: apiGwStack.requestValidators,
+    credentialsRole: apiGwStack.credentialsRole,
+    doneTopic: commonStack.doneTopic,
+    failTopic: commonStack.failTopic,
+  }
+);
+trainUsecaseStack.addDependency(apiGwStack);
+trainUsecaseStack.addDependency(commonStack);
 
 const cleanupStack = new CleanupStack(app, `${Config.app.ns}CleanupStack`, {
   api: apiGwStack.api,

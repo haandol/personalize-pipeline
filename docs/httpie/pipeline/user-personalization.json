@@ -1,6 +1,5 @@
 {
   "name": "user-personalization-baseline",
-  "domain": "VIDEO_ON_DEMAND",
   "schema_arn": "<SCHEMA_ARN>",
   "bucket": "s3://<BUCKET>/interactions.csv",
   "deploy": true

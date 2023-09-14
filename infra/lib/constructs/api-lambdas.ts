@@ -11,6 +11,7 @@ export class ApiLambdas extends Construct {
   public readonly recommendSimilarItemsFunction: lambda.IFunction;
   public readonly recommendUserPersonalizationFunction: lambda.IFunction;
   public readonly recommendRankingFunction: lambda.IFunction;
+  public readonly recommendUsecaseFunction: lambda.IFunction;
   public readonly listCampaignArnsFunction: lambda.IFunction;
   public readonly createSchemaFunction: lambda.IFunction;
   public readonly deleteSchemaFunction: lambda.IFunction;
@@ -99,6 +100,20 @@ export class ApiLambdas extends Construct {
         runtime,
         role,
         handler: 'recommend_ranking.handler',
+      }
+    );
+
+    this.recommendUsecaseFunction = new lambda.Function(
+      this,
+      'RecommendUsecaseFunction',
+      {
+        code,
+        runtime,
+        role,
+        handler: 'recommend_usecase.handler',
+        currentVersionOptions: {
+          removalPolicy: cdk.RemovalPolicy.RETAIN,
+        },
       }
     );
 

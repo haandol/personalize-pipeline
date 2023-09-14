@@ -14,6 +14,17 @@ def handler(event, context):
     _ = event["schema_arn"]  # check existance
 
     name = event["name"]
+    domain = event["domain"]
+    recipe_arn = event["recipe_arn"]
+    if domain == "VIDEO_ON_DEMAND":
+        if not recipe_arn.startswith("arn:aws:personalize:::recipe/aws-vod-"):
+            raise Exception(f"Invalid recipe arn: {recipe_arn}")
+    elif domain == "ECOMMERCE":
+        if not recipe_arn.startswith("arn:aws:personalize:::recipe/aws-ecomm-"):
+            raise Exception(f"Invalid recipe_arn: {recipe_arn}")
+    else:
+        raise Exception(f"Invalid domain name: {domain}")
+
     bucket = event["bucket"]
     if not bucket.startswith("s3://") and not bucket.endswith(".csv"):
         raise Exception(f"Invalid bucket format, s3://BUCKET_NAME/XYZ.csv but {bucket}")
@@ -47,7 +58,10 @@ def handler(event, context):
         raise Exception(f"user_schema_arn should be provided")
 
     # create dataset group
-    params = dict(name=name)
+    params = dict(
+        name=name,
+        domain=domain,
+    )
     create_dataset_group_response = personalize.create_dataset_group(**params)
     logger.info(json.dumps(create_dataset_group_response, indent=2))
     dataset_group_arn = create_dataset_group_response["datasetGroupArn"]

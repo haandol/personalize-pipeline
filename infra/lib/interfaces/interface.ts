@@ -10,11 +10,13 @@ export interface StatesRequestModels {
   SimilarItemsModel: apigw.IModel;
   MetadataDatasetModel: apigw.IModel;
   UserPersonalizationModel: apigw.IModel;
+  UsecaseModel: apigw.IModel;
   InteractionsDatasetModel: apigw.IModel;
   RankingModel: apigw.IModel;
   BatchInferenceModel: apigw.IModel;
   BatchSegmentModel: apigw.IModel;
   TrainRecipeModel: apigw.IModel;
+  TrainUsecaseModel: apigw.IModel;
   CleanupModel: apigw.IModel;
 }
 

@@ -1,11 +1,12 @@
 {
-  "name": "similar-items-baseline",
+  "name": "usecase-video-baseline",
+  "domain": "VIDEO_ON_DEMAND",
   "schema_arn": "<SCHEMA_ARN>",
   "bucket": "s3://<BUCKET>/interactions.csv",
   "deploy": true,
-  "solution_config": {
+  "recommender_config": {
     "algorithmHyperParameters": {
-      "popularity_discount_factor": "0.4331786078906956"
+      "minRecommendationRequestsPerSecond": "1"
     }
   }
 }
