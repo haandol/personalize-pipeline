@@ -51,7 +51,7 @@ export class TrainUsecaseStates extends Construct {
       this,
       'RecommenderFunction',
       {
-        runtime: lambda.Runtime.PYTHON_3_7,
+        runtime: lambda.Runtime.PYTHON_3_11,
         code: lambda.Code.fromAsset(
           path.resolve(
             __dirname,
@@ -68,7 +68,7 @@ export class TrainUsecaseStates extends Construct {
     );
 
     const checkReadyFunction = new lambda.Function(this, 'CheckReadyFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
+      runtime: lambda.Runtime.PYTHON_3_11,
       code: lambda.Code.fromAsset(
         path.resolve(__dirname, '..', '..', 'functions', 'common')
       ),

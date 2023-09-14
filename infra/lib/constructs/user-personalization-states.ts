@@ -72,7 +72,7 @@ export class UserPersonalizationStates extends Construct {
       this,
       'DatasetGroupFunction',
       {
-        runtime: lambda.Runtime.PYTHON_3_7,
+        runtime: lambda.Runtime.PYTHON_3_11,
         code: lambda.Code.fromAsset(
           path.resolve(
             __dirname,
@@ -89,7 +89,7 @@ export class UserPersonalizationStates extends Construct {
     );
 
     const datasetFunction = new lambda.Function(this, 'DatasetFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
+      runtime: lambda.Runtime.PYTHON_3_11,
       code: lambda.Code.fromAsset(
         path.resolve(
           __dirname,
@@ -108,7 +108,7 @@ export class UserPersonalizationStates extends Construct {
       this,
       'DatasetImportFunction',
       {
-        runtime: lambda.Runtime.PYTHON_3_7,
+        runtime: lambda.Runtime.PYTHON_3_11,
         code: lambda.Code.fromAsset(
           path.resolve(
             __dirname,
@@ -131,7 +131,7 @@ export class UserPersonalizationStates extends Construct {
       this,
       'ItemDatasetFunction',
       {
-        runtime: lambda.Runtime.PYTHON_3_7,
+        runtime: lambda.Runtime.PYTHON_3_11,
         code: lambda.Code.fromAsset(
           path.resolve(
             __dirname,
@@ -151,7 +151,7 @@ export class UserPersonalizationStates extends Construct {
       this,
       'ItemDatasetImportFunction',
       {
-        runtime: lambda.Runtime.PYTHON_3_7,
+        runtime: lambda.Runtime.PYTHON_3_11,
         code: lambda.Code.fromAsset(
           path.resolve(
             __dirname,
@@ -174,7 +174,7 @@ export class UserPersonalizationStates extends Construct {
       this,
       'UserDatasetFunction',
       {
-        runtime: lambda.Runtime.PYTHON_3_7,
+        runtime: lambda.Runtime.PYTHON_3_11,
         code: lambda.Code.fromAsset(
           path.resolve(
             __dirname,
@@ -194,7 +194,7 @@ export class UserPersonalizationStates extends Construct {
       this,
       'UserDatasetImportFunction',
       {
-        runtime: lambda.Runtime.PYTHON_3_7,
+        runtime: lambda.Runtime.PYTHON_3_11,
         code: lambda.Code.fromAsset(
           path.resolve(
             __dirname,
@@ -214,7 +214,7 @@ export class UserPersonalizationStates extends Construct {
     );
 
     const solutionFunction = new lambda.Function(this, 'SolutionFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
+      runtime: lambda.Runtime.PYTHON_3_11,
       code: lambda.Code.fromAsset(
         path.resolve(
           __dirname,
@@ -230,7 +230,7 @@ export class UserPersonalizationStates extends Construct {
     });
 
     const campaignFunction = new lambda.Function(this, 'CampaignFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
+      runtime: lambda.Runtime.PYTHON_3_11,
       code: lambda.Code.fromAsset(
         path.resolve(__dirname, '..', '..', 'functions', 'common')
       ),
@@ -239,7 +239,7 @@ export class UserPersonalizationStates extends Construct {
     });
 
     const checkReadyFunction = new lambda.Function(this, 'CheckReadyFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
+      runtime: lambda.Runtime.PYTHON_3_11,
       code: lambda.Code.fromAsset(
         path.resolve(__dirname, '..', '..', 'functions', 'common')
       ),

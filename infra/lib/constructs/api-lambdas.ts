@@ -39,7 +39,7 @@ export class ApiLambdas extends Construct {
       ],
     });
 
-    const runtime = lambda.Runtime.PYTHON_3_7;
+    const runtime = lambda.Runtime.PYTHON_3_11;
     const code = lambda.Code.fromAsset(
       path.resolve(__dirname, '..', '..', 'functions', 'apis')
     );

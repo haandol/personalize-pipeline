@@ -49,7 +49,7 @@ export class CommonStack extends cdk.Stack {
     const chimeWebhook = props?.notification.chimeWebhook || '';
 
     const notifyDoneFunction = new lambda.Function(this, 'NotifyDoneFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
+      runtime: lambda.Runtime.PYTHON_3_11,
       code: lambda.Code.fromAsset(
         path.resolve(__dirname, '..', '..', 'functions', 'common')
       ),
@@ -67,7 +67,7 @@ export class CommonStack extends cdk.Stack {
     notifyDoneFunction.addEventSource(new SnsEventSource(this.doneTopic));
 
     const notifyFailFunction = new lambda.Function(this, 'NotifyFailFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
+      runtime: lambda.Runtime.PYTHON_3_11,
       code: lambda.Code.fromAsset(
         path.resolve(__dirname, '..', '..', 'functions', 'common')
       ),

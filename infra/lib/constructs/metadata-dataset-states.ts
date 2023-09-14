@@ -69,7 +69,7 @@ export class MetadataDatasetStates extends Construct {
       this,
       'ItemDatasetFunction',
       {
-        runtime: lambda.Runtime.PYTHON_3_7,
+        runtime: lambda.Runtime.PYTHON_3_11,
         code: lambda.Code.fromAsset(
           path.resolve(
             __dirname,
@@ -89,7 +89,7 @@ export class MetadataDatasetStates extends Construct {
       this,
       'ItemDatasetImportFunction',
       {
-        runtime: lambda.Runtime.PYTHON_3_7,
+        runtime: lambda.Runtime.PYTHON_3_11,
         code: lambda.Code.fromAsset(
           path.resolve(
             __dirname,
@@ -112,7 +112,7 @@ export class MetadataDatasetStates extends Construct {
       this,
       'UserDatasetFunction',
       {
-        runtime: lambda.Runtime.PYTHON_3_7,
+        runtime: lambda.Runtime.PYTHON_3_11,
         code: lambda.Code.fromAsset(
           path.resolve(
             __dirname,
@@ -136,7 +136,7 @@ export class MetadataDatasetStates extends Construct {
       this,
       'UserDatasetImportFunction',
       {
-        runtime: lambda.Runtime.PYTHON_3_7,
+        runtime: lambda.Runtime.PYTHON_3_11,
         code: lambda.Code.fromAsset(
           path.resolve(
             __dirname,
@@ -156,7 +156,7 @@ export class MetadataDatasetStates extends Construct {
     );
 
     const solutionFunction = new lambda.Function(this, 'SolutionFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
+      runtime: lambda.Runtime.PYTHON_3_11,
       code: lambda.Code.fromAsset(
         path.resolve(
           __dirname,
@@ -172,7 +172,7 @@ export class MetadataDatasetStates extends Construct {
     });
 
     const campaignFunction = new lambda.Function(this, 'CampaignFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
+      runtime: lambda.Runtime.PYTHON_3_11,
       code: lambda.Code.fromAsset(
         path.resolve(__dirname, '..', '..', 'functions', 'common')
       ),
@@ -181,7 +181,7 @@ export class MetadataDatasetStates extends Construct {
     });
 
     const checkReadyFunction = new lambda.Function(this, 'CheckReadyFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
+      runtime: lambda.Runtime.PYTHON_3_11,
       code: lambda.Code.fromAsset(
         path.resolve(__dirname, '..', '..', 'functions', 'common')
       ),

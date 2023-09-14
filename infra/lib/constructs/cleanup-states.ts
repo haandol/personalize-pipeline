@@ -49,7 +49,7 @@ export class CleanupStates extends Construct {
     );
 
     const fetchArnFunction = new lambda.Function(this, 'FetchArnFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
+      runtime: lambda.Runtime.PYTHON_3_11,
       code: lambda.Code.fromAsset(
         path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'cleanup')
       ),
@@ -61,7 +61,7 @@ export class CleanupStates extends Construct {
       this,
       'DeleteResourceFunction',
       {
-        runtime: lambda.Runtime.PYTHON_3_7,
+        runtime: lambda.Runtime.PYTHON_3_11,
         code: lambda.Code.fromAsset(
           path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'cleanup')
         ),
@@ -74,7 +74,7 @@ export class CleanupStates extends Construct {
       this,
       'CheckDeleteFunction',
       {
-        runtime: lambda.Runtime.PYTHON_3_7,
+        runtime: lambda.Runtime.PYTHON_3_11,
         code: lambda.Code.fromAsset(
           path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'cleanup')
         ),

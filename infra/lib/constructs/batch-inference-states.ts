@@ -62,7 +62,7 @@ export class BatchInferenceStates extends Construct {
       this,
       'BatchInferenceFunction',
       {
-        runtime: lambda.Runtime.PYTHON_3_7,
+        runtime: lambda.Runtime.PYTHON_3_11,
         code: lambda.Code.fromAsset(
           path.resolve(
             __dirname,
@@ -85,7 +85,7 @@ export class BatchInferenceStates extends Construct {
       this,
       'CheckReadyFunction',
       {
-        runtime: lambda.Runtime.PYTHON_3_7,
+        runtime: lambda.Runtime.PYTHON_3_11,
         code: lambda.Code.fromAsset(
           path.resolve(__dirname, '..', '..', 'functions', 'common')
         ),

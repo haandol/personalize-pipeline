@@ -67,7 +67,7 @@ export class UsecaseStates extends Construct {
       this,
       'DatasetGroupFunction',
       {
-        runtime: lambda.Runtime.PYTHON_3_7,
+        runtime: lambda.Runtime.PYTHON_3_11,
         code: lambda.Code.fromAsset(
           path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'usecase')
         ),
@@ -77,7 +77,7 @@ export class UsecaseStates extends Construct {
     );
 
     const datasetFunction = new lambda.Function(this, 'DatasetFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
+      runtime: lambda.Runtime.PYTHON_3_11,
       code: lambda.Code.fromAsset(
         path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'usecase')
       ),
@@ -89,7 +89,7 @@ export class UsecaseStates extends Construct {
       this,
       'DatasetImportFunction',
       {
-        runtime: lambda.Runtime.PYTHON_3_7,
+        runtime: lambda.Runtime.PYTHON_3_11,
         code: lambda.Code.fromAsset(
           path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'usecase')
         ),
@@ -105,7 +105,7 @@ export class UsecaseStates extends Construct {
       this,
       'ItemDatasetFunction',
       {
-        runtime: lambda.Runtime.PYTHON_3_7,
+        runtime: lambda.Runtime.PYTHON_3_11,
         code: lambda.Code.fromAsset(
           path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'usecase')
         ),
@@ -118,7 +118,7 @@ export class UsecaseStates extends Construct {
       this,
       'ItemDatasetImportFunction',
       {
-        runtime: lambda.Runtime.PYTHON_3_7,
+        runtime: lambda.Runtime.PYTHON_3_11,
         code: lambda.Code.fromAsset(
           path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'usecase')
         ),
@@ -134,7 +134,7 @@ export class UsecaseStates extends Construct {
       this,
       'UserDatasetFunction',
       {
-        runtime: lambda.Runtime.PYTHON_3_7,
+        runtime: lambda.Runtime.PYTHON_3_11,
         code: lambda.Code.fromAsset(
           path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'usecase')
         ),
@@ -147,7 +147,7 @@ export class UsecaseStates extends Construct {
       this,
       'UserDatasetImportFunction',
       {
-        runtime: lambda.Runtime.PYTHON_3_7,
+        runtime: lambda.Runtime.PYTHON_3_11,
         code: lambda.Code.fromAsset(
           path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'usecase')
         ),
@@ -163,7 +163,7 @@ export class UsecaseStates extends Construct {
       this,
       'RecommenderFunction',
       {
-        runtime: lambda.Runtime.PYTHON_3_7,
+        runtime: lambda.Runtime.PYTHON_3_11,
         code: lambda.Code.fromAsset(
           path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'usecase')
         ),
@@ -173,7 +173,7 @@ export class UsecaseStates extends Construct {
     );
 
     const checkReadyFunction = new lambda.Function(this, 'CheckReadyFunction', {
-      runtime: lambda.Runtime.PYTHON_3_7,
+      runtime: lambda.Runtime.PYTHON_3_11,
       code: lambda.Code.fromAsset(
         path.resolve(__dirname, '..', '..', 'functions', 'common')
       ),
