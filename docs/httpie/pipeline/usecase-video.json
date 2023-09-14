@@ -6,8 +6,9 @@
   "bucket": "s3://<BUCKET>/interactions.csv",
   "deploy": true,
   "recommender_config": {
-    "algorithmHyperParameters": {
-      "minRecommendationRequestsPerSecond": "1"
+    "itemExplorationConfig": {
+      "explorationWeight": "0.3",
+      "explorationItemAgeCutOff": "30"
     }
   }
 }
