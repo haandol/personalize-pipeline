@@ -27,6 +27,9 @@ def handler(event, context):
     elif stage == "CAMPAIGN":
         campaign_arn = event["campaign_arn"]
         event["status"] = check_campaign(campaign_arn)
+    elif stage == "RECOMMENDER":
+        recommender_arn = event["recommender_arn"]
+        event["status"] = check_recommender(recommender_arn)
     else:
         raise RuntimeError(f"Invalid stage: {stage}")
 
@@ -90,4 +93,17 @@ def check_campaign(campaign_arn):
     describe_campaign_response = personalize.describe_campaign(campaignArn=campaign_arn)
     status = describe_campaign_response["campaign"]["status"]
     logger.info("Campaign: {}".format(status))
+    return status
+
+
+def check_recommender(recommender_arn):
+    # skip creating recommender
+    if not recommender_arn:
+        return "ACTIVE"
+
+    describe_recommender_response = personalize.describe_recommender(
+        recommenderArn=recommender_arn
+    )
+    status = describe_recommender_response["recommender"]["status"]
+    logger.info("Recommender: {}".format(status))
     return status
