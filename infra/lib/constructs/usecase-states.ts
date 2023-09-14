@@ -35,7 +35,7 @@ export class UsecaseStates extends Construct {
   }
 
   private createSfnFunctions(): IStateFunctions {
-    const personalizeRole = new iam.Role(this, 'UsecasePersonalizeRole', {
+    const usecaseRole = new iam.Role(this, 'UsecaseRole', {
       assumedBy: new iam.ServicePrincipal('personalize.amazonaws.com'),
       managedPolicies: [
         {
@@ -69,14 +69,7 @@ export class UsecaseStates extends Construct {
       {
         runtime: lambda.Runtime.PYTHON_3_7,
         code: lambda.Code.fromAsset(
-          path.resolve(
-            __dirname,
-            '..',
-            '..',
-            'functions',
-            'sfn',
-            'user-personalization'
-          )
+          path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'usecase')
         ),
         handler: 'create_dataset_group.handler',
         role: lambdaExecutionRole,
@@ -86,14 +79,7 @@ export class UsecaseStates extends Construct {
     const datasetFunction = new lambda.Function(this, 'DatasetFunction', {
       runtime: lambda.Runtime.PYTHON_3_7,
       code: lambda.Code.fromAsset(
-        path.resolve(
-          __dirname,
-          '..',
-          '..',
-          'functions',
-          'sfn',
-          'user-personalization'
-        )
+        path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'usecase')
       ),
       handler: 'create_dataset.handler',
       role: lambdaExecutionRole,
@@ -105,19 +91,12 @@ export class UsecaseStates extends Construct {
       {
         runtime: lambda.Runtime.PYTHON_3_7,
         code: lambda.Code.fromAsset(
-          path.resolve(
-            __dirname,
-            '..',
-            '..',
-            'functions',
-            'sfn',
-            'user-personalization'
-          )
+          path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'usecase')
         ),
         handler: 'create_dataset_import.handler',
         role: lambdaExecutionRole,
         environment: {
-          ROLE_ARN: personalizeRole.roleArn,
+          ROLE_ARN: usecaseRole.roleArn,
         },
       }
     );
@@ -128,14 +107,7 @@ export class UsecaseStates extends Construct {
       {
         runtime: lambda.Runtime.PYTHON_3_7,
         code: lambda.Code.fromAsset(
-          path.resolve(
-            __dirname,
-            '..',
-            '..',
-            'functions',
-            'sfn',
-            'user-personalization'
-          )
+          path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'usecase')
         ),
         handler: 'create_item_dataset.handler',
         role: lambdaExecutionRole,
@@ -148,19 +120,12 @@ export class UsecaseStates extends Construct {
       {
         runtime: lambda.Runtime.PYTHON_3_7,
         code: lambda.Code.fromAsset(
-          path.resolve(
-            __dirname,
-            '..',
-            '..',
-            'functions',
-            'sfn',
-            'user-personalization'
-          )
+          path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'usecase')
         ),
         handler: 'create_item_dataset_import.handler',
         role: lambdaExecutionRole,
         environment: {
-          ROLE_ARN: personalizeRole.roleArn,
+          ROLE_ARN: usecaseRole.roleArn,
         },
       }
     );
@@ -171,14 +136,7 @@ export class UsecaseStates extends Construct {
       {
         runtime: lambda.Runtime.PYTHON_3_7,
         code: lambda.Code.fromAsset(
-          path.resolve(
-            __dirname,
-            '..',
-            '..',
-            'functions',
-            'sfn',
-            'user-personalization'
-          )
+          path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'usecase')
         ),
         handler: 'create_user_dataset.handler',
         role: lambdaExecutionRole,
@@ -191,19 +149,12 @@ export class UsecaseStates extends Construct {
       {
         runtime: lambda.Runtime.PYTHON_3_7,
         code: lambda.Code.fromAsset(
-          path.resolve(
-            __dirname,
-            '..',
-            '..',
-            'functions',
-            'sfn',
-            'user-personalization'
-          )
+          path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'usecase')
         ),
         handler: 'create_user_dataset_import.handler',
         role: lambdaExecutionRole,
         environment: {
-          ROLE_ARN: personalizeRole.roleArn,
+          ROLE_ARN: usecaseRole.roleArn,
         },
       }
     );
