@@ -1,10 +1,10 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as iam from 'aws-cdk-lib/aws-iam';
-import * as sfn from 'aws-cdk-lib/aws-stepfunctions';
 import * as sns from 'aws-cdk-lib/aws-sns';
 import * as apigw from 'aws-cdk-lib/aws-apigateway';
 import { TrainRecipeStates } from '../constructs/train-recipe-states';
+import { TrainUsecaseStates } from '../constructs/train-usecase-states';
 import {
   StatesRequestModels,
   RequestValidators,
@@ -20,22 +20,29 @@ interface Props extends cdk.StackProps {
   failTopic: sns.ITopic;
 }
 
-export class TrainRecipeStack extends Sfn.BaseStack {
-  public readonly stateMachine: sfn.IStateMachine;
-
+export class TrainRecipeUsecaseStack extends Sfn.BaseStack {
   constructor(scope: Construct, id: string, props: Props) {
     super(scope, id, props);
 
-    const states = new TrainRecipeStates(this, 'TrainRecipeStates', props);
-    this.stateMachine = states.stateMachine;
+    const recipeStates = new TrainRecipeStates(
+      this,
+      'TrainRecipeStates',
+      props
+    );
+    const usecaseStates = new TrainUsecaseStates(
+      this,
+      'TrainUsecaseStates',
+      props
+    );
 
     const api = apigw.RestApi.fromRestApiAttributes(this, 'RestApi', {
       restApiId: props.api.restApiId,
       rootResourceId: props.api.root.resourceId,
     });
 
+    const trainResource = api.root.resourceForPath('/train');
     this.registerSfnIntegration({
-      resource: api.root.addResource('train-recipe'),
+      resource: trainResource.addResource('recipe'),
       methodOptions: {
         ...this.methodOptions,
         requestModels: {
@@ -44,7 +51,20 @@ export class TrainRecipeStack extends Sfn.BaseStack {
         requestValidator: props.requestValidators.bodyValidator,
       },
       credentialsRole: props.credentialsRole,
-      stateMachineArn: this.stateMachine.stateMachineArn,
+      stateMachineArn: recipeStates.stateMachine.stateMachineArn,
+    });
+
+    this.registerSfnIntegration({
+      resource: trainResource.addResource('usecase'),
+      methodOptions: {
+        ...this.methodOptions,
+        requestModels: {
+          'application/json': props.requestModels.TrainUsecaseModel,
+        },
+        requestValidator: props.requestValidators.bodyValidator,
+      },
+      credentialsRole: props.credentialsRole,
+      stateMachineArn: usecaseStates.stateMachine.stateMachineArn,
     });
   }
 }

@@ -13,8 +13,7 @@ import { InteractionDatasetStack } from '../lib/stacks/interaction-dataset-stack
 import { RankingStack } from '../lib/stacks/ranking-stack';
 import { BatchInferenceStack } from '../lib/stacks/batch-inference-stack';
 import { BatchSegmentStack } from '../lib/stacks/batch-segment-stack';
-import { TrainRecipeStack } from '../lib/stacks/train-recipe-stack';
-import { TrainUsecaseStack } from '../lib/stacks/train-usecase-stack';
+import { TrainRecipeUsecaseStack } from '../lib/stacks/train-recipe-usecase-stack';
 import { CleanupStack } from '../lib/stacks/cleanup-stack';
 import { ApiIntegrationStack } from '../lib/stacks/api-integration-stack';
 import { StorageStack } from '../lib/stacks/storage-stack';
@@ -157,9 +156,9 @@ const batchSegmentStack = new BatchSegmentStack(
 batchSegmentStack.addDependency(apiGwStack);
 batchSegmentStack.addDependency(commonStack);
 
-const trainRecipeStack = new TrainRecipeStack(
+const trainRecipeUsecaseStack = new TrainRecipeUsecaseStack(
   app,
-  `${Config.app.ns}TrainRecipeStack`,
+  `${Config.app.ns}TrainRecipeUsecaseStack`,
   {
     api: apiGwStack.api,
     requestModels: apiGwStack.statesRequestModels,
@@ -169,23 +168,8 @@ const trainRecipeStack = new TrainRecipeStack(
     failTopic: commonStack.failTopic,
   }
 );
-trainRecipeStack.addDependency(apiGwStack);
-trainRecipeStack.addDependency(commonStack);
-
-const trainUsecaseStack = new TrainUsecaseStack(
-  app,
-  `${Config.app.ns}TrainUsecaseStack`,
-  {
-    api: apiGwStack.api,
-    requestModels: apiGwStack.statesRequestModels,
-    requestValidators: apiGwStack.requestValidators,
-    credentialsRole: apiGwStack.credentialsRole,
-    doneTopic: commonStack.doneTopic,
-    failTopic: commonStack.failTopic,
-  }
-);
-trainUsecaseStack.addDependency(apiGwStack);
-trainUsecaseStack.addDependency(commonStack);
+trainRecipeUsecaseStack.addDependency(apiGwStack);
+trainRecipeUsecaseStack.addDependency(commonStack);
 
 const cleanupStack = new CleanupStack(app, `${Config.app.ns}CleanupStack`, {
   api: apiGwStack.api,
