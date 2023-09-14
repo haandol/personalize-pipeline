@@ -214,14 +214,7 @@ export class UsecaseStates extends Construct {
       {
         runtime: lambda.Runtime.PYTHON_3_7,
         code: lambda.Code.fromAsset(
-          path.resolve(
-            __dirname,
-            '..',
-            '..',
-            'functions',
-            'sfn',
-            'user-personalization'
-          )
+          path.resolve(__dirname, '..', '..', 'functions', 'sfn', 'usecase')
         ),
         handler: 'create_recommender.handler',
         role: lambdaExecutionRole,
