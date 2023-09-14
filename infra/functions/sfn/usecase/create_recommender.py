@@ -13,7 +13,7 @@ def handler(event, context):
 
     name = event["name"]
     dataset_group_arn = event["dataset_group_arn"]
-    recipe_arn = event["recepe_arn"]
+    recipe_arn = event["recipe_arn"]
 
     recommender_params = dict(
         name=name,
