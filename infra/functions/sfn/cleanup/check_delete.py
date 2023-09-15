@@ -14,7 +14,7 @@ def handler(event, context):
     if stage == "RECOMMENDER":
         event["status"] = is_recommender_deleted(event["dataset_group_arn"])
         if "DELETED" == event["status"]:
-            event["next"] = "EVENT_TRACKER"
+            event["next"] = "CAMPAIGN"
     elif stage == "CAMPAIGN":
         event["status"] = is_campaign_deleted(event["solution_arns"])
         if "DELETED" == event["status"]:
