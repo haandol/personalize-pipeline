@@ -11,7 +11,11 @@ def handler(event, context):
     logger.info(event)
 
     stage = event["stage"]
-    if stage == "CAMPAIGN":
+    if stage == "RECOMMENDER":
+        event["status"] = is_recommender_deleted(event["dataset_group_arn"])
+        if "DELETED" == event["status"]:
+            event["next"] = "EVENT_TRACKER"
+    elif stage == "CAMPAIGN":
         event["status"] = is_campaign_deleted(event["solution_arns"])
         if "DELETED" == event["status"]:
             event["next"] = "SOLUTION"
@@ -35,6 +39,16 @@ def handler(event, context):
         raise RuntimeError(f"Invalid stage: {stage}")
 
     return event
+
+
+def is_recommender_deleted(dataset_group_arn):
+    recommenders = personalize.list_recommenders(datasetGroupArn=dataset_group_arn)[
+        "recommenders"
+    ]
+    if recommenders:
+        return "DELETING"
+    else:
+        return "DELETED"
 
 
 def is_campaign_deleted(solution_arns):

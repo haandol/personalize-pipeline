@@ -118,6 +118,17 @@ export class CleanupStates extends Construct {
     });
     fetchArnTask.addCatch(failTask);
 
+    const deleteRecommenderTask = new tasks.LambdaInvoke(
+      this,
+      'DeleteRecommenderTask',
+      {
+        lambdaFunction: stateFunctions.deleteResourceFunction,
+        outputPath: '$.Payload',
+      }
+    );
+    deleteRecommenderTask.next(checkDeleteTask);
+    deleteRecommenderTask.addCatch(failTask);
+
     const deleteCampaignTask = new tasks.LambdaInvoke(
       this,
       'DeleteCampaignTask',
@@ -184,6 +195,13 @@ export class CleanupStates extends Construct {
     retryCheckDeleteTask
       .when(
         sfn.Condition.and(
+          sfn.Condition.stringEquals('$.stage', 'RECOMMENDER'),
+          sfn.Condition.stringEquals('$.status', 'DELETED')
+        ),
+        deleteCampaignTask
+      )
+      .when(
+        sfn.Condition.and(
           sfn.Condition.stringEquals('$.stage', 'CAMPAIGN'),
           sfn.Condition.stringEquals('$.status', 'DELETED')
         ),
@@ -223,7 +241,9 @@ export class CleanupStates extends Construct {
         }).next(checkDeleteTask)
       );
 
-    const definition = sfn.Chain.start(fetchArnTask).next(deleteCampaignTask);
+    const definition = sfn.Chain.start(fetchArnTask).next(
+      deleteRecommenderTask
+    );
     const role = new iam.Role(this, 'StateMachineRole', {
       assumedBy: new iam.ServicePrincipal('states.amazonaws.com'),
       managedPolicies: [

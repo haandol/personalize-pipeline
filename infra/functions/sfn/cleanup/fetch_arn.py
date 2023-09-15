@@ -56,8 +56,17 @@ def handler(event, context):
         for campaign in campaigns:
             campaign_arns.append(campaign["campaignArn"])
 
+    # Fetch Recommenders
+    recommender_arns = []
+    recommenders = personalize.list_recommenders(datasetGroupArn=dataset_group_arn)[
+        "recommenders"
+    ]
+    for recommender in recommenders:
+        recommender_arns.append(recommender["recommenderArn"])
+
     return {
-        "next": "CAMPAIGN",
+        "next": "RECOMMENDER",
+        "recommender_arns": recommender_arns,
         "campaign_arns": campaign_arns,
         "solution_arns": solution_arns,
         "event_tracker_arns": event_tracker_arns,

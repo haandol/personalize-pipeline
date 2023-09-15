@@ -13,7 +13,11 @@ def handler(event, context):
     logger.info(event)
 
     stage = event["stage"]
-    if stage == "CAMPAIGN":
+    if stage == "RECOMMENDER":
+        logger.info("delete recommender...")
+        for recommender_arn in event["recommender_arns"]:
+            personalize.delete_recommender(recommenderArn=recommender_arn)
+    elif stage == "CAMPAIGN":
         logger.info("delete campaign...")
         for campaign_arn in event["campaign_arns"]:
             personalize.delete_campaign(campaignArn=campaign_arn)
