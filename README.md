@@ -26,7 +26,7 @@ $ npm i
 Install cdk in global context and run `cdk bootstrap` if you did not initailize cdk yet.
 
 ```bash
-$ npm i -g cdk@2.96.2
+$ npm i -g cdk@2.97.1
 $ cdk bootstrap
 ```
 
