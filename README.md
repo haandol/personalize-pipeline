@@ -62,11 +62,18 @@ $ docker-compose up
 
 **If you are not yet request increasing SES limitation, you can only send email to verified email.**
 
-2. open [**config.ts**](infra/config/dev.toml) and replace values for your environment
+2. open [**/infra/config/dev.toml**](infra/config/dev.toml) and replace values for your environment
 
-3. Generate _csv_ file by following intructions of [**Amazon Personalize Samples**](https://github.com/aws-samples/amazon-personalize-samples/blob/master/getting_started/notebooks/1.Building_Your_First_Campaign.ipynb)
+3. copy `dev.toml` file under infra folder with name `.toml`
 
-4. Upload _csv_ file to _S3 Bucket_
+```bash
+$ cd infra
+$ cp config/dev.toml .toml
+```
+
+4. Generate _csv_ file by following intructions of [**Amazon Personalize Samples**](https://github.com/aws-samples/amazon-personalize-samples/blob/master/getting_started/notebooks/1.Building_Your_First_Campaign.ipynb)
+
+5. Upload _csv_ file to _S3 Bucket_
 
 ## Create Similarity Items campaign
 
